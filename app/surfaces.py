@@ -108,7 +108,9 @@ COUNTER = Surface(
         "Crawl any website and count every word — per page, per folder, in total. Built for "
         "sizing translation projects, with CSV export and a shareable report."
     ),
-    og_image="/static/brand/og-counter.png",
+    # ?v= changes with the image, so social networks fetch it again instead of
+    # showing their cached copy (they cache by URL).
+    og_image="/static/brand/og-counter.png?v=2",
     default_capture_markdown=False,
     demo_run_id=os.environ.get("COUNTER_DEMO_RUN_ID", ""),
     old_hosts=_hosts("COUNTER_OLD_HOSTS", "wordcount.wxrks.app,wordcounter.wxrks.app"),
@@ -164,7 +166,7 @@ MARKDOWN = Surface(
         "Crawl any website and export every page as clean Markdown in a single ZIP. Main "
         "content only — ready to feed a language model, a RAG pipeline or a CMS migration."
     ),
-    og_image="/static/brand/og-markdown.png",
+    og_image="/static/brand/og-markdown.png?v=2",
     default_capture_markdown=True,
     demo_run_id=os.environ.get("MARKDOWN_DEMO_RUN_ID", ""),
     old_hosts=_hosts("MARKDOWN_OLD_HOSTS", "markdown.wxrks.app"),
