@@ -1,0 +1,37 @@
+{# "Add to project": tick the projects a run belongs to, or name a new one.
+   One dialog per page; app.js fills the ticks from the button that opened it
+   (data-project-run, data-project-ids), so a list of runs can share it. #}
+<div class="modal-overlay" id="project-modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+    <div class="modal-head">
+      <h2 id="project-modal-title">{{ _('Add to project') }}</h2>
+      <button type="button" class="modal-close" id="project-modal-close" aria-label="{{ _('Close') }}">×</button>
+    </div>
+    <form class="modal-body project-form" id="project-form">
+      <p class="muted project-form-lead">{{ _('A run can be in more than one project. In each, a page found in several crawls counts once.') }}</p>
+      {% if projects %}
+      <div class="project-options">
+        {% for p in projects %}
+        <label class="project-option">
+          <input type="checkbox" name="project" value="{{ p.id }}">
+          <span class="project-option-name">{{ p.name }}</span>
+          <span class="project-option-meta">
+            {%- if p.run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(p.run_count)) }}{% endif -%}
+            {%- if p.cached_new_words is not none %} · {{ _('%(n)s new words', n=num(p.cached_new_words)) }}
+            {%- elif p.cached_words %} · {{ _('%(n)s words', n=num(p.cached_words)) }}{% endif -%}
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <label class="visually-hidden" for="project-new-name">{{ _('New project name') }}</label>
+      <input type="text" id="project-new-name" class="project-new-name" maxlength="120" autocomplete="off"
+             placeholder="{{ _('New project, e.g. the client’s name') }}">
+      <p class="field-error" id="project-error" hidden></p>
+      <div class="project-form-actions">
+        <button type="button" class="secondary" id="project-cancel">{{ _('Cancel') }}</button>
+        <button type="submit">{{ _('Save') }}</button>
+      </div>
+    </form>
+  </div>
+</div>

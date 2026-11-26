@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Translation check — Admin{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% if active %}<meta http-equiv="refresh" content="30">{% endif %}{% endblock %}
+{% macro n(v) %}{{ "{:,}".format(v or 0) }}{% endmacro %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap">
+    <h1 class="tc-title">Translation check</h1>
+    <p class="subtitle">
+      What a multilingual site still hasn't translated: language versions that don't exist, and text, titles
+      and image text left in the original. Each page is compared with its versions in every language the site
+      declares.
+    </p>
+
+    <p class="tc-schedule">
+      {% if scheduled %}
+        Checked by itself every {{ every_days }} days, around {{ "%02d"|format(hour_utc) }}:00 UTC:
+        {% for site in scheduled %}<strong>{{ site }}</strong>{{ ", " if not loop.last }}{% endfor %}.
+        The result is emailed to the admins.
+      {% else %}
+        No site is checked on a schedule. Set <code>TRANSLATION_CHECK_SITES</code> to check one every week.
+      {% endif %}
+    </p>
+
+    {% if is_admin(user) %}
+    <form class="filter-row tc-start" method="post" action="/admin/translations/start">
+      <input type="url" name="url" required placeholder="https://wxrks.com" value="{{ scheduled[0] if scheduled else '' }}"
+             aria-label="Site to check">
+      <button type="submit"{% if active %} disabled title="A check is already running"{% endif %}>Check now</button>
+    </form>
+    {% endif %}
+    {% if busy %}<p class="field-error">A check is already running. One at a time.</p>{% endif %}
+
+    {% if active %}
+    <a class="tc-running" href="/admin/translations/{{ active.id }}">
+      <span class="status-badge status-crawling">Running</span>
+      <span>{{ active.host }}</span>
+      {% if progress.total %}
+      <span class="muted">{{ n(progress.done) }} of {{ n(progress.total) }} pages</span>
+      <span class="meter tc-meter"><span class="meter-fill" style="width: {{ (100 * progress.done / progress.total) | round | int }}%;"></span></span>
+      {% else %}
+      <span class="muted">Reading the sitemap…</span>
+      {% endif %}
+    </a>
+    {% endif %}
+
+    <div class="section-label tc-gap">Checks</div>
+    <div class="table-scroll table-paged">
+      <table>
+        <thead>
+          <tr>
+            <th>Site</th><th class="col-left">Status</th><th class="col-left">Started</th>
+            <th class="col-num">Pages</th><th class="col-num">Translated</th><th class="col-num">Strings</th>
+            <th class="col-num">Missing</th><th class="col-num">New / fixed</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for check in checks %}
+          {% set s = check.summary %}
+          <tr>
+            <td class="url-cell" title="{{ check.site_url }}">{{ check.host }}</td>
+            <td>
+              {% if check.status in ("planning", "running") %}<span class="status-badge status-crawling">Running</span>
+              {% else %}<span class="status-badge status-{{ check.status }}">{{ check.status | capitalize }}</span>{% endif %}
+            </td>
+            <td class="run-date run-date-iso" data-iso="{{ check.started_at }}"></td>
+            <td class="words-cell">{{ n(s.source_pages) if s else "—" }}</td>
+            <td class="words-cell">{{ ("%g%%"|format(s.translated_pct)) if s and s.translated_pct is not none else "—" }}</td>
+            <td class="words-cell">{{ n(s.strings) if s else "—" }}</td>
+            <td class="words-cell">{{ n(s.missing) if s else "—" }}</td>
+            <td class="words-cell">
+              {% if check.diff and check.diff.previous_id and not check.diff.rules_changed %}+{{ n(check.diff.new) }} / −{{ n(check.diff.fixed) }}{% else %}—{% endif %}
+            </td>
+            <td class="open-cell"><a href="/admin/translations/{{ check.id }}">Open ↗</a></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="9" class="muted">No checks yet. Enter a site above and press Check now.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    formatRunDates();
+  </script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Connect an assistant') }} — {{ _(surface.name) }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <main class="doc-page connect-page">
+    <a class="back-link" href="{{ url('/mcp') }}">← {{ _('How it works') }}</a>
+    <h1>{{ _('Connect Claude, ChatGPT or another assistant') }}</h1>
+    <p class="doc-lede">{{ _('Make a connection for each app you use. Each one has its own URL and key, and you can revoke it without touching the others.') }}</p>
+
+    <form class="connect-form" id="mcp-key-form">
+      <label for="mcp-key-name">{{ _('What is it for?') }}</label>
+      <div class="connect-form-row">
+        <input type="text" id="mcp-key-name" maxlength="60" autocomplete="off" placeholder="{{ _('e.g. Claude Code on my laptop') }}">
+        <button type="submit" id="mcp-key-create"{% if keys | length >= max_keys %} disabled{% endif %}>{{ _('Make a connection') }}</button>
+      </div>
+      <p class="field-error" id="mcp-key-error" hidden></p>
+      {% if keys | length >= max_keys %}<p class="muted">{{ _('You have %(n)s connections, the most there can be. Revoke one to make another.', n=max_keys) }}</p>{% endif %}
+    </form>
+
+    <section class="connect-new" id="mcp-key-new" hidden aria-live="polite">
+      <h2>{{ _('Your connection is ready') }}</h2>
+      <p class="connect-warning">{{ _('Copy it now: this is the only time it’s shown. It works like a password.') }}</p>
+
+      <h3>{{ _('Personal URL — for Claude, ChatGPT and apps that only take a URL') }}</h3>
+      <div class="doc-code" translate="no"><pre><code id="mcp-new-url"></code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+
+      <h3>{{ _('Claude Code — paste in a terminal') }}</h3>
+      <div class="doc-code" translate="no"><pre><code id="mcp-new-command"></code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+
+      <h3>{{ _('Key — for apps that send it as a header') }}</h3>
+      <div class="doc-code" translate="no"><pre><code id="mcp-new-key"></code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+      <p><a href="{{ url('/mcp') }}#connect">{{ _('Where to paste it, app by app →') }}</a></p>
+    </section>
+
+    <section class="connect-list">
+      <h2>{{ _('Your connections') }}</h2>
+      <p class="muted" id="mcp-keys-empty"{% if keys %} hidden{% endif %}>{{ _('None yet.') }}</p>
+      <ul class="connect-keys" id="mcp-keys">
+        {% for key in keys %}
+        <li data-key-id="{{ key.id }}">
+          <span class="connect-key-name">{{ key.name }}</span>
+          <span class="connect-key-meta"><span translate="no">wck_…{{ key.hint }}</span> · {{ _('made') }} <span class="run-date-iso" data-iso="{{ key.created_at }}"></span>
+            · {% if key.last_used_at %}{{ _('last used') }} <span class="run-date-iso" data-iso="{{ key.last_used_at }}"></span>{% else %}{{ _('not used yet') }}{% endif %}</span>
+          <button type="button" class="link-button connect-revoke" data-revoke="{{ key.id }}">{{ _('Revoke') }}</button>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    formatRunDates();
+    initCopyButtons();
+    initMcpConnect({ endpoint: {{ endpoint | tojson }} });
+  </script>
+{% endblock %}

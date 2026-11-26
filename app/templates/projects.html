@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Projects') }} — {{ surface.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap projects-wrap">
+    <div class="projects-head">
+      <div>
+        <h1 class="projects-title">{{ _('Projects') }}</h1>
+        <p class="subtitle">{{ _('One client, every crawl that belongs to it, and the number that counts each page once.') }}</p>
+      </div>
+      <form class="projects-create" id="project-create-form">
+        <label class="visually-hidden" for="project-create-name">{{ _('New project name') }}</label>
+        <input type="text" id="project-create-name" maxlength="120" autocomplete="off" required
+               placeholder="{{ _('New project, e.g. the client’s name') }}">
+        <button type="submit">{{ _('Create') }}</button>
+      </form>
+    </div>
+    <p class="field-error" id="project-create-error" hidden></p>
+
+    {% if projects %}
+    <div class="project-cards">
+      {% for p in projects %}
+      <a class="project-card" href="{{ url('/projects/' ~ p.id) }}">
+        <span class="project-card-head">
+          <span class="project-card-name">{{ p.name }}</span>
+          {% if p.is_public %}<span class="status-badge status-completed">{{ _('Shared') }}</span>{% endif %}
+        </span>
+        {% if p.run_count %}
+        {% if p.cached_new_words is not none %}
+        <span class="project-card-number">{{ num(p.cached_new_words) }}</span>
+        <span class="project-card-sub">
+          {{ _('new words: each page and sentence once') }}{% if p.cached_pages %} · {{ _('%(n)s pages', n=num(p.cached_pages)) }}{% endif %}
+        </span>
+        {% else %}
+        <span class="project-card-number">{{ num(p.cached_words or 0) }}</span>
+        <span class="project-card-sub">
+          {{ _('words, each page once') }}{% if p.cached_pages %} · {{ _('%(n)s pages', n=num(p.cached_pages)) }}{% endif %}
+        </span>
+        {% endif %}
+        <span class="project-card-sites">
+          {% for site in (project_sites.get(p.id) or [])[:3] %}<span class="project-site">{{ site | replace('https://', '') | replace('http://', '') }}</span>{% endfor %}
+          {% if (project_sites.get(p.id) or []) | length > 3 %}<span class="project-site">+{{ (project_sites.get(p.id) | length) - 3 }}</span>{% endif %}
+        </span>
+        <span class="project-card-foot">
+          {%- if p.run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(p.run_count)) }}{% endif -%}
+          {%- if p.cached_new_words is not none and p.cached_words %} · {{ _('%(n)s words added up, each page once', n=num(p.cached_words)) }}{% endif %}
+        </span>
+        {% else %}
+        <span class="project-card-sub">{{ _('No crawls yet — add some from the project.') }}</span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted projects-empty">{{ _('No projects yet. Make one above, then add crawls to it — from the project page, or from any report’s ⋯ menu.') }}</p>
+    {% endif %}
+
+    {% if loose_runs %}
+    <div class="list-head projects-loose-head">
+      <div class="section-label">{{ _('Runs not in a project') }}</div>
+      <a href="{{ url('/runs') }}">{{ _('Your runs') }} →</a>
+    </div>
+    <ul class="recent-runs loose-runs">
+      {% for run in loose_runs %}
+      <li class="loose-run">
+        <a href="{{ url('/crawl/' ~ run.id) }}" class="loose-run-url">{{ run.shown_url | replace('https://', '') | replace('http://', '') }}</a>
+        <span class="run-words">{{ _('%(n)s words', n=num(run.total_words)) }}</span>
+        <span class="run-date run-date-iso" data-iso="{{ run.created_at }}"></span>
+        {% if projects %}
+        <button type="button" class="secondary loose-run-add" data-project-run="{{ run.id }}" data-project-ids="[]">{{ _('Add to a project') }}…</button>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  {% if projects %}{% include "_project_dialog.html" %}{% endif %}
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    initBilling();
+    formatRunDates();
+    initProjectDialog();
+    initProjectsHome();
+  </script>
+{% endblock %}

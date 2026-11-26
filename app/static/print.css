@@ -1,0 +1,119 @@
+/* The printed report — what gets handed to a client.
+
+   The same report as on screen, set for paper: the summary band, the
+   repetition estimate, folders and top pages, subdomains and languages, and
+   what was left out. Not the page-by-page list — two thousand rows is the
+   CSV's job, and the last lines say where to find it — and none of the
+   controls. Colours print as designed (print-color-adjust), and the layout is
+   pinned here rather than left to the phone breakpoints a sheet of A4 would
+   otherwise fall under. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 14mm 16mm;
+  }
+
+  html, body { background: #FFFFFF !important; }
+  body {
+    font-size: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Controls, and what's only for the person at the screen. */
+  .topbar-right,
+  .report-header > a,
+  .header-actions,
+  #edit-url-btn,
+  .edit-url,
+  .crawled-from,
+  #email-notice,
+  .why-slow,
+  .guest-note,
+  .report-nav,
+  .live-strip,
+  .coverage-rerun,
+  .run-bar,
+  .estimate-panel,
+  .promo,
+  #pages,
+  #page-issues-details,
+  .left-out-card .link-button,
+  .show-all-row,
+  .modal-overlay,
+  .field-error {
+    display: none !important;
+  }
+  .print-only { display: block !important; }
+
+  /* The wordmark heads the first page. */
+  header.topbar { padding: 0 0 10px; border-bottom: 1px solid var(--border); }
+  .logo-img { height: 22px; }
+  .logo-name { font-size: 15px; }
+
+  .report-wrap { max-width: none; }
+  .report-header { padding: 16px 0 0; }
+  .report-header h1 { margin: 0 0 4px; font-size: 22px; }
+  .settings-applied { margin-top: 8px; }
+
+  /* The summary band becomes a card. */
+  .report-hero { margin-top: 16px; border: 1px solid var(--border); border-radius: 10px; }
+  .report-hero-inner { padding: 18px 20px; }
+  .hero-top { flex-wrap: nowrap; gap: 24px; }
+  .hero-number { font-size: 44px; letter-spacing: -1.2px; }
+  .hero-stats { flex-wrap: nowrap; width: auto; gap: 0; }
+  .hero-stat { padding: 0 0 0 18px; margin-inline-start: 18px; border-inline-start: 1px solid var(--border); }
+  .hero-stat-value { font-size: 22px; }
+  .coverage { margin-top: 18px; }
+  .coverage-legend { gap: 6px 18px; font-size: 11.5px; }
+
+  .report-body { padding: 22px 0 0; }
+  .report-section { margin-bottom: 26px; }
+  .report-section h2 { margin-bottom: 8px; font-size: 17px; break-after: avoid; }
+  .report-section h3 { break-after: avoid; }
+  .section-head { margin-bottom: 8px; }
+  .section-note, .section-lead { font-size: 12px; }
+
+  .rep-figures { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 12px 0 10px; }
+  .rep-pct { font-size: 20px; }
+  #rep-top-block { margin-top: 18px; }
+  .rep-table td { padding: 8px 4px; font-size: 12px; }
+  .rep-table td.muted { font-size: 12px; }
+  .rep-table th:nth-child(3), .rep-table td:nth-child(3) { display: table-cell; }
+
+  .report-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; }
+  table.folder-table td { padding: 6px 4px; font-size: 12px; }
+  ol#top-pages-list li { padding: 6px 0; }
+
+  .left-out-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+  .left-out-card { padding: 14px 16px; }
+  .left-out-count { font-size: 20px; }
+
+  /* The short sections move to the next page whole rather than leave their
+     heading behind. The repetition estimate can run long, so it may break —
+     between rows, never through one. */
+  #folders, #subdomains, #languages, #left-out { break-inside: avoid; }
+
+  /* Rows, cards and the band never split across a page break. */
+  .hero-top, .coverage, .rep-figures, .rep-bar, tr, ol#top-pages-list li, .left-out-card, .print-footer {
+    break-inside: avoid;
+  }
+  thead { display: table-header-group; }
+  thead th { position: static !important; }
+
+  .print-footer {
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 11.5px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .print-footer p { margin: 0 0 4px; }
+  .print-credit { color: var(--text); font-weight: 600; }
+
+  /* A project's client view prints as the document it is. */
+  .client-actions { display: none !important; }
+  .client-doc { max-width: none; padding: 16px 0 0; gap: 28px; }
+  .client-number { font-size: 64px; }
+  .client-grid, .client-section, .client-total { break-inside: avoid; }
+}

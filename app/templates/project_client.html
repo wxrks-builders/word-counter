@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} — {{ surface.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% if not c %}<meta http-equiv="refresh" content="20">{% endif %}{% endblock %}
+{% macro site(u) %}{{ u | replace('https://', '') | replace('http://', '') }}{% endmacro %}
+{% set t = c.totals if c else {} %}
+{% set counted = rows | selectattr('state', 'in', ['counted', 'gap_filler']) | list %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <main class="client-doc">
+    <div class="client-head">
+      <div>
+        <span class="section-label">{{ _('Word count · project') }}</span>
+        <h1>{{ project.name }}</h1>
+        <p class="client-sites">{{ counted | map(attribute='shown_url') | map('replace', 'https://', '') | map('replace', 'http://', '') | join(' · ') }}</p>
+      </div>
+      {% if is_owner %}
+      <div class="header-actions client-actions">
+        <a class="button secondary" href="{{ url('/projects/' ~ project.id) }}">← {{ _('Back to the project') }}</a>
+        <button type="button" class="secondary" id="client-print-btn">{{ _('Print') }}</button>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if not c %}
+    <p class="muted">{{ _('This project is being prepared. The page updates by itself.') }}</p>
+    {% elif not counted %}
+    <p class="muted">{{ _('No finished crawls in this project yet.') }}</p>
+    {% else %}
+    <section class="client-total">
+      <div class="client-number">{{ num(t.new_words) }}</div>
+      <p class="client-lead">
+        {%- if counted | length == 1 %}{{ _('new words to translate on this site: each page and each sentence counted once.') }}
+        {%- else %}{{ _('new words to translate across the %(n)s sites: each page and each sentence counted once.', n=num(counted | length)) }}{% endif -%}
+      </p>
+      {% if t.added_up %}
+      <div class="client-bar" role="img" aria-label="{{ _('New words and repeated words') }}">
+        <span class="client-bar-counted" style="width: {{ (100 * t.new_words / t.added_up) | round(2) }}%;"></span>
+        <span class="wf-within" style="width: {{ (100 * t.repeated_within / t.added_up) | round(2) }}%;"></span>
+        <span class="wf-across" style="width: {{ (100 * t.repeated_across / t.added_up) | round(2) }}%;"></span>
+        <span class="cov-unchecked" style="width: {{ (100 * t.same_pages / t.added_up) | round(2) }}%;"></span>
+      </div>
+      <ol class="waterfall client-waterfall">
+        <li><span>{{ _('Added up: every page of every site') }}</span><strong>{{ num(t.added_up) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Same page on more than one site') }}</span><strong>−{{ num(t.same_pages) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Sentences repeated within a site') }}</span><strong>−{{ num(t.repeated_within) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Sentences repeated across sites') }}</span><strong>−{{ num(t.repeated_across) }}</strong></li>
+        <li class="waterfall-total"><span>{{ _('New words') }}</span><strong>{{ num(t.new_words) }}</strong></li>
+      </ol>
+      {% if t.estimated_words %}
+      <p class="client-note">{{ _('Part of this is estimated: some sites were crawled before their sentences were kept, so their repetition is worked out from their main content.') }}</p>
+      {% endif %}
+      {% endif %}
+    </section>
+
+    <section class="client-section">
+      <h2>{{ _('The sites') }}</h2>
+      <div class="table-scroll table-paged">
+        <table class="client-table">
+          <thead><tr><th>{{ _('Site') }}</th><th class="col-left">{{ _('Crawled') }}</th><th class="col-num">{{ _('Words') }}</th><th class="col-num">{{ _('New words') }}</th></tr></thead>
+          <tbody>
+            {% for row in counted %}
+            <tr>
+              <td>
+                {% if is_owner %}<a href="{{ url('/crawl/' ~ row.id) }}"><strong>{{ site(row.shown_url) }}</strong></a>
+                {% elif row.is_public %}<a href="{{ url('/share/' ~ row.id) }}"><strong>{{ site(row.shown_url) }}</strong></a>
+                {% else %}<strong>{{ site(row.shown_url) }}</strong>{% endif %}
+                {% if row.detected_cms or row.password_protected %}<span class="cell-sub">{{ row.detected_cms or '' }}{% if row.detected_cms and row.password_protected %} · {% endif %}{% if row.password_protected %}{{ _('staging, password-protected') }}{% endif %}</span>{% endif %}
+                {% if row.state == 'gap_filler' %}<span class="cell-sub">{{ _('Crawl didn’t finish: counted only for what the other sites don’t have') }}</span>{% endif %}
+              </td>
+              <td><span class="run-date-iso" data-iso="{{ row.created_at }}"></span></td>
+              <td class="words-cell">{{ num(row.words) }}</td>
+              <td class="words-cell">{{ num(row.new_words) }}</td>
+            </tr>
+            {% endfor %}
+            {% if counted | length > 1 %}
+            <tr class="client-together">
+              <td colspan="2">{{ _('Together') }}</td>
+              <td class="words-cell">{{ num(t.added_up) }}</td>
+              <td class="words-cell">{{ num(t.new_words) }}</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="client-grid">
+      <section class="client-section">
+        <h2>{{ _('Where the new words are') }}</h2>
+        {% set folders = c.report.folders | sort(attribute='new_words', reverse=true) %}
+        <table class="client-table">
+          <tbody>
+            {% for f in folders[:5] %}
+            <tr><td>{{ f.name }}</td><td class="words-cell">{{ num(f.new_words or 0) }}</td><td class="words-cell client-pct">{{ ((100 * (f.new_words or 0) / t.new_words) | round | int) if t.new_words else 0 }}%</td></tr>
+            {% endfor %}
+            {% if folders | length > 5 %}
+            {% set rest = folders[5:] | sum(attribute='new_words') %}
+            <tr><td>{{ _('Everything else') }}</td><td class="words-cell">{{ num(rest) }}</td><td class="words-cell client-pct">{{ ((100 * rest / t.new_words) | round | int) if t.new_words else 0 }}%</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </section>
+      {% if c.pairs %}
+      <section class="client-section">
+        <h2>{{ _('Shared between the sites') }}</h2>
+        <table class="client-table">
+          <tbody>
+            {% for pair in c.pairs %}
+            <tr><td>{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}</td><td class="words-cell">{% if pair.pages == 1 %}{{ _('1 page') }}{% else %}{{ _('%(n)s pages', n=num(pair.pages)) }}{% endif %}</td><td class="words-cell">{{ _('%(n)s words in sentences', n=num(pair.sentence_words)) }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <p class="client-note">{{ _('A page or a sentence on more than one site is counted once.') }}</p>
+      </section>
+      {% endif %}
+    </div>
+
+    <section class="client-section client-out">
+      <h2>{{ _('Not in this count') }}</h2>
+      <p>
+        {{ _('Menus, footers and forms, which repeat on every page') }}
+        {%- if t.duplicates %}; {{ _('%(n)s duplicate pages within the sites', n=num(t.duplicates)) }}{% endif %}
+        {%- if t.login_walls %}; {{ _('%(n)s pages behind a sign-in', n=num(t.login_walls)) }}{% endif %}
+        {%- if c.report.skipped_hosts %}; {{ _('the linked subdomains that weren’t crawled: %(hosts)s', hosts=c.report.skipped_hosts[:5] | map(attribute='name') | join(', ')) }}{% endif %}.
+        {{ _('Each site’s own report has its pages, its repetition estimate and what it left out.') }}
+      </p>
+      <p class="client-credit">{{ _('Counted with %(product)s by wxrks', product=surface.name) }}{% if share_link %} · {{ share_link }}{% endif %}</p>
+    </section>
+    {% endif %}
+  </main>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    formatRunDates();
+    const printBtn = document.getElementById("client-print-btn");
+    if (printBtn) printBtn.addEventListener("click", () => window.print());
+  </script>
+{% endblock %}

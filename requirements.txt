@@ -1,0 +1,19 @@
+fastapi
+uvicorn[standard]
+jinja2
+crawl4ai
+psutil
+aiosqlite
+authlib
+itsdangerous
+httpx
+# Parsed directly by the translation check; also arrives with crawl4ai.
+lxml
+# Stitches the translation check's screenshots; also arrives with crawl4ai.
+pillow
+python-multipart
+python-dotenv
+stripe
+babel
+# Compares sentences across a project's crawls; also arrives with crawl4ai.
+numpy

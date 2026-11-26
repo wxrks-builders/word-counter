@@ -1,0 +1,71 @@
+<header class="topbar">
+  <a class="logo" href="{{ url('/') }}">
+    <img class="logo-img" src="/static/brand/logo.svg" alt="wxrks" width="123" height="28">
+    <span class="logo-sep"></span>
+    <span class="logo-name">{{ surface.name }}</span>
+  </a>
+
+  {# The chip is the menu button. Everything that used to sit inline beside the
+     name now lives in the dropdown, so adding an item doesn't make the header
+     longer — which is what happened as Upgrade, Billing and the admin pages
+     arrived one at a time. #}
+  <div class="topbar-right">
+    {% include "_lang_menu.html" %}
+
+    {% if user %}
+      <div class="user-menu" id="user-menu" data-menu>
+      <button type="button" class="user-chip" data-menu-button aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-list">
+        {% if user.picture %}<img src="{{ user.picture }}" alt="">{% else %}<span class="avatar">{{ user.name[0] | upper }}</span>{% endif %}
+        <span class="name">{{ user.name }}</span>
+        {% if billing_enabled and user.is_pro %}<span class="plan-pill" title="{{ _('Crawls run at full speed') }}">{{ _('Pro') }}</span>{% endif %}
+        <span class="chev" aria-hidden="true">▾</span>
+      </button>
+  
+      <div class="user-menu-list" id="user-menu-list" role="menu" data-menu-panel hidden>
+        <div class="user-menu-head">
+          <div class="user-menu-name">{{ user.name }}</div>
+          <div class="user-menu-email">{{ user.email }}</div>
+        </div>
+  
+        <a role="menuitem" href="{{ url('/') }}">{{ _('New crawl') }}</a>
+        <a role="menuitem" href="{{ url('/runs') }}">{{ _('Your runs') }}</a>
+        <a role="menuitem" href="{{ url('/projects') }}">{{ _('Projects') }}</a>
+        <a role="menuitem" href="{{ url('/mcp/connect') }}">{{ _('Connect Claude or ChatGPT') }}</a>
+  
+        {% if billing_enabled %}
+          <div class="user-menu-sep"></div>
+          {% if user.is_pro %}
+            <a role="menuitem" href="#" data-billing-portal>{{ _('Manage billing') }}</a>
+          {% else %}
+            <a role="menuitem" href="{{ url('/pricing') }}" class="upgrade-link">{{ _('Upgrade to Pro') }}</a>
+          {% endif %}
+        {% endif %}
+  
+        {# is_admin() is the same function require_admin uses, so this lists
+           exactly the pages that will actually open. #}
+        {% if is_admin(user) %}
+          <div class="user-menu-sep"></div>
+          <div class="user-menu-label">Admin</div>
+          <a role="menuitem" href="/admin/health">Server health</a>
+          <a role="menuitem" href="/admin/jobs">Running crawls</a>
+          <a role="menuitem" href="/admin/runs">All runs</a>
+          <a role="menuitem" href="/admin/estimates">Estimate accuracy</a>
+          <a role="menuitem" href="/admin/translations">Translation check</a>
+        {% elif can_view_translations(user) %}
+          {# TRANSLATION_CHECK_VIEWERS: the reports, without the rest of admin. #}
+          <div class="user-menu-sep"></div>
+          <a role="menuitem" href="/admin/translations">Translation check</a>
+        {% endif %}
+  
+        <div class="user-menu-sep"></div>
+        <a role="menuitem" href="{{ url('/logout') }}">{{ _('Log out') }}</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    {# A shared report has no account — the language menu still belongs to
+       everyone, and Sign in is the one account action that makes sense. #}
+    <a class="button secondary" href="{{ url('/login') }}">{{ _('Sign in') }}</a>
+    {% endif %}
+  </div>
+</header>

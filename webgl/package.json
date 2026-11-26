@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "description": "The front page's WebGL hero. Built into app/static/hero-webgl.js, which is what the app serves; the Docker image never runs Node.",
+  "scripts": {
+    "build": "esbuild src/hero.js --bundle --minify --format=esm --target=es2022 --legal-comments=eof --outfile=../app/static/hero-webgl.js"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

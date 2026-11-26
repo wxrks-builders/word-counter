@@ -1,0 +1,205 @@
+{# Illustrations for the front page, built from the product's own UI rather
+   than screenshots: they stay sharp, follow the design tokens, translate, and
+   the report ones are drawn from a real featured run when one exists. Every
+   one is decorative (aria-hidden) — the text beside it says the same thing.
+   Motion runs once, when the illustration scrolls into view (app.js,
+   initHomeMotion), and not at all under prefers-reduced-motion. #}
+
+{% macro report_card(preview) -%}
+<div class="vis vis-report" aria-hidden="true">
+  <div class="mock-window">
+    <div class="mock-window-bar"><span></span><span></span><span></span></div>
+    <div class="mock-report">
+      <div class="mock-report-head">
+        <span class="mock-host" translate="no">{{ preview.host if preview else 'example.com' }}</span>
+        <span class="status-dot-pill">{{ _('Completed') }}</span>
+      </div>
+      <div class="mock-stats">
+        <div><span class="mock-label">{{ _('Total words') }}</span>
+          <strong data-countup="{{ preview.total_words if preview else 184620 }}">{{ num(preview.total_words if preview else 184620) }}</strong></div>
+        <div><span class="mock-label">{{ _('Pages counted') }}</span>
+          <strong data-countup="{{ preview.page_count if preview else 212 }}">{{ num(preview.page_count if preview else 212) }}</strong></div>
+      </div>
+      <div class="mock-label mock-section">{{ _('By folder') }}</div>
+      {% set folders = preview.folders if preview else [
+        {'name': '/blog', 'pages': 88, 'words': 71240}, {'name': '/docs', 'pages': 54, 'words': 52310},
+        {'name': '/products', 'pages': 31, 'words': 30980}, {'name': '/support', 'pages': 27, 'words': 19870},
+        {'name': '/about', 'pages': 12, 'words': 10220}] %}
+      {% set top = (folders | map(attribute='words') | max) or 1 %}
+      <ul class="mock-bars">
+        {% for f in folders[:5] %}
+        <li style="--w: {{ (f.words / top * 100) | round(1) }}%; --i: {{ loop.index0 }};">
+          <span class="mock-bar"></span>
+          <span class="mock-bar-name">{{ f.name }}</span>
+          <span class="mock-bar-value">{{ num(f.words) }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro page_wireframe() -%}
+<div class="vis vis-wire" aria-hidden="true">
+  <div class="wire-page">
+    <div class="wire-chrome">{{ icon('x', 12) }} {{ _('Header and menu · not counted') }}</div>
+    <div class="wire-body">
+      <span class="wire-h"></span>
+      {% for w in [96, 88, 92, 70, 94, 83, 60] %}<span class="wire-line" style="--w: {{ w }}%; --i: {{ loop.index0 }};"></span>{% endfor %}
+    </div>
+    <div class="wire-chrome">{{ icon('x', 12) }} {{ _('Footer · not counted') }}</div>
+    <div class="wire-count">{{ icon('check', 14) }} <strong data-countup="1284">{{ num(1284) }}</strong> {{ _('words counted') }}</div>
+  </div>
+  <div class="wire-dup">{{ icon('copy-check', 14) }} {{ _('Duplicate · listed separately') }}</div>
+</div>
+{%- endmacro %}
+
+{% macro folder_card(preview) -%}
+<div class="vis vis-folders" aria-hidden="true">
+  <div class="mock-card">
+    <div class="mock-label">{{ _('Top pages by word count') }}</div>
+    {% set rows = [('/guides/getting-started', 6240), ('/blog/annual-report', 5170), ('/docs/api-reference', 4380), ('/legal/terms', 3920), ('/pricing', 1260)] %}
+    <ol class="mock-toplist">
+      {% for path, words in rows %}
+      <li style="--w: {{ (words / 6240 * 100) | round(1) }}%; --i: {{ loop.index0 }};">
+        <span class="mock-bar"></span><span class="mock-bar-name">{{ path }}</span><span class="mock-bar-value">{{ num(words) }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    <div class="mock-csv">{{ icon('download', 14) }} {{ _('Export CSV') }} <span>URL · {{ _('Title') }} · {{ _('Words') }}</span></div>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro markdown_stack(preview) -%}
+<div class="vis vis-md" aria-hidden="true">
+  <div class="md-stack">
+    <div class="md-file" style="--i: 2;"></div>
+    <div class="md-file" style="--i: 1;"></div>
+    <div class="md-file md-front" style="--i: 0;">
+      <div class="md-name">{{ icon('file-text', 14) }} <span translate="no">pricing.md</span></div>
+<pre><span translate="no">&lt;!-- source: https://{{ preview.host if preview else 'example.com' }}/pricing --&gt;</span>
+
+# {{ _('Pricing') }}
+
+{{ _('Plans for teams of every size, billed monthly or yearly.') }}
+
+## {{ _('What every plan includes') }}
+
+- {{ _('Unlimited projects') }}
+- {{ _('Support in your language') }}</pre>
+    </div>
+  </div>
+  <div class="md-zip">{{ icon('file-archive', 16) }} <span class="md-zip-name" translate="no">{{ preview.host if preview else 'example.com' }}-markdown.zip</span>
+    <span class="md-zip-count">{{ _('%(n)s files', n=num(preview.page_count if preview else 212)) }}</span></div>
+</div>
+{%- endmacro %}
+
+{% macro scope_mock() -%}
+<div class="mini" aria-hidden="true">
+  <div class="mini-seg"><span class="on">{{ _('Whole domain') }}</span><span>{{ _('One subdomain') }}</span><span>{{ _('Main site') }}</span></div>
+  <div class="mini-chips">
+    <span class="mini-chip">/careers {{ icon('x', 12) }}</span>
+    <span class="mini-chip" translate="no">staging {{ icon('x', 12) }}</span>
+    <span class="mini-chip">/archive {{ icon('x', 12) }}</span>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro languages_mock() -%}
+<div class="mini" aria-hidden="true">
+  <ul class="mini-paths">
+    <li class="kept"><span>/en/pricing</span>{{ icon('check', 13) }}</li>
+    <li><span>/fr/pricing</span>{{ icon('minus', 13) }}</li>
+    <li><span>/de/pricing</span>{{ icon('minus', 13) }}</li>
+    <li><span>/ja/pricing</span>{{ icon('minus', 13) }}</li>
+  </ul>
+</div>
+{%- endmacro %}
+
+{% macro staging_mock() -%}
+<div class="mini" aria-hidden="true">
+  <div class="mini-auth">
+    <div class="mini-auth-host">{{ icon('lock', 13) }} <span translate="no">stg.example.com</span></div>
+    <span class="mini-field" translate="no">admin</span>
+    <span class="mini-field" translate="no">••••••••</span>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro estimate_mock(pause_at_words) -%}
+<div class="vis vis-estimate" aria-hidden="true">
+  <div class="mock-card">
+    <div class="mock-label">{{ _('Estimate — before you crawl') }} · <span translate="no">example.com</span></div>
+    <div class="est-stats">
+      <div><span class="mock-label">{{ _('Estimated total') }}</span><strong data-countup="548000">{{ num(548000) }}</strong></div>
+      <div><span class="mock-label">{{ _('Estimated total pages') }}</span><strong data-countup="420">{{ num(420) }}</strong></div>
+      <div><span class="mock-label">{{ _('Estimated total time') }}</span><strong>{{ _('~%(n)s min', n=15) }}</strong></div>
+    </div>
+    <div class="est-track"><span class="est-fill"></span><span class="est-mark"></span></div>
+    <div class="est-note">{{ _('Paused at %(n)s words', n=num(pause_at_words)) }}</div>
+    <div class="est-google">{% include "_google_g.html" %} {{ _('Sign in with Google to continue') }}</div>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro share_mock() -%}
+<div class="vis vis-share" aria-hidden="true">
+  <div class="mock-card">
+    <div class="share-link">{{ icon('link', 14) }} <span translate="no">{{ counter_surface.host }}/share/7c2e…</span><b>{{ _('Copy link') }}</b></div>
+    <div class="share-actions">
+      <span>{{ icon('mail', 16) }} {{ _('Email') }}</span>
+      <span>{{ icon('printer', 16) }} {{ _('Print') }}</span>
+      <span translate="no">{{ icon('download', 16) }} CSV</span>
+      <span translate="no">{{ icon('file-archive', 16) }} Markdown</span>
+    </div>
+  </div>
+</div>
+{%- endmacro %}
+
+{# "Why not just ask ChatGPT or Claude?": what each one did with wxrks.com, row
+   against row. The figures are the article's (articles.HOME_VS), measured. #}
+{% macro vs_board(v) -%}
+<div class="vis vis-vs" aria-hidden="true">
+  <div class="vs-card vs-alone">
+    <div class="vs-who"><span class="vs-mark">{{ icon('bot', 18) }}</span>
+      <span><strong>{{ _('An AI assistant on its own') }}</strong><small>{{ _('Claude Code, writing its own crawler') }}</small></span></div>
+    <div class="vs-metric">
+      <span class="mock-label">{{ _('Words on the main site') }}</span>
+      <strong class="vs-number" data-countup="{{ v.alone_words }}">{{ num(v.alone_words) }}</strong>
+      <span class="vs-flag is-warn">{{ _('Menu and footer counted on every page: %(n)s%% more than the text people read', n=v.more_pct) }}</span>
+    </div>
+    {% for state, topic, text in [
+        ('x', _('Subdomains'), _('None found. It trusted the sitemap.')),
+        ('minus', _('Repetition'), _('Measured only when asked.')),
+        ('x', _('Translations'), _('Every language crawled: %(n)s pages.', n=num(v.alone_pages_fetched))),
+        ('x', _('For your client'), _('A chat transcript.'))] %}
+    <div class="vs-row" style="--i: {{ loop.index0 }};"><span class="vs-state is-{{ state }}">{{ icon(state, 13) }}</span>
+      <span><b>{{ topic }}</b> {{ text }}</span></div>
+    {% endfor %}
+    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ _('%(n)s min', n=v.alone_minutes) }} · <span translate="no">{{ v.alone_cost }}</span></strong> <span>{{ _('for its careful count') }}</span></div>
+  </div>
+
+  <span class="vs-versus">{{ _('vs.') }}</span>
+
+  <div class="vs-card vs-ours">
+    <div class="vs-who"><span class="vs-mark">{{ icon('check', 18) }}</span>
+      <span><strong>Word Counter</strong><small>{{ _('The same site, the same day') }}</small></span></div>
+    <div class="vs-metric">
+      <span class="mock-label">{{ _('Words on the main site') }}</span>
+      <strong class="vs-number" data-countup="{{ v.main_words }}">{{ num(v.main_words) }}</strong>
+      <span class="vs-flag is-ok">{{ _('The text people read, each page once') }}</span>
+    </div>
+    {% for topic, text in [
+        (_('Subdomains'), _('%(n)s found, with %(words)s more words, each on its own line.', n=v.subdomains, words=num(v.subdomain_words))),
+        (_('Repetition'), _('%(pct)s%% measured on every count, by sentence.', pct=num(v.repeated_pct))),
+        (_('Translations'), _('%(n)s translated pages set aside, never fetched.', n=num(v.translated_pages))),
+        (_('For your client'), _('A report link, a CSV of every page, the text as Markdown.'))] %}
+    <div class="vs-row" style="--i: {{ loop.index0 }};"><span class="vs-state is-check">{{ icon('check', 13) }}</span>
+      <span><b>{{ topic }}</b> {{ text }}</span></div>
+    {% endfor %}
+    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ _('%(n)s min', n=v.minutes) }} · {{ _('free') }}</strong> <span>{{ _('on our servers, no AI usage') }}</span></div>
+  </div>
+</div>
+{%- endmacro %}

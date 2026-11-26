@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ _('All crawls') }} — {{ surface.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap">
+    <a href="{{ url('/') }}" class="back-link">{{ _('← New crawl') }}</a>
+
+    <div class="list-head" style="margin-top:20px;">
+      <div class="section-label">{{ _('All your crawls') }}{% if total %} ({{ num(total) }}){% endif %}</div>
+    </div>
+
+    {% if runs %}
+      {% include "_run_list.html" %}
+      {% include "_pagination.html" %}
+    {% else %}
+      <p class="muted">{{ _('No crawls yet') }} — <a href="{{ url('/') }}">{{ _('start one') }}</a>.</p>
+    {% endif %}
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    initBilling();
+    formatRunDates();
+  </script>
+{% endblock %}

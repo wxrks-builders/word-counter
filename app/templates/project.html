@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} — {{ _('Projects') }} — {{ surface.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% macro site(u) %}{{ u | replace('https://', '') | replace('http://', '') }}{% endmacro %}
+{% macro site_list(ids, names) %}{% for i in ids %}{% if not loop.first %}, {% endif %}{{ site(names.get(i, i)) }}{% endfor %}{% endmacro %}
+{% set t = c.totals if c else {} %}
+{% set kind_labels = {'same_text': _('same text'), 'changed_text': _('text changed — counted from the crawl listed first'),
+                      'address_only': _('same address')} %}
+{% set status_labels = {'completed': _('Completed'), 'failed': _('Failed'), 'cancelled': _('Cancelled'),
+                        'paused': _('Paused'), 'crawling': _('Crawling'), 'queued': _('Queued'),
+                        'starting': _('Starting…')} %}
+{% set step_labels = {'queued': _('Waiting to start…'), 'loading': _('Reading the crawls…'), 'pages': _('Matching pages…'),
+                      'sentences': _('Reading sentences…'), 'compare': _('Comparing sentences…'), 'save': _('Saving…')} %}
+{% set busy = job.status in ('queued', 'running') %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="report-wrap report-header">
+    <a href="{{ url('/projects') }}">← {{ _('Projects') }}</a>
+    <div class="title-row">
+      <div class="title-block">
+        <h1 id="project-name">{{ project.name }}</h1>
+        <button type="button" class="icon-button" id="rename-btn"
+                aria-label="{{ _('Rename project') }}" title="{{ _('Rename project') }}">{{ icon('pencil', 16) }}</button>
+        <form class="edit-url" id="rename-form" hidden>
+          <label for="rename-input">{{ _('Project name') }}</label>
+          <div class="edit-url-row">
+            <input type="text" id="rename-input" value="{{ project.name }}" maxlength="120" autocomplete="off">
+            <button type="submit">{{ _('Save') }}</button>
+            <button type="button" class="secondary" id="rename-cancel">{{ _('Cancel') }}</button>
+          </div>
+          <p class="field-error" id="rename-error" hidden></p>
+        </form>
+      </div>
+      <div class="header-actions">
+        {% if c %}<a class="button secondary" href="/projects/{{ project.id }}/export.csv">{{ _('Export CSV') }}</a>{% endif %}
+        <a class="button secondary" href="{{ url('/projects/' ~ project.id ~ '/client') }}">{{ _('Client view') }}</a>
+        <button type="button" class="secondary" id="project-share-btn">{{ _('Share') }}</button>
+        <a class="button" href="{{ url('/') }}?project={{ project.id }}">{{ icon('plus', 16) }} {{ _('Crawl another site') }}</a>
+        <div class="action-menu" data-menu>
+          <button type="button" class="secondary action-dots" data-menu-button
+                  aria-haspopup="true" aria-expanded="false" title="{{ _('More actions') }}">⋯</button>
+          <div class="action-menu-list" role="menu" data-menu-panel hidden>
+            <button type="button" role="menuitem" id="add-runs-open">{{ _('Add existing runs') }}…</button>
+            <button type="button" role="menuitem" id="delete-project-btn" class="menu-danger">{{ _('Delete project') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="run-date-line">
+      {%- if run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(run_count)) }}{% endif %}
+      {%- set crawling = rows | selectattr('status', 'in', ['crawling', 'queued', 'starting', 'resuming', 'paused']) | list %}
+      {%- if crawling %} · {{ _('%(n)s still crawling', n=num(crawling | length)) }}{% endif %}
+      {%- if project.is_public %} · <span class="status-badge status-completed">{{ _('Shared') }}</span>{% endif %}
+    </p>
+  </div>
+
+  {% if not rows %}
+  <div class="report-wrap report-body">
+    <div class="project-empty">
+      <h2>{{ _('No crawls in this project yet') }}</h2>
+      <p class="muted">{{ _('Add the crawls you already have, or crawl a site straight into it.') }}</p>
+      <div class="project-empty-actions">
+        <button type="button" class="secondary" id="add-runs-open-empty">{{ _('Add existing runs') }}…</button>
+        <a class="button" href="{{ url('/') }}?project={{ project.id }}">{{ _('Crawl a site') }}</a>
+      </div>
+    </div>
+  </div>
+  {% else %}
+
+  <section class="report-hero" aria-label="{{ _('Summary') }}">
+    <div class="report-wrap report-hero-inner">
+      <div class="hero-top">
+        <div>
+          <div class="hero-label"><span class="section-label">{{ _('New words') }}</span></div>
+          {% if c %}
+          <div class="hero-number">{{ num(t.new_words) }}</div>
+          <p class="hero-sub">
+            {%- if t.runs_counted == 1 %}{{ _('each page and each sentence once, in 1 crawl') }}
+            {%- else %}{{ _('each page and each sentence once, across %(n)s crawls', n=num(t.runs_counted)) }}{% endif -%}
+          </p>
+          {% else %}
+          <div class="hero-number hero-number-pending">—</div>
+          <p class="hero-sub">{{ _('Going through the crawls for the first time…') }}</p>
+          {% endif %}
+        </div>
+        <div class="consolidate-box">
+          {% if c %}<p class="consolidate-when">{{ _('Consolidated') }} <span class="run-date-iso" data-iso="{{ c.computed_at }}"></span></p>{% endif %}
+          <button type="button" id="consolidate-btn"{% if busy %} disabled{% endif %}>
+            {%- if busy %}{{ _('Consolidating…') }}{% elif c %}{{ _('Consolidate again') }}{% else %}{{ _('Consolidate') }}{% endif -%}
+          </button>
+          <div class="consolidate-progress" id="consolidate-progress"{% if not busy %} hidden{% endif %}>
+            <div class="consolidate-track" role="progressbar" aria-label="{{ _('Consolidating') }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ job.percent or 0 }}">
+              <span id="consolidate-bar" style="width: {{ job.percent or 0 }}%;"></span>
+            </div>
+            <p class="consolidate-step" id="consolidate-step" aria-live="polite">{{ step_labels.get(job.step or 'queued', step_labels['queued']) }}</p>
+          </div>
+          <p class="field-error" id="consolidate-error"{% if job.status != 'failed' %} hidden{% endif %}>
+            {%- if job.status == 'failed' %}{{ _('The last consolidation didn’t finish: %(error)s', error=job.error or '') }}{% endif -%}
+          </p>
+        </div>
+      </div>
+
+      {% if c %}
+      <ol class="waterfall" aria-label="{{ _('How the crawls come down to the new words') }}">
+        <li><span>{{ _('Added up: every page of every crawl') }}</span><strong>{{ num(t.added_up) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Same page in more than one crawl') }}</span><strong>−{{ num(t.same_pages) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Sentences repeated within a crawl') }}</span><strong>−{{ num(t.repeated_within) }}</strong></li>
+        <li class="waterfall-minus"><span>{{ _('Sentences repeated across crawls') }}</span><strong>−{{ num(t.repeated_across) }}</strong></li>
+        <li class="waterfall-total"><span>{{ _('New words') }}</span><strong>{{ num(t.new_words) }}</strong></li>
+      </ol>
+      {% if t.added_up %}
+      <div class="coverage">
+        <div class="coverage-bar" role="img" aria-label="{{ _('How the added-up words split') }}">
+          <span class="wf-new" style="width: {{ (100 * t.new_words / t.added_up) | round(2) }}%;"></span>
+          <span class="wf-within" style="width: {{ (100 * t.repeated_within / t.added_up) | round(2) }}%;"></span>
+          <span class="wf-across" style="width: {{ (100 * t.repeated_across / t.added_up) | round(2) }}%;"></span>
+          <span class="cov-unchecked" style="width: {{ (100 * t.same_pages / t.added_up) | round(2) }}%;"></span>
+        </div>
+        <div class="coverage-legend">
+          <span><i class="wf-new"></i> {{ _('new') }}</span>
+          <span><i class="wf-within"></i> {{ _('repeated within a crawl') }}</span>
+          <span><i class="wf-across"></i> {{ _('repeated across crawls') }}</span>
+          <span><i class="cov-unchecked"></i> {{ _('same page in another crawl') }}</span>
+        </div>
+      </div>
+      {% endif %}
+      {% if c.notes.markdown_runs %}
+      <p class="project-notice">
+        {{ _('Estimated from saved Markdown: %(sites)s. These crawls are from before crawls kept their sentences, so their sentences come from the Markdown they saved — main content only — and each page’s words are split in the same proportions. A new crawl gives exact figures.', sites=site_list(c.notes.markdown_runs, names)) }}
+      </p>
+      {% endif %}
+      {% if c.notes.page_only_runs %}
+      <p class="project-notice">
+        {{ _('Checked by page only: %(sites)s. These crawls kept no sentences and saved no Markdown, so their pages count in full unless the same page is in another crawl. A new crawl checks them sentence by sentence.', sites=site_list(c.notes.page_only_runs, names)) }}
+      </p>
+      {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="report-wrap report-body">
+    <section class="report-section" id="crawls">
+      <div class="section-head">
+        <h2>{{ _('Crawls') }}</h2>
+        <button type="button" class="secondary" id="add-runs-open-inline">{{ _('Add existing runs') }}…</button>
+      </div>
+      <p class="section-lead">{{ _('Read in this order, each crawl adds what the ones above it don’t have: completed crawls first, newest first; a crawl that didn’t finish only fills the gaps. Of a site crawled twice, the latest completed crawl counts.') }}</p>
+      <div class="table-scroll table-paged">
+        <table class="project-sites project-crawls">
+          <thead>
+            <tr>
+              <th>{{ _('Crawl') }}</th><th class="col-num">{{ _('Words') }}</th>
+              <th class="col-num">{{ _('Same page in another crawl') }}</th>
+              <th class="col-num">{{ _('Repeated within') }}</th>
+              <th class="col-num">{{ _('Repeated from other crawls') }}</th>
+              <th class="col-num">{{ _('New words') }}</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            {% set counted = row.state in ('counted', 'gap_filler') %}
+            <tr class="project-site-row state-{{ row.state }}">
+              <td>
+                <a class="project-site-name" href="{{ url('/crawl/' ~ row.id) }}">{{ site(row.shown_url) }}</a>
+                <span class="project-site-meta">
+                  <span class="run-date-iso" data-iso="{{ row.created_at }}"></span>
+                  <span class="status-badge status-{{ row.status }}">{{ status_labels.get(row.status, row.status | capitalize) }}</span>
+                  {% if row.detected_cms %}<span class="pill">{{ row.detected_cms }}</span>{% endif %}
+                  {% if row.password_protected %}<span class="pill">{{ _('Password-protected') }}</span>{% endif %}
+                  {% if row.signed_in %}<span class="pill">{{ _('Signed in') }}</span>{% endif %}
+                </span>
+                {% if row.state == 'gap_filler' %}<span class="project-site-note">{{ _('Didn’t finish: adds only the pages and sentences the crawls above don’t have.') }}</span>
+                {% elif row.state == 'superseded' %}<span class="project-site-note">{{ _('Replaced by the newer crawl of this site — not counted.') }}</span>
+                {% elif row.state == 'in_progress' %}<span class="project-site-note">{{ _('Still crawling — joins when it finishes.') }}</span>
+                {% elif row.state == 'waiting' %}<span class="project-site-note">{{ _('Added since the last consolidation — in the next one.') }}</span>{% endif %}
+                {% if counted and row.coverage %}
+                  {% if row.coverage.markdown %}<span class="project-site-note">{{ _('Sentences estimated from saved Markdown.') }}</span>{% endif %}
+                  {% if row.coverage.page_only %}<span class="project-site-note">{{ _('%(n)s words checked by page only.', n=num(row.coverage.page_only)) }}</span>{% endif %}
+                {% endif %}
+              </td>
+              <td class="words-cell" data-label="{{ _('Words') }}">
+                {%- if counted %}{{ num(row.words) }}{% else %}<s class="not-in-total" title="{{ _('Not in the total') }}">{{ num(row.own_words) }}</s>{% endif -%}
+                {%- if row.repeated_pct is not none %}<span class="cell-sub">{{ _('%(pct)s%% repeated in its own report', pct=row.repeated_pct) }}</span>{% endif -%}
+              </td>
+              {% if counted %}
+              <td class="words-cell" data-label="{{ _('Same page in another crawl') }}">
+                {{- num(row.same_page_words) }}
+                {%- if row.same_page_pages %}<span class="cell-sub">
+                  {%- if row.same_page_pages == 1 %}{{ _('1 page') }}{% else %}{{ _('%(n)s pages', n=num(row.same_page_pages)) }}{% endif %}
+                  {%- for other in row.same_page_in[:2] %} · {{ _('counted from %(site)s', site=site(names.get(other.id, other.id))) }}{% endfor %}</span>{% endif -%}
+              </td>
+              <td class="words-cell" data-label="{{ _('Repeated within') }}">{{ num(row.repeated_within) }}</td>
+              <td class="words-cell" data-label="{{ _('Repeated from other crawls') }}">{{ num(row.repeated_across) }}</td>
+              <td class="words-cell words-new" data-label="{{ _('New words') }}">{{ num(row.new_words) }}</td>
+              {% else %}
+              <td class="words-cell" colspan="4">—</td>
+              {% endif %}
+              <td class="open-cell">
+                <button type="button" class="link-button project-remove" data-run="{{ row.id }}">{{ _('Remove') }}</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% if c and t.runs_counted > 1 %}
+          <tfoot>
+            <tr class="project-together">
+              <td>{{ _('Together') }}</td>
+              <td class="words-cell" data-label="{{ _('Words') }}">{{ num(t.added_up) }}</td>
+              <td class="words-cell" data-label="{{ _('Same page in another crawl') }}">{{ num(t.same_pages) }}</td>
+              <td class="words-cell" data-label="{{ _('Repeated within') }}">{{ num(t.repeated_within) }}</td>
+              <td class="words-cell" data-label="{{ _('Repeated from other crawls') }}">{{ num(t.repeated_across) }}</td>
+              <td class="words-cell words-new" data-label="{{ _('New words') }}">{{ num(t.new_words) }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+          {% endif %}
+        </table>
+      </div>
+    </section>
+
+    {% if c %}
+    <section class="report-section" id="overlap">
+      <h2>{{ _('What overlapped') }}</h2>
+      <div class="overlap-tabs" role="tablist" aria-label="{{ _('What overlapped') }}">
+        <button type="button" role="tab" id="tab-overlap-pages" aria-controls="overlap-pages" aria-selected="true">
+          {{ _('Pages') }} <span class="count-chip">{{ num(c.overlap_pages.count) }}</span></button>
+        <button type="button" role="tab" id="tab-overlap-sentences" aria-controls="overlap-sentences" aria-selected="false">
+          {{ _('Sentences') }} <span class="count-chip">{{ num(c.sentences.count) }}</span></button>
+      </div>
+
+      <div class="overlap-panel" id="overlap-pages" role="tabpanel" aria-labelledby="tab-overlap-pages">
+        <p class="section-lead">{{ _('The same page in more than one crawl — the same address on one site, or the same text anywhere — counts once, from the crawl listed first above. Crawls can also share sentences without sharing a page.') }}</p>
+        {% if c.pairs %}
+        <div class="table-scroll">
+          <table class="folder-table overlap-pairs">
+            <thead><tr><th>{{ _('Between') }}</th><th>{{ _('Same pages') }}</th><th>{{ _('Their words') }}</th><th>{{ _('Sentences in common') }}</th></tr></thead>
+            <tbody>
+              {% for pair in c.pairs %}
+              <tr>
+                <td>{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}
+                  {%- if pair.pages %}<span class="cell-sub">
+                    {%- if pair.same_text %}{{ _('%(n)s same text', n=num(pair.same_text)) }}{% endif -%}
+                    {%- if pair.changed_text %}{% if pair.same_text %} · {% endif %}{{ _('%(n)s text changed', n=num(pair.changed_text)) }}{% endif -%}
+                    {%- if pair.address_only %}{% if pair.same_text or pair.changed_text %} · {% endif %}{{ _('%(n)s same address', n=num(pair.address_only)) }}{% endif -%}
+                  </span>{% endif %}
+                </td>
+                <td class="folder-pages">{{ num(pair.pages) }}</td>
+                <td class="folder-words">{{ num(pair.words) }}</td>
+                <td class="folder-words">{{ _('%(n)s words', n=num(pair.sentence_words)) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="muted">{{ _('No page or sentence is in more than one crawl.') }}</p>
+        {% endif %}
+
+        {% if c.overlap_pages.top %}
+        <h3 class="project-subhead">{{ _('Pages in more than one crawl') }}</h3>
+        <div class="table-scroll table-paged">
+          <table class="folder-table overlap-pages">
+            <thead><tr><th>{{ _('Page') }}</th><th>{{ _('Words') }}</th></tr></thead>
+            <tbody>
+              {% for g in c.overlap_pages.top[:25] %}
+              <tr>
+                <td><a href="{{ g.url }}" target="_blank" rel="noopener">{{ g.path }}</a>
+                  <span class="cell-sub">{{ kind_labels[g.kind] }}{% if g.moved %} · {{ _('moved') }}{% endif %} · {{ _('counted from %(site)s', site=site(names.get(g.counted_from, g.counted_from))) }}</span>
+                  {% for copy in g.copies[:3] %}<span class="cell-sub">{{ _('also in %(site)s:', site=site(names.get(copy.run, copy.run))) }} <a href="{{ copy.url }}" target="_blank" rel="noopener">{{ copy.url | replace('https://', '') | replace('http://', '') }}</a></span>{% endfor %}
+                </td>
+                <td class="folder-words">{{ num(g.words) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+
+        {% if c.overlap_pages.mostly_repeated %}
+        <h3 class="project-subhead">{{ _('Pages mostly repeated from another crawl') }}</h3>
+        <p class="muted">{{ _('Different pages, but at least half of their words are sentences another crawl has.') }}</p>
+        <div class="table-scroll table-paged">
+          <table class="folder-table">
+            <thead><tr><th>{{ _('Page') }}</th><th>{{ _('Words') }}</th><th>{{ _('Repeated') }}</th></tr></thead>
+            <tbody>
+              {% for m in c.overlap_pages.mostly_repeated[:25] %}
+              <tr>
+                <td><a href="{{ m.url }}" target="_blank" rel="noopener">{{ m.url | replace('https://', '') | replace('http://', '') }}</a>
+                  {% if m['from'] %}<span class="cell-sub">{{ _('from %(sites)s', sites=site_list(m['from'], names)) }}</span>{% endif %}
+                </td>
+                <td class="folder-words">{{ num(m.words) }}</td>
+                <td class="folder-words">{{ num(m.across) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        <p class="overlap-downloads">
+          <a href="/projects/{{ project.id }}/export.csv?only=overlap">{{ _('Download the pages in more than one crawl (CSV)') }}</a>
+          <a href="/projects/{{ project.id }}/export.csv">{{ _('Download every page, with its new words (CSV)') }}</a>
+        </p>
+      </div>
+
+      <div class="overlap-panel" id="overlap-sentences" role="tabpanel" aria-labelledby="tab-overlap-sentences">
+        <p class="section-lead">{{ _('Sentences found in more than one crawl. Each counts once, where it was first seen; its other copies are the words removed.') }}</p>
+        {% if c.sentences.top %}
+        <div class="table-scroll table-paged">
+          <table class="folder-table overlap-sentences">
+            <thead><tr><th>{{ _('Sentence') }}</th><th>{{ _('Words') }}</th><th>{{ _('Times') }}</th><th>{{ _('Words removed') }}</th></tr></thead>
+            <tbody>
+              {% for sentence in c.sentences.top %}
+              <tr>
+                <td>{% if sentence.text_known %}{{ sentence.text }}{% else %}<span class="muted">{{ _('Text not kept — first seen on') }} <a href="{{ sentence.first_url }}" target="_blank" rel="noopener">{{ sentence.first_url | replace('https://', '') }}</a></span>{% endif %}
+                  <span class="cell-sub">{{ _('in %(sites)s', sites=site_list(sentence.runs, names)) }}</span>
+                </td>
+                <td class="folder-pages">{{ num(sentence.words) }}</td>
+                <td class="folder-pages">{{ num(sentence.times) }}×</td>
+                <td class="folder-words">{{ num(sentence.removed) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="muted">{{ _('No sentence is in more than one crawl.') }}</p>
+        {% endif %}
+        <p class="overlap-downloads">
+          <a href="/projects/{{ project.id }}/sentences.csv">{{ _('Download the repeated sentences (CSV)') }}</a>
+        </p>
+      </div>
+    </section>
+
+    {% set r = c.report %}
+    <div class="report-grid">
+      <section class="report-section" id="folders">
+        <h2>{{ _('Folders') }}</h2>
+        <div class="table-scroll table-paged">
+          <table class="folder-table">
+            <thead><tr><th>{{ _('Folder') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th><th>{{ _('New words') }}</th></tr></thead>
+            <tbody>
+              {% for f in r.folders[:12] %}<tr><td>{{ f.name }}</td><td class="folder-pages">{{ num(f.pages) }}</td><td class="folder-words">{{ num(f.words) }}</td><td class="folder-words">{{ num(f.new_words or 0) }}</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="report-section" id="subdomains">
+        <h2>{{ _('Subdomains') }}</h2>
+        <div class="table-scroll table-paged">
+          <table class="folder-table">
+            <thead><tr><th>{{ _('Host') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th><th>{{ _('New words') }}</th></tr></thead>
+            <tbody>
+              {% for h in r.hosts[:12] %}<tr><td>{{ h.name }}</td><td class="folder-pages">{{ num(h.pages) }}</td><td class="folder-words">{{ num(h.words) }}</td><td class="folder-words">{{ num(h.new_words or 0) }}</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if r.languages | length > 1 %}
+        <h2 class="project-subhead">{{ _('Languages') }}</h2>
+        <div class="table-scroll table-paged">
+          <table class="folder-table">
+            <thead><tr><th>{{ _('Language') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th><th>{{ _('New words') }}</th></tr></thead>
+            <tbody>
+              {% for l in r.languages[:12] %}<tr><td>{{ l.name }}</td><td class="folder-pages">{{ num(l.pages) }}</td><td class="folder-words">{{ num(l.words) }}</td><td class="folder-words">{{ num(l.new_words or 0) }}</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <section class="report-section" id="left-out">
+      <h2>{{ _('Left out') }}</h2>
+      <ul class="project-left-out">
+        <li><span>{{ _('Duplicate pages within a crawl') }}</span><strong>{{ num(t.duplicates) }}</strong></li>
+        <li><span>{{ _('Pages behind a sign-in') }}</span><strong>{{ num(t.login_walls) }}</strong></li>
+        {% if r.blocked_count or r.failed_count %}<li><span>{{ _('Blocked or failed pages') }}</span><strong>{{ num(r.blocked_count + r.failed_count) }}</strong></li>{% endif %}
+        {% if r.skipped_hosts %}<li><span>{{ _('Linked subdomains not crawled') }}</span><strong>{{ r.skipped_hosts[:4] | map(attribute='name') | join(', ') }}</strong></li>{% endif %}
+      </ul>
+    </section>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# Add existing runs: the user's runs not yet in this project. #}
+  <div class="modal-overlay" id="add-runs-modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="add-runs-title">
+      <div class="modal-head">
+        <h2 id="add-runs-title">{{ _('Add existing runs to %(name)s', name=project.name) }}</h2>
+        <button type="button" class="modal-close" id="add-runs-close" aria-label="{{ _('Close') }}">×</button>
+      </div>
+      <form class="modal-body project-form" id="add-runs-form">
+        {% if addable_runs %}
+        <label class="visually-hidden" for="add-runs-search">{{ _('Search your runs') }}</label>
+        <input type="search" id="add-runs-search" class="project-new-name" placeholder="{{ _('Search your runs') }}" autocomplete="off">
+        <div class="project-options add-runs-list">
+          {% for run in addable_runs %}
+          <label class="project-option" data-search="{{ run.shown_url | lower }}">
+            <input type="checkbox" name="run" value="{{ run.id }}">
+            <span class="project-option-name">{{ site(run.shown_url) }}</span>
+            <span class="project-option-meta">{{ _('%(n)s words', n=num(run.total_words)) }} · <span class="run-date-iso" data-iso="{{ run.created_at }}"></span></span>
+          </label>
+          {% endfor %}
+        </div>
+        <p class="muted project-form-lead">{{ _('Up to %(n)s crawls in a project.', n=max_runs) }}</p>
+        {% else %}
+        <p class="muted">{{ _('All your runs are in this project already.') }}</p>
+        {% endif %}
+        <p class="field-error" id="add-runs-error" hidden></p>
+        <div class="project-form-actions">
+          <button type="button" class="secondary" id="add-runs-cancel">{{ _('Cancel') }}</button>
+          {% if addable_runs %}<button type="submit">{{ _('Add') }}</button>{% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {# Share: a public link to the client view. #}
+  <div class="modal-overlay" id="project-share-modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="project-share-title">
+      <div class="modal-head">
+        <h2 id="project-share-title">{{ _('Share this project') }}</h2>
+        <button type="button" class="modal-close" id="project-share-close" aria-label="{{ _('Close') }}">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted">{{ _('The link opens the client view: the combined total, the sites and where the words are. Each crawl’s own report stays private unless you share it too.') }}</p>
+      </div>
+      <div class="modal-foot">
+        <div class="public-link-row">
+          <span class="icon-circle">{{ icon('globe', 18) }}</span>
+          <div class="person-id">
+            <span class="person-name">{{ _('Public link') }}</span>
+            <span class="person-email">{{ _('Anyone with the link can view this project') }}</span>
+          </div>
+          <button type="button" class="switch" id="project-public-toggle" role="switch" aria-checked="{{ 'true' if project.is_public else 'false' }}" aria-label="{{ _('Public link') }}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+        <div class="share-link-row" id="project-link-row"{% if not project.is_public %} style="display:none;"{% endif %}>
+          <input type="text" id="project-link-input" readonly value="{{ share_link or '' }}">
+          <button type="button" id="project-copy-btn" class="secondary">{{ _('Copy link') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    initBilling();
+    formatRunDates();
+    initProjectPage({ projectId: {{ project.id | tojson }}, isPublic: {{ project.is_public | tojson }},
+                      job: {{ {'status': job.status, 'computed_gen': job.computed_gen} | tojson }},
+                      steps: {{ step_labels | tojson }} });
+  </script>
+{% endblock %}

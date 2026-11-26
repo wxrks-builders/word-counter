@@ -1,0 +1,7 @@
+{# Why crawls take a little longer than a quick counter: pages are read once
+   they've finished loading (see _wait_for_content in app/crawler.py). Shared
+   by the live crawl, and the finished report. #}
+<details class="why-slow"{% if why_id %} id="{{ why_id }}"{% endif %}>
+  <summary>{{ why_label }}</summary>
+  <p>{{ _('Each page is opened in a real browser and counted only once it has finished loading — usually a second or two more per page. Tools that read a page the moment it appears finish sooner, but miss text that loads afterwards; on some sites that’s whole sections.') }}</p>
+</details>

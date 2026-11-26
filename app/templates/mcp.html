@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Word Counter for Claude and ChatGPT (MCP server)') }} — {{ _(surface.name) }}{% endblock %}
+{% block description %}{{ _('Connect Word Counter to Claude, ChatGPT, Cursor or any MCP client and ask how many words a website has. It crawls every page and answers with the real total, the repetition and the split by language.') }}{% endblock %}
+{% block og_title %}{{ _('Ask Claude or ChatGPT how many words a website has') }}{% endblock %}
+{% block og_description %}{{ _('Word Counter’s MCP server crawls every page and gives your assistant the real total — not a guess from the homepage.') }}{% endblock %}
+{% set connect_href = url('/mcp/connect') %}
+{% set example_url = endpoint ~ '/wck_your_key' %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <main class="doc-page">
+    <section class="doc-hero">
+      <div class="doc-hero-copy">
+        <span class="section-label">{{ _('MCP server') }}</span>
+        <h1>{{ _('Ask Claude or ChatGPT how many words a website has') }}</h1>
+        <p class="doc-lede">{{ _('Connect Word Counter to your AI assistant. When you ask about a website, it crawls every page and comes back with the real total — the same count as our reports, not a guess from the homepage.') }}</p>
+        <div class="doc-actions">
+          <a class="button" href="{{ connect_href }}">{{ _('Get your connection URL') }} {{ icon('arrow-right', 16) }}</a>
+          <a class="button secondary" href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}">{{ _('Claude alone vs. with Word Counter') }}</a>
+        </div>
+        <p class="doc-fine">{{ _('Free with a Word Counter account. Works with Claude Code, Claude, ChatGPT, Cursor, VS Code and any app that speaks MCP.') }}</p>
+      </div>
+      {% include "_chat_mock.html" %}
+    </section>
+
+    <section class="doc-section">
+      <h2>{{ _('Why your assistant needs it') }}</h2>
+      <div class="doc-cards">
+        <article class="home-card">
+          <h3>{{ _('It reads every page') }}</h3>
+          <p>{{ _('On its own, an assistant estimates from the pages it opens — or, in Claude Code, writes a one-off crawler that counts the menu on every page. Word Counter follows every link and the sitemap until there is nothing left to read.') }}</p>
+        </article>
+        <article class="home-card">
+          <h3>{{ _('It counts what you would translate') }}</h3>
+          <p>{{ _('The main text a visitor reads — without menus, footers and forms, and with each duplicate page counted once.') }}</p>
+        </article>
+        <article class="home-card">
+          <h3>{{ _('It knows what repeats') }}</h3>
+          <p>{{ _('An estimate of the sentences repeated across pages, and the split by language, section and subdomain — the numbers a quote is built on.') }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="doc-section" id="connect">
+      <h2>{{ _('Connect in three steps') }}</h2>
+      <ol class="doc-steps">
+        <li>
+          <h3>{{ _('Get your connection URL') }}</h3>
+          <p>{{ _('Sign in with Google and make a connection. You get a personal URL — and a key for apps that take one — shown once.') }}</p>
+          <a class="button secondary" href="{{ connect_href }}">{{ _('Get your connection URL') }}</a>
+        </li>
+        <li>
+          <h3>{{ _('Add it to your app') }}</h3>
+          <p>{{ _('Pick your app below and paste it in. It takes a minute.') }}</p>
+        </li>
+        <li>
+          <h3>{{ _('Ask about any website') }}</h3>
+          <p>{{ _('“How many words does example.com have?” Your assistant starts the count, follows it, and answers with the total.') }}</p>
+        </li>
+      </ol>
+
+      <div class="doc-tabs" role="tablist" aria-label="{{ _('Your app') }}">
+        <button type="button" role="tab" id="tab-claude-code" aria-controls="app-claude-code" aria-selected="true" translate="no">Claude Code</button>
+        <button type="button" role="tab" id="tab-claude" aria-controls="app-claude" aria-selected="false">{{ _('Claude (web and desktop)') }}</button>
+        <button type="button" role="tab" id="tab-chatgpt" aria-controls="app-chatgpt" aria-selected="false" translate="no">ChatGPT</button>
+        <button type="button" role="tab" id="tab-others" aria-controls="app-others" aria-selected="false">{{ _('Cursor, VS Code and others') }}</button>
+      </div>
+
+      <div class="doc-panel" id="app-claude-code" role="tabpanel" aria-labelledby="tab-claude-code">
+        <h3 translate="no">Claude Code</h3>
+        <p>{{ _('In a terminal, add the server with your key in a header:') }}</p>
+        <div class="doc-code" translate="no"><pre><code>claude mcp add --transport http word-counter {{ endpoint }} \
+  --header "Authorization: Bearer wck_your_key"</code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+        <p>{{ _('Add --scope user to have it in every project. Then type /mcp in Claude Code to check that word-counter is connected, and ask away.') }}</p>
+      </div>
+
+      <div class="doc-panel" id="app-claude" role="tabpanel" aria-labelledby="tab-claude">
+        <h3>{{ _('Claude (claude.ai and Claude Desktop)') }}</h3>
+        <ol class="doc-list">
+          <li>{{ _('Open Settings → Connectors (on some versions, Customize → Connectors).') }}</li>
+          <li>{{ _('Choose Add custom connector.') }}</li>
+          <li>{{ _('Name it Word Counter and paste your personal URL:') }}</li>
+        </ol>
+        <div class="doc-code" translate="no"><pre><code>{{ example_url }}</code></pre></div>
+        <p>{{ _('Leave the advanced settings empty and add it. In a chat, make sure Word Counter is switched on in the tools menu. On the Free plan Claude allows one custom connector.') }}</p>
+      </div>
+
+      <div class="doc-panel" id="app-chatgpt" role="tabpanel" aria-labelledby="tab-chatgpt">
+        <h3 translate="no">ChatGPT</h3>
+        <ol class="doc-list">
+          <li>{{ _('Open Plugins and choose + → Add custom MCP server. (Some accounts have it under Settings → Apps & Connectors → Advanced → Developer mode → Create.)') }}</li>
+          <li>{{ _('Name it Word Counter and paste your personal URL:') }}</li>
+        </ol>
+        <div class="doc-code" translate="no"><pre><code>{{ example_url }}</code></pre></div>
+        <ol class="doc-list" start="3">
+          <li>{{ _('Set Authentication to None — the key is already in the URL — and create it.') }}</li>
+          <li>{{ _('In a chat, add Word Counter from the + menu and ask your question.') }}</li>
+        </ol>
+        <p class="muted">{{ _('Custom MCP servers depend on your ChatGPT plan and, in a workspace, on what your admin allows.') }}</p>
+      </div>
+
+      <div class="doc-panel" id="app-others" role="tabpanel" aria-labelledby="tab-others">
+        <h3>{{ _('Cursor, VS Code and others') }}</h3>
+        <p>{{ _('Cursor — in ~/.cursor/mcp.json:') }}</p>
+        <div class="doc-code" translate="no"><pre><code>{
+  "mcpServers": {
+    "word-counter": {
+      "url": "{{ endpoint }}",
+      "headers": { "Authorization": "Bearer wck_your_key" }
+    }
+  }
+}</code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+        <p>{{ _('VS Code — in .vscode/mcp.json:') }}</p>
+        <div class="doc-code" translate="no"><pre><code>{
+  "servers": {
+    "word-counter": {
+      "type": "http",
+      "url": "{{ endpoint }}",
+      "headers": { "Authorization": "Bearer wck_your_key" }
+    }
+  }
+}</code></pre><button type="button" class="secondary doc-copy" data-copy>{{ _('Copy') }}</button></div>
+        <p>{{ _('Any other app: use Streamable HTTP with the server URL and the key as a Bearer token — or, if it only takes a URL, your personal URL.') }}</p>
+      </div>
+    </section>
+
+    <section class="doc-section">
+      <h2>{{ _('What to ask') }}</h2>
+      <ul class="doc-prompts">
+        <li>{{ _('How many words does wxrks.com have?') }}</li>
+        <li>{{ _('Count the words on example.com and tell me how much of it repeats.') }}</li>
+        <li>{{ _('Which sections of example.com have the most text?') }}</li>
+        <li>{{ _('How many words are in the German part of example.com?') }}</li>
+        <li>{{ _('List the 20 longest pages under example.com/blog.') }}</li>
+        <li>{{ _('Compare the word counts of our live site and our staging site.') }}</li>
+        <li>{{ _('Count only www.example.com — leave out its subdomains.') }}</li>
+        <li>{{ _('Is our help center bigger than our blog?') }}</li>
+      </ul>
+    </section>
+
+    <section class="doc-section">
+      <h2>{{ _('The tools') }}</h2>
+      <p>{{ _('Your assistant picks these itself; you just ask in your own words.') }}</p>
+      <div class="table-scroll">
+        <table class="doc-tools">
+          <thead><tr><th>{{ _('Tool') }}</th><th>{{ _('What it does') }}</th></tr></thead>
+          <tbody>
+            <tr><td translate="no"><code>count_words</code></td><td>{{ _('Counts a website: the total, pages, repetition, and the split by language, section and subdomain, with a link to the full report. The whole domain by default, or one host only. Reuses an earlier count of the same site unless asked to count again.') }}</td></tr>
+            <tr><td translate="no"><code>get_word_count</code></td><td>{{ _('Follows a count that’s still running, and returns the result when it’s done.') }}</td></tr>
+            <tr><td translate="no"><code>continue_word_count</code></td><td>{{ _('Carries a large site past its estimate to the very last page.') }}</td></tr>
+            <tr><td translate="no"><code>list_word_counts</code></td><td>{{ _('The sites you’ve counted, with their totals.') }}</td></tr>
+            <tr><td translate="no"><code>get_pages</code></td><td>{{ _('The pages of a count with their words, largest first, optionally only one section.') }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc-section">
+      <h2>{{ _('Good to know') }}</h2>
+      <div class="doc-faq">
+        <article>
+          <h3>{{ _('How long does a count take?') }}</h3>
+          <p>{{ _('Seconds for a small site, minutes for a large one. Your assistant waits up to a minute, then checks back on the count until it’s done.') }}</p>
+        </article>
+        <article>
+          <h3>{{ _('What about very large sites?') }}</h3>
+          <p>{{ _('At about 50,000 words a count pauses with an estimate of the whole site. Ask your assistant to continue and it counts every page.') }}</p>
+        </article>
+        <article>
+          <h3>{{ _('Where do my counts go?') }}</h3>
+          <p>{{ _('Into Your runs, like any count you start here — each with its report, every page and a CSV.') }}</p>
+        </article>
+        <article>
+          <h3>{{ _('What does it cost?') }}</h3>
+          <p>{{ _('Nothing extra: the same as counting on the website. Pro counts run faster.') }}</p>
+        </article>
+        <article>
+          <h3>{{ _('Is my URL safe to share?') }}</h3>
+          <p>{{ _('No — treat it like a password: anyone with it can count as you. You can revoke it at any time and make a new one.') }}</p>
+        </article>
+        <article>
+          <h3>{{ _('For developers') }}</h3>
+          <p>{{ _('Streamable HTTP at the URL below, plain JSON responses, no sessions. Protocol versions 2025-03-26 to 2026-07-28. Authentication: a Bearer key, or the key in the URL path.') }}</p>
+          <div class="doc-code" translate="no"><pre><code>{{ endpoint }}</code></pre></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="doc-cta">
+      <h2>{{ _('Ask your assistant the question it couldn’t answer before.') }}</h2>
+      <a class="button" href="{{ connect_href }}">{{ _('Get your connection URL') }} {{ icon('arrow-right', 16) }}</a>
+      <p><a href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}">{{ _('Read how Claude does with and without it →') }}</a></p>
+    </section>
+  </main>
+
+  {% include "_site_footer.html" %}
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>initUserMenu(); initDocTabs(); initCopyButtons();</script>
+{% endblock %}

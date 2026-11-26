@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block body %}
+  {# The public front door. Everything here comes from `surface`, so both
+     hostnames share this template and differ only in what they say. #}
+  <header class="topbar">
+    <a class="logo" href="{{ url('/') }}">
+      <img class="logo-img" src="/static/brand/logo.svg" alt="wxrks" width="123" height="28">
+      <span class="logo-sep"></span>
+      <span class="logo-name">{{ surface.name }}</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      {% include "_lang_menu.html" %}
+    <a class="button secondary" href="{{ url('/login') }}">{{ _('Sign in') }}</a>
+    </div>
+  </header>
+
+  {% import "_home_visuals.html" as vis with context %}
+  <main class="home">
+    {# The form is the front door: a visitor can start without signing in, and
+       everything that explains the product comes after it. #}
+    <section class="home-hero">
+      <div class="home-hero-copy">
+        <h1>{% if surface.key == "markdown" %}{{ _(surface.headline) }}{% else %}{{ _('Know how much content you’re dealing with.') }}{% endif %}</h1>
+        <p class="home-sub">{% if surface.key == "markdown" %}{{ _(surface.lede) }}{% else %}{{ _('Quoting a translation, planning a website rewrite or moving to a new CMS? Get a word count for your site, broken down by page and folder, so you can scope the work before you commit.') }}{% endif %}</p>
+        <form class="home-form" method="post" action="{{ url('/start') }}">
+          <div class="home-form-row">
+            <input id="site-url" type="text" name="url" inputmode="url" autocomplete="url" spellcheck="false" autocapitalize="off"
+                   required placeholder="{{ _('Enter your website URL') }}" aria-label="{{ _('Enter your website URL') }}" value="{{ prefill_url }}">
+            <button type="submit">{% if surface.key == "markdown" %}{{ _('Get the Markdown') }}{% else %}{{ _('Count my website’s words') }}{% endif %}</button>
+          </div>
+          <label class="checkbox-label home-md">
+            <input type="checkbox" name="markdown" value="1"{% if surface.default_capture_markdown %} checked{% endif %}> {{ _('Save each page as Markdown') }}
+          </label>
+        </form>
+        {% if start_error %}<p class="field-error">{{ _('Please enter a valid http(s) URL') }}</p>{% endif %}
+        <p class="home-fine">{% include "_google_g.html" %} {{ _('Free to use. No sign-up to start. Sites over %(n)s words require Google sign-in to finish.', n=num(pause_at_words)) }}</p>
+        {% include "_examples.html" %}
+      </div>
+      {# The WebGL scene fills the hero behind the copy. It is loaded after the
+         page has painted (the script at the bottom), and the hero is complete
+         without it: no WebGL, a data-saver connection or a failed load simply
+         leave this empty. #}
+      <div class="home-webgl" id="home-webgl" aria-hidden="true"></div>
+    </section>
+
+    {% include "_intro.html" %}
+
+    {% if surface.key != "markdown" %}
+    {# Word Counter against an AI assistant counting on its own: the article's
+       experiment on wxrks.com, reduced to two cards and four reasons. Here and
+       not in _intro.html: a signed-in first visit doesn't name wxrks.com. #}
+    <section class="home-section home-vs">
+      <div class="home-vs-head">
+        <h2 class="home-h2">{{ _('Why not just ask ChatGPT or Claude?') }}</h2>
+        <p>{{ _('We tried it on our own site. Asked how many words wxrks.com has, Claude Code wrote a crawler, fetched the pages its sitemap lists and counted every word in their HTML. Word Counter counted the same site, the same day.') }}</p>
+      </div>
+      {{ vis.vs_board(vs_ai) }}
+      <div class="home-vs-reasons">
+        <div>
+          <span class="home-icon">{{ icon('layers', 20) }}</span>
+          <h3 class="home-h3">{{ _('Runs on our servers, not your computer') }}</h3>
+          <p>{{ _('No crawler on your laptop and no AI usage spent fetching pages. Close the tab: if you’re signed in, you’ll get an email when it’s done.') }}</p>
+        </div>
+        <div>
+          <span class="home-icon">{{ icon('link', 20) }}</span>
+          <h3 class="home-h3">{{ _('No sitemap needed') }}</h3>
+          <p>{{ _('It follows links the way a visitor does, so it finds the help centers, docs and subdomains a sitemap leaves out.') }}</p>
+        </div>
+        <div>
+          <span class="home-icon">{{ icon('rotate-cw', 20) }}</span>
+          <h3 class="home-h3">{{ _('The same rules on every site') }}</h3>
+          <p>{{ _('An assistant writes a new crawler every time, and its steps change from one run to the next. Word Counter counts every site the same way, so next month’s count compares with this one.') }}</p>
+        </div>
+        <div>
+          <span class="home-icon">{{ icon('share-2', 20) }}</span>
+          <h3 class="home-h3">{{ _('A report you can send') }}</h3>
+          <p>{{ _('Share a link with your client, export every page to CSV, or put a client’s sites in one project that counts each page and sentence once.') }}</p>
+        </div>
+      </div>
+      <p class="home-vs-more"><a href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}#compare">{{ _('All %(n)s differences, side by side', n=vs_ai.differences) }} {{ icon('arrow-right', 16) }}</a></p>
+    </section>
+    {% endif %}
+
+    {# The MCP server: the same count, asked for from Claude, ChatGPT or any
+       assistant. The guide is /mcp; the article measures the difference. #}
+    <section class="home-section{% if surface.key != "markdown" %} home-subtle{% endif %} home-mcp">
+      <div class="home-split">
+        <div class="home-copy">
+          <span class="home-icon">{{ icon('bot', 20) }}</span>
+          <h2 class="home-h2">{{ _('Ask Claude or ChatGPT. Get the real count.') }}</h2>
+          <p>{{ _('Already working in an AI assistant? Connect it to Word Counter and ask about any website in plain words. The crawl runs on Word Counter’s servers, and your assistant answers with the total, the repetition and the split by language, with a link to the full report.') }}</p>
+          <p>{{ _('Then keep asking. Your assistant reads the numbers with you: which sections are biggest, what to leave out of a quote, how many words are new.') }}</p>
+          <ol class="home-mcp-steps">
+            <li>{{ _('Get your connection URL') }}</li>
+            <li>{{ _('Add it to your app') }}</li>
+            <li>{{ _('Ask about any website') }}</li>
+          </ol>
+          <p class="home-mcp-apps"><span>{{ _('Works with') }}</span>
+            {% for app in ('Claude Code', 'Claude', 'ChatGPT', 'Cursor', 'VS Code') %}<span class="home-mcp-app" translate="no">{{ app }}</span>{% endfor %}</p>
+          <p class="home-mcp-links">
+            <a class="button" href="{{ url('/mcp') }}">{{ _('Connect your assistant') }}</a>
+            <a href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}">{{ _('Claude with and without it →') }}</a>
+          </p>
+        </div>
+        {% with chat_follow_up = true %}{% include "_chat_mock.html" %}{% endwith %}
+      </div>
+    </section>
+
+    <section class="home-final">
+      <h2>{{ _('Find out how much work is on your website.') }}</h2>
+      <a class="button home-final-button" href="#site-url" data-focus-form>{{ _('Count my website’s words') }} {{ icon('arrow-right', 17) }}</a>
+      <p>{{ _('Free. No sign-up for sites under %(n)s words. Sign in with Google to finish larger sites.', n=num(pause_at_words)) }}</p>
+    </section>
+  </main>
+
+  {% include "_site_footer.html" %}
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>initUserMenu(); initHomeMotion();</script>
+  <script>
+    (function () {
+      if (navigator.connection && navigator.connection.saveData) return;
+      var load = function () { import("/static/hero-webgl.js?v={{ asset_v }}").catch(function () {}); };
+      (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(load);
+    })();
+  </script>
+{% endblock %}

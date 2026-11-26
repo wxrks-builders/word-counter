@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Articles') }} — {{ _(surface.name) }}{% endblock %}
+{% block description %}{{ _('What it takes to count the words on a website — measured, with screenshots.') }}{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+  <main class="doc-page article-index">
+    <div>
+      <span class="section-label">{{ _('Articles') }}</span>
+      <h1>{{ _('Counting the words on a website, measured') }}</h1>
+    </div>
+    <ul class="article-cards">
+      {% for a in articles %}
+      <li>
+        <a class="article-card" href="{{ url('/articles/' ~ a.slug) }}">
+          <img src="{{ a.image }}" alt="" width="1200" height="630" loading="lazy">
+          <span class="article-card-body">
+            <span class="article-card-date" lang="en">{{ a.published }}</span>
+            <strong lang="en">{{ a.title }}</strong>
+            <span lang="en">{{ a.description }}</span>
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </main>
+  {% include "_site_footer.html" %}
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>initUserMenu();</script>
+{% endblock %}

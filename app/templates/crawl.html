@@ -1,0 +1,626 @@
+{% extends "base.html" %}
+{% block title %}{{ display_url }} — {{ surface.name }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="report-wrap report-header">
+    <a href="/">← New crawl</a>
+    <div class="title-row">
+      <div class="title-block">
+        <h1 id="report-url">{{ display_url }}</h1>
+        {% if is_owner %}
+        <button type="button" class="icon-button" id="edit-url-btn"
+                aria-label="{{ _('Change the address this report shows') }}" title="{{ _('Change the address this report shows') }}">{{ icon('pencil', 16) }}</button>
+        {# The address is just a label: the crawl, and any re-crawl, start from the
+           page that worked. Kept to the site that was crawled (app/main.py). #}
+        <form class="edit-url" id="edit-url-form" hidden>
+          <label for="edit-url-input">{{ _('Address shown on this report') }}</label>
+          <div class="edit-url-row">
+            <input type="text" id="edit-url-input" value="{{ display_url }}" spellcheck="false" autocomplete="off">
+            <button type="submit">{{ _('Save') }}</button>
+            <button type="button" class="secondary" id="edit-url-cancel">{{ _('Cancel') }}</button>
+          </div>
+          <p class="edit-url-hint">{{ _('Shown on this report, its shared link and the CSV. It has to be on the site that was crawled. Leave it empty to show where the crawl started.') }}</p>
+          <p class="field-error" id="edit-url-error" hidden></p>
+        </form>
+        {% endif %}
+      </div>
+      <div class="header-actions">
+        {# Option A from the canvas: one Export menu instead of three buttons,
+           so a fifth export never widens the header again. The ids inside are
+           unchanged — the existing handlers bind to them. #}
+        <div class="action-menu" data-menu>
+          <button type="button" class="secondary" data-menu-button
+                  aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"></path></svg>
+            {{ _('Export') }} ▾
+          </button>
+          <div class="action-menu-list" role="menu" data-menu-panel hidden>
+            <button type="button" role="menuitem" id="export-csv-btn">{{ _('Export CSV') }}</button>
+            {# Label and visibility are set by applyMarkdown() in app.js, as before. #}
+            <button type="button" role="menuitem" id="markdown-btn" style="display:none;"></button>
+            <button type="button" role="menuitem" id="print-btn">{{ _('Print report') }}</button>
+          </div>
+        </div>
+        {# Share, Re-crawl and Delete need an account: not in a shared view,
+           nor for a guest, whose report isn't theirs to keep until they sign in. #}
+        {% if mode != "shared" and user %}
+        <button type="button" id="share-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line>
+            <line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line>
+          </svg>
+          {{ _('Share results') }}
+        </button>
+        {# Delete can't be undone and Re-crawl is occasional: neither earns a
+           button of its own, and the dots give Delete a home away from the
+           actions people use daily. #}
+        <div class="action-menu" data-menu>
+          <button type="button" class="secondary action-dots" data-menu-button
+                  aria-haspopup="true" aria-expanded="false" title="{{ _('More actions') }}">⋯</button>
+          <div class="action-menu-list" role="menu" data-menu-panel hidden>
+            {# Shown by app.js once the run actually has blocked or failed
+               pages — an empty diagnostics item is noise. #}
+            <button type="button" role="menuitem" id="page-issues-open-btn" style="display:none;"></button>
+            <button type="button" role="menuitem" id="recrawl-open-btn">{{ _('Re-crawl') }}…</button>
+            {% if projects is defined %}
+            {% set mine = run_projects.get(run_id, []) %}
+            <button type="button" role="menuitem" id="project-open-btn" data-project-run="{{ run_id }}"
+                    data-project-ids="{{ mine | map(attribute='id') | list | tojson | forceescape }}">{{ _('Add to project') }}…</button>
+            {% endif %}
+            <button type="button" role="menuitem" id="delete-btn" class="menu-danger" style="display:none;">{{ _('Delete run') }}</button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <p class="run-date-line">
+      <span id="run-date"></span>{% if user %}<span id="email-notice" style="display:none;"> · <span id="email-notice-label"></span> <strong>{{ user.email }}</strong></span>{% endif %}
+      {%- if mode != "live" and run and run.duration_seconds %}<span class="run-took"> · {{ _('Took %(time)s', time=run.duration_seconds | duration) }}</span>{% endif %}
+    </p>
+    {% if projects is defined and run_projects.get(run_id) %}
+    <p class="run-date-line run-projects">
+      {{ icon('folder', 14) }}
+      {% for p in run_projects.get(run_id) %}<a href="{{ url('/projects/' ~ p.id) }}">{{ p.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+    {% endif %}
+    {% if is_owner and run.display_url %}
+    <p class="run-date-line crawled-from">{{ _('Crawled from %(url)s — only you see this.', url=run.source_url) }}</p>
+    {% endif %}
+    {% if mode != "live" and run and run.duration_seconds %}
+      {% with why_label=_('Why it took this long'), why_id=None %}{% include "_why_slow.html" %}{% endwith %}
+    {% endif %}
+    {% if guest %}
+    <p class="guest-note">
+      {{ _('You’re not signed in, so this report is kept for %(days)s days.', days=retention_days) }}
+      <a href="{{ sign_in_url }}">{{ _('Sign in with Google to keep it') }}</a>
+    </p>
+    {% endif %}
+    <div class="settings-applied">
+      <span class="section-label">{{ _('Settings applied') }}</span>
+      <span class="pill" id="domain-scope-pill"></span>
+      <span class="pill" id="language-pill"></span>
+      {# Filled in by renderSettingsPills, which always shows it — "Excluded:
+         none" is a different statement from the pill not being there. #}
+      <span class="pill" id="exclusions-pill"></span>
+      {% if password_protected %}<span class="pill">{{ _('Password-protected') }}</span>{% endif %}
+      {% if signed_in %}<span class="pill" title="{{ _('Crawled signed in on the site’s sign-in page') }}">{{ _('Signed in') }}</span>{% endif %}
+    </div>
+  </div>
+
+  {# The summary: the total first, then what it's made of. "Not counted" and
+     the Markdown figures update live; the repetition figures and the coverage
+     bar arrive with the saved report. #}
+  <section class="report-hero" id="overview" aria-label="{{ _('Summary') }}">
+    {# While the crawl runs: its status, and the one control that acts on it.
+       Hidden once it stops; the status badge then moves up beside the total. #}
+    <div class="live-strip" id="live-strip" hidden>
+      <div class="report-wrap live-strip-inner">
+        <span id="live-strip-status"></span>
+        <span id="live-strip-note"></span>
+        {% if mode == "live" %}
+        {% with why_label=_('Seems slow? Here’s why'), why_id="why-slow-live" %}{% include "_why_slow.html" %}{% endwith %}
+        {% endif %}
+        <button type="button" id="cancel-btn" class="danger-outline" style="display:none;">{{ _('Cancel crawl') }}</button>
+      </div>
+    </div>
+    <div class="report-wrap report-hero-inner">
+      <div class="hero-top">
+        <div class="hero-total">
+          <div class="hero-label">
+            <span class="stat-label">{{ _('Total words') }}</span>
+            <span class="status-badge" id="status-badge"><span id="status-dot"></span><span id="status-text">{{ _('Starting…') }}</span></span>
+          </div>
+          <div class="hero-number" id="total-words">0</div>
+          <p class="hero-sub" id="hero-sub"></p>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat" id="hero-repeated" hidden>
+            <span class="stat-label">{{ _('Repeated · est.') }}</span>
+            <span class="hero-stat-value" id="hero-repeated-pct"></span>
+            <span class="hero-stat-sub" id="hero-repeated-sub"></span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-label">{{ _('Not counted') }}</span>
+            <span class="hero-stat-value" id="not-counted">0</span>
+            <span class="hero-stat-sub" id="not-counted-sub"></span>
+          </div>
+          <div class="hero-stat" id="markdown-stat" style="display:none;">
+            <span class="stat-label">{{ _('Markdown saved') }}</span>
+            <span class="hero-stat-value" id="markdown-size">0</span>
+            <span class="hero-stat-sub" id="markdown-pages"></span>
+          </div>
+        </div>
+      </div>
+      {# The whole total as one bar: new, repeated, differs only by numbers —
+         and, when a restart cut the estimate short, what it never checked. #}
+      <div class="coverage" id="coverage" hidden>
+        <div class="coverage-bar" aria-hidden="true">
+          <span class="rep-new" id="cov-new"></span><span class="rep-repeated" id="cov-repeated"></span><span class="rep-near" id="cov-near"></span><span class="cov-unchecked" id="cov-unchecked"></span>
+        </div>
+        <div class="coverage-legend">
+          <span><i class="rep-new"></i>{{ _('New') }} <strong id="cov-new-n"></strong></span>
+          <span><i class="rep-repeated"></i>{{ _('Repeated') }} <strong id="cov-repeated-n"></strong></span>
+          <span><i class="rep-near"></i>{{ _('Differs only by numbers') }} <strong id="cov-near-n"></strong></span>
+          <span id="cov-unchecked-item" hidden><i class="cov-unchecked"></i>{{ _('Not checked') }} <strong id="cov-unchecked-n"></strong></span>
+          {% if mode != "shared" and user %}
+          <button type="button" class="link-button coverage-rerun" id="cov-rerun" hidden>{{ icon('rotate-cw', 14) }} {{ _('Re-run to check every word') }}</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# Every section stays on the page; these jump to them, and the bar stays in
+     reach once it has scrolled up. Links for sections a run doesn't have are
+     hidden by app.js (syncReportNav). #}
+  <nav class="report-nav" id="report-nav" aria-label="{{ _('Report sections') }}">
+    <div class="report-wrap report-nav-inner">
+      <div class="report-nav-links">
+        <a href="#overview">{{ _('Overview') }}</a>
+        <a href="#repetition" hidden>{{ _('Repetition') }}</a>
+        <a href="#folders" hidden>{{ _('Folders') }}</a>
+        <a href="#subdomains" hidden>{{ _('Subdomains') }}</a>
+        <a href="#languages" hidden>{{ _('Languages') }}</a>
+        <a href="#pages">{{ _('Pages') }} <span class="nav-count" id="nav-pages-count" hidden></span></a>
+        <a href="#left-out" hidden>{{ _('Left out') }} <span class="nav-count" id="nav-left-out-count"></span></a>
+      </div>
+      <span class="report-nav-total" id="nav-total"></span>
+    </div>
+  </nav>
+
+  <div class="report-wrap report-body">
+    <p class="note" id="limit-note" style="display:none;"></p>
+    <p class="note" id="cancel-note" style="display:none;">{{ _('This crawl was cancelled — showing partial results.') }}</p>
+    <p class="note" id="paused-past-note" style="display:none;">{{ _('This crawl was paused for an estimate and never resumed — showing partial results from before the pause.') }}</p>
+    <p class="note" id="try-different-page-note" style="display:none;">{{ _('Nothing could be counted because the starting page itself couldn\'t be accessed. If you know another page on this site that might be more accessible (e.g. a blog post or inner page rather than the homepage), try starting the crawl from that URL instead.') }}</p>
+    <p class="note" id="markdown-note" style="display:none;"></p>
+    <p class="error-box" id="error-box" style="display:none;"></p>
+
+    {# Running it again. Cancelling is up in the summary band, beside the status. #}
+    <div class="run-bar" id="action-row">
+      <span class="run-bar-gap"></span>
+
+      {% if mode != "shared" %}
+      {# Opened from the ⋯ menu in the header rather than a chip of its own —
+         the summary is hidden and details.open is driven from there. The form
+         stays down here because its tag input and options would never fit in a
+         dropdown. Anonymous viewers never see it: a re-crawl needs an account
+         to belong to. #}
+      <details class="run-disclosure run-disclosure-headless" id="recrawl-disclosure">
+        <summary class="run-chip run-chip-action">{{ _('Re-crawl') }}</summary>
+        <form id="recrawl-form">
+          <select id="recrawl-domain-scope" title="{{ _('Which pages count as part of this site?') }}">
+            <option value="all" selected>{{ _('Whole domain (incl. subdomains)') }}</option>
+            <option value="subdomain_only">{{ _('This subdomain only') }}</option>
+            <option value="top_domain_only">{{ _('Top-level domain only') }}</option>
+          </select>
+          {# Hidden alongside the one on the home form — see index.html. #}
+          <input type="text" id="recrawl-language" class="language-input" hidden placeholder="Language (auto)" title="Only crawl this language's pages, for sites with a /en/, /fr/, ... path per language. Leave blank to auto-detect the starting page's language.">
+          {# Pre-filled from the run being re-crawled, so a re-crawl doesn't
+             silently drop exclusions that were applied the first time. #}
+          <input type="text" id="recrawl-exclusions" class="exclusions-input recrawl-exclusions" placeholder="Exclude: staging, /careers" title="{{ _('Comma-separated subdomains and folders to leave out. A leading / excludes a folder, anything else a subdomain.') }}">
+          <label class="checkbox-label" title="Save each page's main content as Markdown, downloadable as a ZIP when the crawl finishes.">
+            <input type="checkbox" id="recrawl-markdown"{% if surface.default_capture_markdown %} checked{% endif %}> {{ _('Save Markdown') }}
+          </label>
+          {# The password was never kept, so a re-crawl of a protected site
+             asks for it again. Also revealed if the site starts asking. #}
+          <span class="site-auth" id="recrawl-auth"{% if not password_protected %} hidden{% endif %}>
+            <input type="text" id="recrawl-site-username" autocomplete="off" spellcheck="false" placeholder="{{ _('Site username') }}" aria-label="{{ _('Site username') }}">
+            <input type="password" id="recrawl-site-password" autocomplete="new-password" placeholder="{{ _('Site password') }}" aria-label="{{ _('Site password') }}">
+          </span>
+          {# Signed in last time: it signs in again, since the email, password
+             and session were never kept. The sign-in page was, and is reused. #}
+          <span class="site-auth" id="recrawl-login"{% if not signed_in %} hidden{% endif %}>
+            <input type="hidden" id="recrawl-login-url" value="{{ login_url or '' }}">
+            <input type="text" id="recrawl-login-email" autocomplete="off" spellcheck="false" placeholder="{{ _('Sign-in email') }}" aria-label="{{ _('Sign-in email') }}">
+            <input type="password" id="recrawl-login-password" autocomplete="new-password" placeholder="{{ _('Sign-in password') }}" aria-label="{{ _('Sign-in password') }}">
+            <input type="text" id="recrawl-login-session" autocomplete="off" spellcheck="false" placeholder="{{ _('or paste a session') }}" aria-label="{{ _('Session from your browser') }}">
+          </span>
+          <button type="submit" id="recrawl-btn">{{ _('Start re-crawl') }}</button>
+        </form>
+        <p class="field-error" id="recrawl-error" hidden></p>
+      </details>
+
+      {% endif %}
+    </div>
+
+    <div class="estimate-panel" id="queued-panel" style="display:none;">
+      <div class="section-label">{{ _('Queued') }}</div>
+      <p class="muted" id="queued-message"></p>
+    </div>
+
+    <div class="estimate-panel" id="estimate-panel" style="display:none;">
+      <div class="section-label">{{ _('Estimate — before you crawl') }}</div>
+      <div class="estimate-badges">
+        <span class="pill confidence-badge" id="estimate-confidence-badge"></span>
+        <span class="pill" id="estimate-cms-pill" style="display:none;"></span>
+        <span class="pill" id="estimate-concurrency-pill"></span>
+      </div>
+      <div class="estimate-duration">
+        <span class="muted">{{ _('Estimated total time') }}</span>
+        <div class="big" id="estimate-duration">—</div>
+        <span class="muted" id="estimate-speed"></span>
+        <span class="estimate-wait-note">{{ _('Includes waiting for each page to finish loading, so text that loads late isn’t missed.') }}</span>
+        <p class="estimate-pro-note" id="estimate-pro-note" style="display:none;"></p>
+      </div>
+      <div class="estimate-stats">
+        <div class="estimate-stat">
+          <span class="muted">{{ _('Pages fetched so far') }}</span>
+          <div class="big" id="estimate-pages-fetched">0</div>
+        </div>
+        <div class="estimate-stat">
+          <span class="muted">{{ _('Estimated total pages') }}</span>
+          <div class="big" id="estimate-total-pages">0</div>
+        </div>
+        <div class="estimate-stat">
+          <span class="muted">{{ _('Avg words / page') }}</span>
+          <div class="big" id="estimate-avg-words">0</div>
+        </div>
+        <div class="estimate-stat">
+          <span class="muted">{{ _('Estimated total') }}</span>
+          <div class="big" id="estimate-total-words">0</div>
+        </div>
+      </div>
+      <p class="muted" id="estimate-message"></p>
+      {# Offered here as well as on the crawl form, because this panel is the
+         first point at which the size of what's about to be crawled is
+         visible — which is when you'd notice a staging mirror in the total. #}
+      {% if guest %}
+      {# The estimate is the free part. Going past it takes an account — and
+         the crawl carries on from where it stopped rather than starting over. #}
+      <div class="guest-gate">
+        <p>
+          <strong>{{ _('This site has more than %(n)s words.', n=num(pause_at_words)) }}</strong>
+          {{ _('Sign in with Google to count the rest. It’s free, and the crawl carries on from here.') }}
+        </p>
+        <a class="google-btn" href="{{ continue_url }}">{% include "_google_g.html" %} {{ _('Sign in with Google to continue') }}</a>
+      </div>
+      {% endif %}
+      <details class="crawl-advanced"{% if guest %} hidden{% endif %}>
+        <summary>{{ _('Exclude subdomains or folders before continuing') }}</summary>
+        <div class="tag-input" id="estimate-exclusions">
+          <span data-tag-list></span>
+          <input type="text" placeholder="staging, web-staging, /careers">
+        </div>
+        <p class="muted advanced-hint">
+          {{ _('Press Enter or comma to add one. A leading / excludes a folder, anything else a subdomain — each entry is labelled with how it will be treated. Applies to the rest of this crawl; pages already counted stay counted.') }}
+        </p>
+      </details>
+      <div style="display:flex; gap:8px;"{% if guest %} hidden{% endif %}>
+        <button id="proceed-btn">{{ _('Proceed with crawl') }}</button>
+        <button id="adjust-btn" class="secondary">{{ _('Adjust settings') }}</button>
+      </div>
+    </div>
+
+    <div id="summary" style="display:none;">
+      {# Finished runs only: the tally settles when the crawl does. Hidden on
+         runs from before it existed. #}
+      <section class="report-section" id="repetition" hidden>
+        <div class="section-head">
+          <h2>{{ _('Repetition estimate') }}</h2>
+          <span class="coverage-pill" id="rep-coverage-pill" hidden>{{ icon('triangle-alert', 13) }} <span id="rep-coverage-text"></span></span>
+        </div>
+        <p class="section-note">
+          {{ _('An estimate: each page is split into sentences, matched exactly across the pages counted, as CAT tools do at their simplest. Your TMS analysis will differ with its own segmentation, tags, numbers and translation memory.') }}
+          <span id="rep-extra"></span>
+        </p>
+        <div class="rep-figures">
+          <div id="rep-new"><span class="rep-label"><i class="rep-new"></i>{{ _('New') }}</span><strong class="rep-pct"></strong><span class="rep-words"></span></div>
+          <div id="rep-repeated"><span class="rep-label"><i class="rep-repeated"></i>{{ _('Repeated') }}</span><strong class="rep-pct"></strong><span class="rep-words"></span></div>
+          <div id="rep-near"><span class="rep-label"><i class="rep-near"></i>{{ _('Differs only by numbers') }}</span><strong class="rep-pct"></strong><span class="rep-words"></span></div>
+        </div>
+        <div class="rep-bar" aria-hidden="true">
+          <span class="rep-new" id="rep-bar-new"></span><span class="rep-repeated" id="rep-bar-repeated"></span><span class="rep-near" id="rep-bar-near"></span>
+        </div>
+        <div id="rep-top-block" hidden>
+          <h3>{{ _('Most repeated text') }}</h3>
+          <table class="data-table rep-table">
+            <thead>
+              <tr>
+                <th>{{ _('Text') }}</th>
+                <th class="col-num">{{ _('Seen') }}</th>
+                <th class="col-num">{{ _('Words each') }}</th>
+                <th class="col-num">{{ _('Repeated words') }}</th>
+              </tr>
+            </thead>
+            <tbody id="rep-top"></tbody>
+          </table>
+        </div>
+      </section>
+
+      {# Below the estimate on purpose: the offer is a guest on this page, so it
+         comes after what the report is actually for. Not dismissible, by
+         decision: it stays on every report, for the owner and for anyone they
+         share it with. #}
+      {% if wxrks_pitch %}
+      {% set p = wxrks_pitch %}
+      <aside class="promo promo-wxrks"
+             style="--promo-mint: {{ p.accent }};">
+        <p class="promo-title">
+          {%- if p.logo_url %}
+          <span class="promo-logo"><img src="{{ p.logo_url }}" alt="{{ p.cms }}" width="16" height="16"></span>
+          {%- endif %}
+          <strong>{{ "{:,}".format(p.total_words) }}</strong> words to translate.
+          {% if p.preview %}<span class="promo-preview">{{ _('Preview') }}</span>{% endif %}
+        </p>
+        <p class="promo-body">
+          {%- if p.cms %}
+          {{ _('wxrks has a %(cms)s connector: it pulls your content straight from %(cms)s, translates it with the best AI models and keeps it in sync.', cms=p.cms) }}
+          {%- else %}
+          {{ _('wxrks pulls the content and translates it with the best AI models, then keeps it in sync as the site changes.') }}
+          {%- endif %}
+        </p>
+        <a class="button" href="{{ p.url }}" target="_blank" rel="noopener">
+          {% if p.cms %}{{ _('See the %(cms)s connector', cms=p.cms) }}{% else %}{{ _('What that costs') }}{% endif %} →
+        </a>
+      </aside>
+      {% endif %}
+
+      {% if pro_upsell %}
+      <aside class="promo promo-pro">
+        <p class="promo-title">
+          {# The duration filter already prefixes "~", so no "about" here. #}
+          This crawl took {{ pro_upsell.took_seconds | duration }}. On Pro:
+          <strong>{{ pro_upsell.pro_seconds | duration }}</strong>.
+          {% if pro_upsell.preview %}<span class="promo-preview">{{ _('Preview') }}</span>{% endif %}
+        </p>
+        <p class="promo-body">
+          More pages fetched at once, and it starts ahead of the queue. Everything else
+          about the crawl is identical.
+        </p>
+        <a class="button" href="{{ url('/pricing') }}">Compare plans →</a>
+      </aside>
+      {% endif %}
+
+      <section class="report-section" id="folders">
+        <h2>{{ _('Folders') }}</h2>
+        <p class="section-lead" id="folders-lead" hidden></p>
+        <div class="report-grid">
+          <div>
+            <h3>{{ _('By folder') }}</h3>
+            <table class="folder-table">
+              <thead>
+                <tr><th>{{ _('Folder') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th></tr>
+              </thead>
+              <tbody id="folder-tbody"></tbody>
+            </table>
+          </div>
+          <div>
+            <h3>{{ _('Top pages by word count') }}</h3>
+            <ol id="top-pages-list"></ol>
+          </div>
+        </div>
+      </section>
+
+      {# Always shown: "were subdomains included?" is a question every report
+         should answer, including when the settings kept them out. #}
+      <section class="report-section" id="subdomains">
+        <h2>{{ _('By subdomain') }}</h2>
+        <p class="section-note" id="host-note" hidden></p>
+        <table class="folder-table">
+          <thead>
+            <tr><th>{{ _('Subdomain') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th></tr>
+          </thead>
+          <tbody id="host-tbody"></tbody>
+        </table>
+        <div class="left-out" id="host-left-out" hidden>
+          <h3>{{ _('Linked but not crawled') }}</h3>
+          <p class="section-note" id="host-left-out-note"></p>
+          <ul id="host-left-out-list"></ul>
+        </div>
+      </section>
+
+      <section class="report-section" id="languages" style="display:none;">
+        <h2>{{ _('By language') }}</h2>
+        <table class="folder-table" id="language-table">
+          <thead>
+            <tr><th>{{ _('Language') }}</th><th>{{ _('Pages') }}</th><th>{{ _('Words') }}</th></tr>
+          </thead>
+          <tbody id="language-tbody"></tbody>
+        </table>
+        <p class="section-note" id="language-note" hidden>
+          {{ _('The crawl counts the starting page’s language only. Every page is checked — by the language it declares, and by the script it’s written in — and pages in another language are set aside, whatever their address says. Folders such as /de/ are skipped without being fetched.') }}
+        </p>
+        <div class="left-out" id="language-set-aside" hidden>
+          <h3>{{ _('Set aside: other languages') }}</h3>
+          <ul id="language-set-aside-list"></ul>
+        </div>
+        <div class="left-out" id="language-left-out" hidden>
+          <h3>{{ _('Skipped as translations') }}</h3>
+          <ul id="language-left-out-list"></ul>
+        </div>
+      </section>
+    </div>
+
+    <section class="report-section" id="pages">
+      <div class="section-head">
+        <h2>{{ _('Pages') }} <span class="count-chip" id="pages-heading-count" hidden></span></h2>
+        {# The CSV is in Export, at the top. #}
+        {% if mode == "live" %}<span class="section-aside">{{ _('Newest first') }}</span>{% endif %}
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>{{ _('URL') }}</th><th>{{ _('Title') }}</th><th>{{ _('Words') }}</th><th></th></tr>
+          </thead>
+          <tbody id="page-tbody"></tbody>
+        </table>
+      </div>
+      <div class="page-more" id="page-more" style="display:none;">
+        <button type="button" class="secondary" id="page-more-btn">{{ _('Show more') }}</button>
+        <span class="muted" id="page-more-note"></span>
+      </div>
+    </section>
+
+    {# Everything the crawl found but didn't add to the total, with why. Shown
+       once there is something in it, while crawling too. #}
+    <section class="report-section" id="left-out" hidden>
+      <h2>{{ _('Left out') }}</h2>
+      <p class="section-note">{{ _('Found while crawling, but not in the total.') }}</p>
+      <div class="left-out-cards">
+        <article class="left-out-card" id="lo-duplicates" hidden>
+          <span class="stat-label">{{ _('Duplicate pages') }}</span>
+          <strong class="left-out-count" id="lo-duplicates-n"></strong>
+          <p>{{ _('The same text as a page already counted, under another address. Counted once, not twice.') }}</p>
+        </article>
+        <article class="left-out-card" id="lo-login" hidden>
+          <span class="stat-label">{{ _('Behind a login') }}</span>
+          <strong class="left-out-count" id="lo-login-n"></strong>
+          <p>{{ _('Showed a member login instead of the page.') }}</p>
+        </article>
+        <article class="left-out-card" id="lo-blocked" hidden>
+          <span class="stat-label">{{ _('Blocked by the host') }}</span>
+          <strong class="left-out-count" id="lo-blocked-n"></strong>
+          <p>{{ _('Turned away by the site’s bot protection.') }}</p>
+          <button type="button" class="link-button" data-open-issues>{{ _('View the list') }}</button>
+        </article>
+        <article class="left-out-card" id="lo-failed" hidden>
+          <span class="stat-label">{{ _('Failed to load') }}</span>
+          <strong class="left-out-count" id="lo-failed-n"></strong>
+          <p>{{ _('Didn’t load when the crawler asked for them.') }}</p>
+          <button type="button" class="link-button" data-open-issues>{{ _('View the list') }}</button>
+        </article>
+      </div>
+      {# Opened from these cards and from the ⋯ menu's "View blocked/failed pages". #}
+      <details class="run-disclosure run-disclosure-headless" id="page-issues-details" style="display:none;">
+        <summary class="run-chip run-chip-warn" hidden>
+          <span id="page-issues-note"></span>
+        </summary>
+        <ul id="page-issues-list" class="issues-list"></ul>
+      </details>
+    </section>
+
+    {# The printed report stops before the page list (print.css): this says
+       where it is instead. #}
+    {% if mode != "live" and run %}
+    <footer class="print-only print-footer">
+      <p>{{ _('The full list of %(n)s pages, with each page’s title and word count, is in the CSV export.', n=num(run.page_count)) }}</p>
+      {% if share_link %}<p>{{ _('Interactive report: %(url)s', url=share_link) }}</p>{% endif %}
+      <p class="print-credit">{{ _('Counted with %(product)s by wxrks', product=surface.name) }}</p>
+    </footer>
+    {% endif %}
+  </div>
+
+  {# Sharing needs an account to share from: not in a shared view, nor for a guest. #}
+  {% if mode != "shared" and user %}
+  <div class="modal-overlay" id="share-modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+      <div class="modal-head">
+        <h2 id="share-modal-title">{{ _('Share this report') }}</h2>
+        <button type="button" class="modal-close" id="share-modal-close" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="share-email-form" class="share-invite-row">
+          <input type="email" id="share-email-input" placeholder="{{ _('Add people by email') }}" required>
+          <button type="submit">{{ _('Send') }}</button>
+        </form>
+        <p class="muted" id="share-email-status"></p>
+
+        <div class="section-label">{{ _('People with access') }}</div>
+        <ul class="people-list" id="people-list">
+          <li class="person-row">
+            {% if user.picture %}<img class="avatar" src="{{ user.picture }}" alt="">{% else %}<span class="avatar">{{ user.name[0] | upper }}</span>{% endif %}
+            <div class="person-id">
+              <span class="person-name">{{ _('%(name)s (you)', name=user.name) }}</span>
+              <span class="person-email">{{ user.email }}</span>
+            </div>
+            <span class="person-role">{{ _('Owner') }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-foot">
+        <div class="public-link-row">
+          <span class="icon-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <path d="M12 3c2.5 2.4 3.8 5.5 3.8 9S14.5 18.6 12 21c-2.5-2.4-3.8-5.5-3.8-9S9.5 5.4 12 3z"></path>
+            </svg>
+          </span>
+          <div class="person-id">
+            <span class="person-name">{{ _('Public link') }}</span>
+            <span class="person-email">{{ _('Anyone with the link can view this report') }}</span>
+          </div>
+          <button type="button" class="switch" id="share-public-toggle" role="switch" aria-checked="false" aria-label="{{ _('Public link') }}">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+        <div class="share-link-row" id="share-link-row" style="display:none;">
+          <input type="text" id="share-link-input" readonly>
+          <button type="button" id="share-copy-btn" class="secondary">{{ _('Copy link') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if projects is defined %}{% include "_project_dialog.html" %}{% endif %}
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    initBilling();
+    initProjectDialog();
+    initCrawlPage({
+      billingEnabled: {{ billing_enabled | tojson }},
+      isPro: {{ (user.is_pro if user else False) | tojson }},
+      mode: {{ mode | tojson }},
+      runId: {{ run_id | tojson }},
+      {# A shared report can't be re-crawled, so it never needs — or shows —
+         the page the crawl started from. #}
+      sourceUrl: {{ (display_url if mode == "shared" else source_url) | tojson }},
+      displayUrl: {{ display_url | tojson }},
+      startedAt: {{ started_at | default(none) | tojson }},
+      initialShareRecipients: {{ share_recipients | default([]) | tojson }},
+      {% if initial_status_payload %}
+      initialStatusPayload: {{ initial_status_payload | tojson }},
+      {% endif %}
+      {% if run %}
+      initialStatus: {{ run.status | tojson }},
+      initialTotalWords: {{ run.total_words | tojson }},
+      initialPageCount: {{ run.page_count | tojson }},
+      initialLoginBlockedCount: {{ run.login_blocked_count | tojson }},
+      initialDuplicateCount: {{ run.duplicate_count | tojson }},
+      initialLimitReached: {{ run.limit_reached | tojson }},
+      createdAt: {{ run.created_at | tojson }},
+      initialPages: {{ initial_pages | tojson }},
+      summary: {{ summary | tojson }},
+      domainScope: {{ run.domain_scope | tojson }},
+      exclusions: {{ run.exclusions | tojson }},
+      languageSetting: {{ run.language | tojson }},
+      languageAutoDetected: {{ run.language_auto_detected | tojson }},
+      detectedCms: {{ run.detected_cms | tojson }},
+      initialIsPublic: {{ run.is_public | tojson }},
+      initialMarkdown: {{ {"enabled": run.capture_markdown, "pages": run.markdown_pages,
+                           "bytes": run.markdown_bytes, "state": run.markdown_state} | tojson }},
+      {% endif %}
+    });
+  </script>
+{% endblock %}

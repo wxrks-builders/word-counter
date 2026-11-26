@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}Server Health — Admin{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% macro gb(n) %}{{ "%.2f"|format((n or 0) / 1000000000) }} GB{% endmacro %}
+{% macro bar(pct) %}
+  <div class="meter"><span class="meter-fill{% if pct >= 90 %} meter-hot{% elif pct >= 70 %} meter-warm{% endif %}"
+       style="width: {{ [pct, 100] | min }}%;"></span></div>
+{% endmacro %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap">
+    <p class="subtitle">
+      What this server looks like right now.
+      <a href="/admin/jobs">Running crawls →</a>
+      <a href="/admin/runs">All runs →</a>
+      <a href="/admin/health.json">JSON →</a>
+    </p>
+
+    {% set live = health.live %}
+    <div class="section-label">Right now</div>
+    <div class="totals-bar">
+      <div class="stat-card" title="The ceiling the crawler enforces on itself — a crawl is stopped before this is reached, rather than being OOM-killed.">
+        <div class="muted">Memory</div>
+        <div class="big">{{ live.memory_pct }}%</div>
+        <div class="muted">{{ gb(live.rss_bytes) }} of {{ gb(live.memory_limit_bytes) }}</div>
+        {{ bar(live.memory_pct) }}
+      </div>
+      <div class="stat-card">
+        <div class="muted">Crawls running</div>
+        <div class="big">{{ live.active_crawls }} / {{ live.max_concurrent_crawls }}</div>
+        <div class="muted">{{ live.queued }} waiting</div>
+      </div>
+      <div class="stat-card" title="Pages being fetched at this instant across every crawl. This is what actually loads the box.">
+        <div class="muted">Pages in flight</div>
+        <div class="big">{{ live.pages_in_flight }} / {{ live.page_budget }}</div>
+        {{ bar(live.pages_pct) }}
+      </div>
+    </div>
+
+    {% set disk = health.disk %}
+    <div class="section-label" style="margin-top:32px;">Disk</div>
+    <div class="totals-bar">
+      <div class="stat-card">
+        <div class="muted">Volume used</div>
+        <div class="big">{{ disk.volume_used_pct }}%</div>
+        <div class="muted">{{ gb(disk.volume_free_bytes) }} free of {{ gb(disk.volume_total_bytes) }}</div>
+        {{ bar(disk.volume_used_pct) }}
+      </div>
+      <div class="stat-card" title="Saved Markdown stops being written at this cap, and again if free space drops below the floor.">
+        <div class="muted">Markdown stored</div>
+        <div class="big">{{ disk.markdown_pct }}%</div>
+        <div class="muted">{{ gb(disk.markdown_bytes_on_disk) }} of {{ gb(disk.markdown_cap_bytes) }}</div>
+        {{ bar(disk.markdown_pct) }}
+      </div>
+      <div class="stat-card stat-card-muted" title="What the crawler counted as it wrote, against what is actually on disk. A gap means files exist that no run accounts for, or the reverse.">
+        <div class="muted">Counted vs on disk</div>
+        <div class="big">{{ gb(health.markdown_bytes_counted) }}</div>
+        <div class="muted">on disk: {{ gb(disk.markdown_bytes_on_disk) }}</div>
+      </div>
+    </div>
+
+    {% if disk.below_floor %}
+      <p class="note" style="margin-top:16px;">
+        Free space is below the {{ gb(disk.floor_bytes) }} floor, so Markdown capture has
+        stopped. Word counts are unaffected — the database shares this volume and needs
+        the room more.
+      </p>
+    {% endif %}
+    {% if disk.orphan_run_dirs %}
+      <p class="note" style="margin-top:16px;">
+        {{ disk.orphan_run_dirs | length }} Markdown folder(s) belong to no run. The
+        startup sweep clears these, so they have accumulated since the last restart.
+      </p>
+    {% endif %}
+
+    <div class="section-label" style="margin-top:32px;">How runs ended, last 7 days</div>
+    {% if health.stop_counts %}
+      <div class="settings-applied">
+        {% for kind, n in health.stop_counts.items() %}
+          <span class="pill">{{ kind }}: <strong>{{ n }}</strong></span>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">No runs in the last 7 days.</p>
+    {% endif %}
+
+    <div class="section-label" style="margin-top:32px;">Recent stops</div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Site</th><th>Owner</th><th>Why</th><th>Reason</th><th>Ran for</th><th>Pages at once</th></tr>
+        </thead>
+        <tbody>
+          {% for s in health.recent_stops %}
+          <tr>
+            <td class="url-cell"><a href="/crawl/{{ s.id }}">{{ s.source_url }}</a></td>
+            <td>{{ s.owner_email }}</td>
+            <td><span class="pill">{{ s.stop_kind }}</span></td>
+            <td class="muted">{{ s.stopped_reason or s.error or "—" }}</td>
+            <td>{{ s.duration_seconds | duration }}</td>
+            <td>{{ s.crawl_concurrency or "—" }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="muted">
+            Nothing has been cancelled or failed. Runs from before stop reasons were
+            recorded don't appear here — they were saved without one.
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label" style="margin-top:32px;">Email</div>
+    <div class="totals-bar">
+      <div class="stat-card{% if not health.email_configured %} stat-card-muted{% endif %}"
+           title="Crawl-finished, shared-report and server-alert emails all need MAILGUN_API_KEY and MAILGUN_DOMAIN. Without them nothing is sent and nothing fails — it is simply skipped.">
+        <div class="muted">Mailgun</div>
+        <div class="big">{{ "Configured" if health.email_configured else "Not set" }}</div>
+        {% if not health.email_configured %}
+        <div class="muted">No email is being sent at all</div>
+        {% endif %}
+      </div>
+      <div class="stat-card stat-card-muted" title="Addresses in ADMIN_EMAILS. These receive the server alerts on this page.">
+        <div class="muted">Alert recipients</div>
+        <div class="big">{{ health.admin_alert_recipients }}</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:32px;">Platform detection</div>
+    <p class="muted" style="margin-top:0;">
+      Runs crawled before the platform was recorded show the general translation
+      offer instead of their connector. Nothing on disk can say what they were built
+      on — the HTML was never kept — so this asks each site again, once per site.
+    </p>
+    <div class="action-row">
+      <button id="backfill-cms-btn" class="secondary">Re-probe older runs</button>
+      <span class="muted" id="backfill-cms-result"></span>
+    </div>
+
+    <div class="section-label" style="margin-top:32px;">Disk by user</div>
+    <p class="muted" style="margin-top:0;">
+      From what each run recorded as it wrote. Compare the total with "on disk" above —
+      they should be close.
+    </p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>User</th><th>Markdown</th><th>Runs</th><th>Runs with Markdown</th></tr></thead>
+        <tbody>
+          {% for u in health.by_user %}
+          <tr>
+            <td>{{ u.email }}</td>
+            <td>{{ gb(u.bytes) }}</td>
+            <td>{{ u.runs }}</td>
+            <td>{{ u.runs_with_markdown or 0 }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="muted">No users yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    const backfillBtn = document.getElementById("backfill-cms-btn");
+    const backfillOut = document.getElementById("backfill-cms-result");
+    backfillBtn.addEventListener("click", async () => {
+      backfillBtn.disabled = true;
+      backfillBtn.textContent = "Asking each site…";
+      try {
+        const res = await fetch("/admin/backfill/detected-cms", { method: "POST" });
+        const d = await res.json();
+        const named = Object.entries(d.by_platform || {})
+          .map(([cms, n]) => `${n} ${cms}`).join(", ");
+        backfillOut.textContent =
+          `${d.runs_updated} run(s) updated from ${d.sites_probed} site(s)` +
+          (named ? ` — ${named}.` : ".") +
+          (d.sites_unknown ? ` ${d.sites_unknown} still unrecognised.` : "");
+      } catch (err) {
+        backfillOut.textContent = "Could not finish: " + err.message;
+      }
+      backfillBtn.disabled = false;
+      backfillBtn.textContent = "Re-probe older runs";
+    });
+  </script>
+{% endblock %}

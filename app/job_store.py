@@ -1,0 +1,335 @@
+from __future__ import annotations
+
+import asyncio
+import logging
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+
+from app import repetition as repetition_store
+from app import segment_store
+from app.models import PageResult
+from app.repetition import RepetitionTally
+from app.site_auth import SiteAuth
+from app.site_login import SiteSession
+from app.url_policy import canonical_key
+
+logger = logging.getLogger(__name__)
+
+JOBS: dict[str, "Job"] = {}
+# FIFO job ids waiting for a free slot (see crawler.py's MAX_CONCURRENT_CRAWLS
+# and _maybe_start_next_queued) — not persisted; a restart loses the wait
+# list, same acceptable tradeoff as other in-memory-only state in this app.
+QUEUE: list[str] = []
+
+
+@dataclass
+class Job:
+    id: str
+    source_url: str
+    user_id: int
+    max_pages: int
+    status: str = "starting"  # starting | queued | crawling | completed | failed | cancelled | paused
+    started_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    # Bumped on every page result (success, blocked, or failed) — a stall
+    # watchdog (see crawler.py's _stall_watchdog) uses this to detect a crawl
+    # that's gone completely silent (a hung fetch/browser context, not just a
+    # slow one) and auto-cancel it instead of leaving it "crawling" forever.
+    last_progress_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    # When fetching actually began, as opposed to started_at, which is stamped
+    # when the job is created. Everything between the two — launching Chromium,
+    # crawl4ai's setup, the <html lang> probe (a whole extra page fetch) — is a
+    # one-time cost, and the estimate has to keep it out of the per-page rate.
+    # See _build_estimate_result for what including it did to the projection.
+    crawling_since: datetime | None = None
+    pages: dict[str, PageResult] = field(default_factory=dict)
+    login_blocked: dict[str, PageResult] = field(default_factory=dict)
+    # Pages fetched that turned out to be a copy of one already counted (see
+    # crawler.py's post-fetch duplicate guard). Held apart from `pages` for the
+    # same reason login_blocked is: they're neither real content nor a failure,
+    # so they must not inflate the page count or the word total.
+    duplicates: dict[str, PageResult] = field(default_factory=dict)
+    # Identity of everything counted so far, for that guard: canonical keys of
+    # crawled URLs, and hashes of the text they contained.
+    counted_keys: set[str] = field(default_factory=set)
+    content_hashes: dict[str, str] = field(default_factory=dict)
+    total_words: int = 0
+    error: str | None = None
+    limit_reached: bool = False
+    subscribers: list[asyncio.Queue] = field(default_factory=list)
+    cancel_requested: bool = False
+    detected_language: str | None = None
+    domain_scope: str = "all"
+    # Comma-separated subdomains/folders to leave out, as typed. Lives on the
+    # job rather than only in the request payload because a *queued* job is
+    # started later by _maybe_start_next_queued(), which has no payload to read
+    # — same reason domain_scope and capture_markdown are here.
+    exclusions: str | None = None
+    # Pages fetched at once — the whole of this crawl's speed. Resolved once at
+    # start from the owner's plan and whatever else is running (app/plans.py),
+    # and carried on the job because a *queued* crawl is launched later by
+    # _maybe_start_next_queued(), which has no request to resolve it from.
+    concurrency: int = 0
+    language_setting: str | None = None
+    # BFSDeepCrawlStrategy's on_state_change snapshot — lets a paused crawl
+    # (see run_crawl's pause_at_words) resume later from the same frontier.
+    resume_state: dict | None = None
+    estimate_result: dict | None = None
+    stopped_reason: str | None = None
+    # A short machine-readable tag for why this run ended: memory, stalled,
+    # user_cancelled, failed, paused, completed. The sentence above explains it
+    # to a person; this makes it countable, which is what turns "is the server
+    # struggling" from a guess into a query.
+    stop_kind: str | None = None
+    # Only set when reconstructed from a checkpoint (see restore_job) — the
+    # crash happened before the specific login-blocked URLs were persisted,
+    # just their count, so it's tracked separately from the live dict above.
+    restored_login_blocked_count: int = 0
+    restored_duplicate_count: int = 0
+    # Saved page Markdown. Only counters live here — the content itself goes
+    # straight to disk (app/markdown_store.py), because holding it would grow
+    # RSS against the ceiling that cancels crawls.
+    capture_markdown: bool = False
+    markdown_pages: int = 0
+    markdown_bytes: int = 0
+    # off | capturing | stopped_disk | stopped_run_cap | stopped_global_cap | error
+    markdown_state: str = "off"
+    # The product this run was started from; follows it into the finished email.
+    surface: str = "counter"
+    # Per-CMS weighted hit tally accumulated across pages (see crawler.py's
+    # _detect_cms_signals/_resolve_detected_cms) — not persisted across a
+    # crash/resume; low-stakes enough to just start over on that rare path.
+    cms_match_counts: dict[str, int] = field(default_factory=dict)
+    # The site's Basic Auth password, for this crawl only. Never persisted and
+    # never in a repr; dropped when the crawl ends. password_protected is the
+    # part that is saved — see app/site_auth.py.
+    site_auth: SiteAuth | None = field(default=None, repr=False)
+    password_protected: bool = False
+    # The session from signing in on the site's own page, for this crawl only,
+    # the same way — see app/site_login.py. signed_in and login_url (not a
+    # secret) are what's saved, so a re-crawl knows to sign in again.
+    site_session: SiteSession | None = field(default=None, repr=False)
+    signed_in: bool = False
+    login_url: str | None = None
+    # Started from the front page without signing in — see app/auth.py.
+    guest: bool = False
+    # Pages linking to each subdomain / language folder — see LinkCensus.
+    linked_hosts: dict[str, int] = field(default_factory=dict)
+    linked_languages: dict[str, int] = field(default_factory=dict)
+    # Pages set aside as another language (app/language_check.py), per
+    # language: {"pages", "skipped", "example"}. Saved with the run.
+    other_languages: dict[str, dict] = field(default_factory=dict)
+    # Working state for that, not saved: which folders have turned out to be
+    # other languages, which have had a page counted, and what was set aside
+    # or turned away — so a resume doesn't fetch any of it again.
+    set_aside_folders: dict[str, dict] = field(default_factory=dict)
+    counted_folders: set[str] = field(default_factory=set)
+    set_aside_urls: set[str] = field(default_factory=set)
+    skipped_urls: set[str] = field(default_factory=set)
+    expected_scripts: set[str] = field(default_factory=set)
+    scripts_resolved: bool = False
+    # The repetition estimate. Saved to disk at each checkpoint and picked
+    # back up by restore_job; partial when a restart lost some of it anyway.
+    repetition: RepetitionTally = field(default_factory=RepetitionTally, repr=False)
+    repetition_partial: bool = False
+    # Each counted page's sentence fingerprints, appended at every checkpoint
+    # and kept after the run (app/segment_store.py) — what a project compares
+    # sentence by sentence. Created on first use, so a restored job carries on
+    # appending to the same file.
+    segments: "segment_store.Writer | None" = field(default=None, repr=False)
+    # The asyncio.Task actually running run_crawl for this job, if it's in
+    # this process (never persisted/serialized — purely a runtime handle).
+    # crawl4ai's BFSDeepCrawlStrategy only checks its cooperative
+    # should_cancel callback between BFS levels, which can take a long time
+    # to come back around on a slow site — cancelling this task directly
+    # interrupts it immediately, at whatever await point it's currently at.
+    task: asyncio.Task | None = None
+
+    def request_cancel(self) -> None:
+        # A queued job has no task at all yet — just pull it out of the
+        # queue and resolve it directly, rather than the running-crawl path
+        # below.
+        if self.status == "queued":
+            remove_from_queue(self.id)
+            self.status = "cancelled"
+            return
+        # Still set for should_cancel to see (covers the narrow window before
+        # a page's first checkpoint, or if .task somehow isn't set) — but
+        # .task.cancel() below is what actually makes this prompt.
+        self.cancel_requested = True
+        if self.task is not None and not self.task.done():
+            self.task.cancel()
+
+    @property
+    def duplicate_count(self) -> int:
+        return len(self.duplicates) + self.restored_duplicate_count
+
+    def publish(self, event: dict) -> None:
+        for queue in list(self.subscribers):
+            queue.put_nowait(event)
+
+    def status_payload(self) -> dict:
+        return {
+            "type": "status",
+            "status": self.status,
+            "total_words": self.total_words,
+            "page_count": len(self.pages),
+            "login_blocked_count": len(self.login_blocked) + self.restored_login_blocked_count,
+            "duplicate_count": self.duplicate_count,
+            "limit_reached": self.limit_reached,
+            "error": self.error,
+            "detected_language": self.detected_language,
+            "domain_scope": self.domain_scope,
+            "exclusions": self.exclusions,
+            "concurrency": self.concurrency,
+            "language_setting": self.language_setting,
+            "estimate_result": self.estimate_result,
+            "stopped_reason": self.stopped_reason,
+            "queue_position": (QUEUE.index(self.id) + 1) if self.id in QUEUE else None,
+            "markdown": {
+                "enabled": self.capture_markdown,
+                "pages": self.markdown_pages,
+                "bytes": self.markdown_bytes,
+                "state": self.markdown_state,
+            },
+        }
+
+
+def create_job(source_url: str, user_id: int, max_pages: int) -> Job:
+    job = Job(id=uuid.uuid4().hex, source_url=source_url, user_id=user_id, max_pages=max_pages)
+    JOBS[job.id] = job
+    return job
+
+
+def get_job(job_id: str) -> Job | None:
+    return JOBS.get(job_id)
+
+
+def list_active_jobs() -> list[Job]:
+    """Jobs actively doing work right now — "paused" is deliberately
+    excluded: it already exited normally with no live task to interrupt,
+    just idle in memory awaiting a Proceed/Adjust decision, a different
+    concern from "what's running and needs to be stopped"."""
+    return [j for j in JOBS.values() if j.status in ("starting", "crawling")]
+
+
+def reassign_jobs(from_user_id: int, to_user_id: int) -> None:
+    for job in JOBS.values():
+        if job.user_id == from_user_id:
+            job.user_id = to_user_id
+            job.guest = False
+
+
+def list_queued_jobs() -> list[Job]:
+    return [JOBS[job_id] for job_id in QUEUE if job_id in JOBS]
+
+
+def enqueue(job_id: str, front: bool = False) -> int:
+    """Adds a job to the wait list, returning its 1-based position.
+
+    front=True puts a paid crawl ahead of the free ones already waiting, which
+    is most of what "faster" means when the box is busy — no amount of page
+    concurrency helps a crawl that hasn't started. It jumps the queued jobs, not
+    the running ones; nothing is ever interrupted.
+    """
+    if front:
+        QUEUE.insert(0, job_id)
+        return 1
+    QUEUE.append(job_id)
+    return len(QUEUE)
+
+
+def dequeue_next() -> str | None:
+    return QUEUE.pop(0) if QUEUE else None
+
+
+def remove_from_queue(job_id: str) -> bool:
+    if job_id in QUEUE:
+        QUEUE.remove(job_id)
+        return True
+    return False
+
+
+def _stored_tally(run) -> tuple[RepetitionTally, bool]:
+    """The repetition tally saved with the run's last checkpoint, and whether
+    it's partial.
+
+    It's written just after the checkpoint, so a process that dies between the
+    two leaves one from the checkpoint before: it has counted fewer words than
+    the run, covers the pages it saw, and is marked partial. One that has
+    counted more than the run can't be squared with it and is dropped, as is a
+    missing or unreadable one — the tally then starts over from here."""
+    fresh = RepetitionTally(), bool(run.pages)
+    try:
+        stored = repetition_store.load(run.id)
+    except Exception:
+        logger.exception("Could not read the saved repetition tally for run %s", run.id)
+        return fresh
+    if stored is None:
+        return fresh
+    tally, partial = stored
+    if tally.words_total == run.total_words:
+        return tally, partial
+    if tally.words_total < run.total_words:
+        return tally, True
+    return fresh
+
+
+def restore_job(run, estimate_result: dict | None = None) -> Job:
+    """Reconstructs an in-memory Job from a checkpointed RunRecord (see
+    app.db.get_crawling_runs/get_paused_runs) — status follows the run's own
+    (either "crawling", for an interrupted crawl app.main's lifespan will
+    relaunch a task for, or "paused", for display/resume purposes only, no
+    task started). estimate_result lets a restored "paused" job's estimate
+    panel keep working across a restart, since it otherwise only ever lived
+    on the original in-memory Job (see app.crawler.estimate_result_from_snapshot)."""
+    job = Job(
+        id=run.id,
+        source_url=run.source_url,
+        user_id=run.user_id,
+        max_pages=float("inf"),
+        status=run.status,
+        started_at=run.created_at,
+        pages={p.url: p for p in run.pages},
+        total_words=run.total_words,
+        limit_reached=run.limit_reached,
+        detected_language=run.language if run.language_auto_detected else None,
+        domain_scope=run.domain_scope,
+        exclusions=run.exclusions,
+        # Restored rather than re-resolved: a crawl picked back up after a crash
+        # should run at the speed it was sold, even if the owner's plan lapsed
+        # or the box is busier now than when it started.
+        concurrency=run.crawl_concurrency,
+        language_setting=None if run.language_auto_detected else run.language,
+        resume_state=run.resume_state,
+        restored_login_blocked_count=run.login_blocked_count,
+        restored_duplicate_count=run.duplicate_count,
+        # Rebuilt so the duplicate guard still recognizes pages counted before
+        # the restart. Its other half — the content hashes — can't come back,
+        # since only the word counts were persisted, not the text. A resumed
+        # crawl therefore catches same-URL-identity duplicates but not
+        # same-text-under-a-new-path ones from before the restart; the frontier
+        # filter is what does the heavy lifting either way.
+        counted_keys={canonical_key(p.url) for p in run.pages},
+        # The duplicate guard's fingerprints, from pages saved since they were
+        # (app/projects.py): a resumed crawl still knows the text it counted.
+        content_hashes={p.content_hash: p.url for p in run.pages if p.content_hash},
+        estimate_result=estimate_result,
+        # Carried across the restart so a resumed crawl keeps capturing instead
+        # of silently producing a ZIP that stops at the crash point.
+        capture_markdown=run.capture_markdown,
+        markdown_pages=run.markdown_pages,
+        markdown_bytes=run.markdown_bytes,
+        markdown_state=run.markdown_state,
+        surface=run.surface,
+        # The flag survives a restart; the password, by design, does not.
+        password_protected=run.password_protected,
+        signed_in=run.signed_in,
+        login_url=run.login_url,
+        linked_hosts=dict(run.linked_hosts),
+        linked_languages=dict(run.linked_languages),
+        other_languages={k: dict(v) for k, v in run.other_languages.items()},
+    )
+    job.repetition, job.repetition_partial = _stored_tally(run)
+    JOBS[job.id] = job
+    return job

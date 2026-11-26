@@ -1,0 +1,41 @@
+Word Counter
+Copyright (C) 2026 wxrks
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, version 3. See LICENSE.
+
+The wxrks name and logos (app/static/brand/) are trademarks of wxrks and are
+not licensed under the AGPL. The logos of other platforms (WordPress, Drupal,
+Webflow, Contentful and others in app/static/brand/cms/ and app/brand_logos.py)
+are their owners' trademarks, shown only to name the platforms the crawler
+works with.
+
+Third-party software and assets
+-------------------------------
+
+Crawl4AI (Apache License 2.0), the crawler this app is built on:
+  This product includes software developed by UncleCode
+  (https://x.com/unclecode) as part of the Crawl4AI project
+  (https://github.com/unclecode/crawl4ai).
+  The same sentence is shown in the footer of the app's public pages, as
+  Crawl4AI's license requires.
+
+Urbanist (SIL Open Font License 1.1), app/static/fonts/
+  Copyright 2021 The Urbanist Project Authors
+  (https://github.com/coreyhu/Urbanist). See app/static/fonts/URBANIST-LICENSE.txt.
+
+Lucide icons (ISC License), app/icons.py
+  Copyright (c) Lucide Contributors; portions (c) Cole Bemis, as part of
+  Feather (MIT). See app/static/LUCIDE-LICENSE.txt.
+
+three.js (MIT License), bundled into app/static/hero-webgl.js from webgl/
+  Copyright 2010-2026 Three.js Authors. Its license notice is kept at the end
+  of the bundle.
+
+Simple Icons (CC0 1.0), the platform logo paths in app/brand_logos.py
+  https://simpleicons.org. The icons are public domain; the brands are their
+  owners' trademarks.
+
+Python dependencies (requirements.txt) are installed separately and keep their
+own licenses.

@@ -1,0 +1,13 @@
+{# Finished reports anyone can open without signing in — the fastest answer to
+   "what would I get?". Featured from the admin runs list. #}
+{% if examples %}
+<div class="examples">
+  <span class="examples-label">{{ _(surface.demo_label) }}</span>
+  {% for ex in examples %}
+  <a class="example-chip" href="{{ url('/share/' ~ ex.id) }}">
+    <span class="example-host">{{ (ex.shown_url or ex.source_url).split('//')[-1].split('/')[0] | replace('www.', '') }}</span>
+    <span class="example-words">{{ _('%(n)s words', n=num(ex.total_words)) }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}

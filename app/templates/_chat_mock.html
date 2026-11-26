@@ -1,0 +1,23 @@
+{# An assistant answering with Word Counter: what the MCP server looks like in
+   use. The figures are the ones Word Counter found for wxrks.com when the
+   article (articles/claude_vs_word_counter.html) was written, and the follow-up
+   is what Claude advised from them in that run: what to quote on.
+   On the front page (chat_follow_up) the messages appear one by one, once,
+   when it scrolls into view (app.js, initHomeMotion). #}
+<div class="chat-mock{% if chat_follow_up %} vis vis-chat{% endif %}" role="img" aria-label="{{ _('An assistant answering with Word Counter') }}">
+  <div class="chat-bubble chat-user" style="--i: 0;">{{ _('How many words does wxrks.com have?') }}</div>
+  <div class="chat-tool" style="--i: 1;"><span class="chat-tool-dot"></span><span translate="no">word-counter · count_words</span></div>
+  <div class="chat-bubble chat-assistant" style="--i: 2;">
+    <p>{{ _('I counted every page with Word Counter:') }}</p>
+    <p class="chat-number">{{ _('%(words)s words on %(pages)s pages', words=num(chat_mock.words), pages=num(chat_mock.pages)) }}</p>
+    <p>{{ _('%(pct)s%% of it repeats text from other pages; %(new)s words are new.', pct=chat_mock.repeated_pct, new=num(chat_mock.new)) }}</p>
+    <p class="chat-link">{{ _('Full report, every page →') }}</p>
+  </div>
+  {% if chat_follow_up %}
+  <div class="chat-bubble chat-user" style="--i: 3;">{{ _('What should I quote on?') }}</div>
+  <div class="chat-bubble chat-assistant" style="--i: 4;">
+    <p>{{ _('About %(words)s words, without the machine-generated API docs and the user forum.', words=num(chat_mock.quote_scope)) }}</p>
+    <p>{{ _('If your vendor prices by translation memory, the %(new)s new words are the number that matters.', new=num(chat_mock.new)) }}</p>
+  </div>
+  {% endif %}
+</div>

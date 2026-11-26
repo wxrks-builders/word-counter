@@ -1,0 +1,444 @@
+{
+  "label": "Round 4 — with Word Counter, full count",
+  "prompt": "I need an accurate word count of the entire website wxrks.com for a translation quote: every page, the total number of words, how many pages there are, and how much of the text is repeated across pages. Count it as accurately as you can.",
+  "model": "claude-opus-5[1m]",
+  "claude_code": "2.1.220",
+  "answer": "Done — full crawl completed, no pages blocked or failed.\n\n**Full report:** https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\n**Every page as CSV:** https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\n\n## Headline numbers\n\n| | |\n|---|---|\n| **Total words** | **2,696,246** |\n| **Pages counted** | **2,494** |\n| **Repeated text** | **39.5%** — 1,064,373 exact + 27,863 near-duplicate |\n| **Unique (\"new\") words** | **1,604,010** |\n\nNote this is ~20× what the initial sitemap estimate suggested (it predicted 1,150 pages / 2.24M words — pages were right-ish, but the crawler found 2,494 once it followed links beyond the sitemap).\n\n## Where the words are (by subdomain)\n\n| Subdomain | Pages | Words |\n|---|---|---|\n| wxrks.com (main site) | 1,050 | 1,718,712 |\n| community.wxrks.com | 818 | 386,353 |\n| support.wxrks.com | 292 | 341,066 |\n| dev.wxrks.com | 40 | 133,220 |\n| mergingminds.wxrks.com | 131 | 44,627 |\n| report.wxrks.com | 23 | 42,758 |\n| marketplace.wxrks.com | 125 | 17,047 |\n| status / resources / translate | 12 | 12,405 |\n\nBy section: `/blog` is the single biggest block at **953 pages / 1,622,290 words** — 60% of the whole site. Then `/en` (help center) 340,790, `/c` (community) 226,378, root pages 169,202.\n\nLargest individual pages: `dev.wxrks.com/openapi.json` (45,915), `reference/projects.html` (23,785), `schemas.html` (15,683), then the blog's `ai-statistics-500-facts` (11,141) and the help-center roles article (10,579).\n\n## Three things to settle before you send this to a vendor\n\n**1. Roughly 520k words are probably not translation scope.** The `dev.wxrks.com` API docs (133,220 words) are largely machine-generated — `openapi.json` alone is 45,915 words of JSON schema. And `community.wxrks.com` (386,353 words) is user-generated forum content. Excluding both puts you at **2,176,673 words**.\n\n**2. The community forum is inflating the count with URL variants.** `/c/announcements` was counted three times — once plain, once as `?sort=comments`, once as `?sort=top` — 8,602 words each, and the repetition data confirms ~8,601 of those words are duplicates in the latter two. Same pattern across paginated `?sort=…&page=N` URLs. This is a large part of why repetition hit 39.5%. The counter already excluded 799 outright duplicate pages, but these query-string variants slipped through as distinct URLs.\n\n**3. Part of the site may already be localized.** The crawl found links to language versions it didn't count — pt, ar, az, bg, bn and others — plus an uncounted `eu.wxrks.com` subdomain. Worth confirming what already exists before paying to translate it. Also 14 pages sit behind sign-in and weren't counted.\n\n## What I'd quote on\n\n- **Absolute ceiling:** 2,696,246 words\n- **Realistic scope** (drop API docs + forum): ~2,176,673 words\n- **If your vendor prices on unique words / TM leverage:** ~1,604,010 is the number that matters — the 39.5% repetition is mostly nav-adjacent boilerplate and recurring CTAs (\"Save your Spot\", the footer legal block appearing on 1,047 pages, the standard product tagline on 944), which translate once and leverage everywhere.\n\nThe CSV has all 2,494 rows with per-page word counts and per-page repeated-word counts, which is the right thing to hand a translation agency directly.",
+  "num_turns": 41,
+  "duration_ms": 2105936,
+  "total_cost_usd": 1.337704,
+  "usage": {
+    "input_tokens": 82,
+    "cache_creation_input_tokens": 31136,
+    "cache_read_input_tokens": 1614718,
+    "output_tokens": 8743,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 31136,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 2825,
+        "cache_read_input_tokens": 47719,
+        "cache_creation_input_tokens": 3574,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3574
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "finished_as": "success",
+  "steps": [
+    {
+      "say": "I'll crawl wxrks.com with the word counter and report back."
+    },
+    {
+      "tool": "ToolSearch",
+      "input": {
+        "query": "select:mcp__word-counter__count_words,mcp__word-counter__get_word_count,mcp__word-counter__get_pages,mcp__word-counter__continue_word_count",
+        "max_results": 5
+      },
+      "output": "\n\n\n",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__count_words",
+      "input": {
+        "url": "wxrks.com",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"paused\",\"words\":50683,\"pages\":26,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"repetition\":{\"words_checked\":50683,\"repeated\":12939,\"near_repeated\":824,\"new\":36920,\"repeated_percent\":25.5,\"most_repeated\":[{\"text\":\"Save your Spot\",\"times\":141,\"words\":420},{\"text\":\"Who We AreOur MissionCareersIn the NewsPrivacy PolicyTerms of UseTerms (DPA)Trust CenterAcceptable Use PolicyCookie PolicyEULA\",\"times\":19,\"words\":252},{\"text\":\".png)\",\"times\":188,\"words\":187},{\"text\":\"Javi Díaz\",\"times\":87,\"words\":172},{\"text\":\"For TranslatorsFor EnterpriseFor DevelopersFor Translation AgenciesFor Small-Med BusinessesChatGPT Integration\",\"times\":19,\"words\":162}]},\"languages\":[{\"name\":\"Default\",\"pages\":26,\"words\":50683}],\"folders\":[{\"name\":\"/blog\",\"pages\":12,\"words\":36253},{\"name\":\"(root)\",\"pages\":7,\"words\":7668},{\"name\":\"/platform\",\"pages\":6,\"words\":6724},{\"name\":\"/join\",\"pages\":1,\"words\":38}],\"subdomains\":[{\"name\":\"wxrks.com\",\"pages\":19,\"words\":44363},{\"name\":\"mergingminds.wxrks.com\",\"pages\":1,\"words\":4512},{\"name\":\"dev.wxrks.com\",\"pages\":1,\"words\":765},{\"name\":\"marketplace.wxrks.com\",\"pages\":1,\"words\":434},{\"name\":\"support.wxrks.com\",\"pages\":1,\"words\":276},{\"name\":\"status.wxrks.com\",\"pages\":1,\"words\":269},{\"name\":\"community.wxrks.com\",\"pages\":1,\"words\":38},{\"name\":\"trust.wxrks.com\",\"pages\":1 … [1,215 more characters]",
+      "error": false
+    },
+    {
+      "say": "The crawl paused at the 50k safety limit. Here's where it stands and why I'm continuing:\n\n- **Counted so far:** 50,683 words across 26 pages\n- **Sitemap-based estimate for the full site:** ~2,241,748 words across ~1,150 pages (high confidence), ~19 min to finish\n\nThat's a far bigger site than the first 26 pages suggest — the sitemap lists 1,150 URLs. Since you asked for every page and maximum accuracy for a quote, I'm continuing to the full count."
+    },
+    {
+      "tool": "mcp__word-counter__continue_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80"
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"status\":\"resuming\"}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":218622,\"pages\":168,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "Running — 168 pages / 218,622 words so far."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":324003,\"pages\":257,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":418091,\"pages\":338,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "338 / ~1,150 pages. Continuing to poll."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":424204,\"pages\":369,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":432787,\"pages\":438,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":533839,\"pages\":521,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "521 / ~1,150 pages — roughly halfway."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":643996,\"pages\":602,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":752949,\"pages\":685,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":894333,\"pages\":798,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "798 / ~1,150 pages."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1109456,\"pages\":942,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1172851,\"pages\":1011,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1188902,\"pages\":1072,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "1,072 / ~1,150 pages — nearly there."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1202615,\"pages\":1115,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1206384,\"pages\":1147,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1259865,\"pages\":1188,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "Past the sitemap estimate (1,188 pages) — the crawler is finding pages beyond the 1,150 listed."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1407925,\"pages\":1271,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1617448,\"pages\":1400,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1633947,\"pages\":1470,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1643143,\"pages\":1512,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "1,512 pages / 1.64M words and still going."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1650479,\"pages\":1518,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1653399,\"pages\":1541,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1925340,\"pages\":1672,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1932771,\"pages\":1717,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1941926,\"pages\":1759,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "1,759 pages / 1.94M words."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":1949841,\"pages\":1767,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2034438,\"pages\":1847,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2096189,\"pages\":1930,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2134168,\"pages\":2010,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "2,010 pages — well past the sitemap's 1,150. Still crawling."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2178815,\"pages\":2083,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2210679,\"pages\":2141,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2241188,\"pages\":2192,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2284956,\"pages\":2230,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "say": "2,230 pages / 2.28M words."
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2361448,\"pages\":2284,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2470749,\"pages\":2358,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"crawling\",\"words\":2605615,\"pages\":2444,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"queue_position\":null}",
+      "error": false
+    },
+    {
+      "tool": "mcp__word-counter__get_word_count",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "wait_seconds": 55
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"site\":\"https://wxrks.com\",\"status\":\"completed\",\"words\":2696246,\"pages\":2494,\"links\":{\"report\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\",\"csv\":\"https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\"},\"repetition\":{\"words_checked\":2696246,\"repeated\":1064373,\"near_repeated\":27863,\"new\":1604010,\"repeated_percent\":39.5,\"most_repeated\":[{\"text\":\"Who We AreOur MissionCareersIn the NewsPrivacy PolicyTerms of UseTerms (DPA)Trust CenterAcceptable Use PolicyCookie PolicyEULA\",\"times\":1047,\"words\":14644},{\"text\":\"TMS vs LLM With the rise of large language models (LLMs) like GPT-5, many freelancers and agencies wonder: Can these tools really replace a Translation Manageme\",\"times\":373,\"words\":11532},{\"text\":\"Raised in a family that spoke three languages and having picked up another three over the course of his life, he has always been fascinated with the role langua\",\"times\":299,\"words\":11026},{\"text\":\"Best Practices Count every word on your site before you pay to translate it Translation is priced per word, and most teams guess their website's total.\",\"times\":373,\"words\":9672},{\"text\":\"Unlock the power of glocalization with our Translation Management System.\",\"times\":944,\"words\":9430}]},\"languages\":[{\"name\":\"Default\",\"pages\":2203,\"words\":2355456},{\"name\":\"en\",\"pages\":291,\"words\":340790}],\"folders\":[{\"name\":\"/blog\",\"pages\":953,\"words\":1622290},{\"name\":\"/en\",\"pages\":291,\"words\":340790},{\"name\": … [1,957 more characters]",
+      "error": false
+    },
+    {
+      "say": "Count finished. Let me pull the per-page breakdown."
+    },
+    {
+      "tool": "mcp__word-counter__get_pages",
+      "input": {
+        "run_id": "97f3bffb50f74db4bf4b25d299f83f80",
+        "limit": 40
+      },
+      "output": "{\"run_id\":\"97f3bffb50f74db4bf4b25d299f83f80\",\"matching_pages\":2494,\"pages\":[{\"url\":\"https://dev.wxrks.com/openapi.json\",\"title\":\"\",\"words\":45915,\"repeated_words\":26331},{\"url\":\"https://dev.wxrks.com/reference/projects.html\",\"title\":\"Projects · wxrks API\",\"words\":23785,\"repeated_words\":13020},{\"url\":\"https://dev.wxrks.com/schemas.html\",\"title\":\"Schemas · wxrks API\",\"words\":15683,\"repeated_words\":7158},{\"url\":\"https://wxrks.com/blog/ai-statistics-500-facts-driving-global-innovation\",\"title\":\"AI Statistics: 500+ Facts Driving Global Innovation\",\"words\":11141,\"repeated_words\":472},{\"url\":\"https://support.wxrks.com/en/articles/15452758-all-about-wxrks-roles\",\"title\":\"All about wxrks roles | wxrks Help Center\",\"words\":10579,\"repeated_words\":1031},{\"url\":\"https://community.wxrks.com/c/announcements\",\"title\":\"Product Updates · wxrks community\",\"words\":8602,\"repeated_words\":1670},{\"url\":\"https://community.wxrks.com/c/announcements?sort=comments\",\"title\":\"Product Updates · wxrks community\",\"words\":8602,\"repeated_words\":8601},{\"url\":\"https://community.wxrks.com/c/announcements?sort=top\",\"title\":\"Product Updates · wxrks community\",\"words\":8602,\"repeated_words\":8601},{\"url\":\"https://dev.wxrks.com/reference/tasks.html\",\"title\":\"Tasks · wxrks API\",\"words\":6906,\"repeated_words\":5247},{\"url\":\"https://www.wxrks.com/blog/what-is-translation-memory-tm\",\"title\":\"What is Translation Memory Software\",\"words\":6852,\"repeated_words\":580},{\"url\":\"https://wxrks.com/blog/websites-and-translation-in-the-a … [4,469 more characters]",
+      "error": false
+    },
+    {
+      "say": "Done — full crawl completed, no pages blocked or failed.\n\n**Full report:** https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80\n**Every page as CSV:** https://wordcount.wxrks.app/crawl/97f3bffb50f74db4bf4b25d299f83f80/export.csv\n\n## Headline numbers\n\n| | |\n|---|---|\n| **Total words** | **2,696,246** |\n| **Pages counted** | **2,494** |\n| **Repeated text** | **39.5%** — 1,064,373 exact + 27,863 near-duplicate |\n| **Unique (\"new\") words** | **1,604,010** |\n\nNote this is ~20× what the initial sitemap estimate suggested (it predicted 1,150 pages / 2.24M words — pages were right-ish, but the crawler found 2,494 once it followed links beyond the sitemap).\n\n## Where the words are (by subdomain)\n\n| Subdomain | Pages | Words |\n|---|---|---|\n| wxrks.com (main site) | 1,050 | 1,718,712 |\n| community.wxrks.com | 818 | 386,353 |\n| support.wxrks.com | 292 | 341,066 |\n| dev.wxrks.com | 40 | 133,220 |\n| mergingminds.wxrks.com | 131 | 44,627 |\n| report.wxrks.com | 23 | 42,758 |\n| marketplace.wxrks.com | 125 | 17,047 |\n| status / resources / translate | 12 | 12,405 |\n\nBy section: `/blog` is the single biggest block at **953 pages / 1,622,290 words** — 60% of the whole site. Then `/en` (help center) 340,790, `/c` (community) 226,378, root pages 169,202.\n\nLargest individual pages: `dev.wxrks.com/openapi.json` (45,915), `reference/projects.html` (23,785), `schemas.html` (15,683), then the blog's `ai-statistics-500-facts` (11,141) and the help-center roles article (10,579).\n\n## Three things to settle before you send this to a vendor\n\n**1. Roughly 520k words are probably not translation scope.** The `dev.wxrks.com` API docs (133,220 words) are largely machine-generated — `openapi.json` alone is 45,915 words of JSON schema. And `community.wxrks.com` (386,353 words) is user-generated forum content. Excluding both puts you at **2,176,673 words**.\n\n**2. The community forum is inflating the count with URL variants.** `/c/announcements` was counted three times — once plain, once as `?sort=comments`, once as `?sort=top` — 8,602 words each, and the repetition data confirms ~8,601 of those words are duplicates in the latter two. Same pattern across paginated `?sort=…&page=N` URLs. This is a large part of why repetition hit 39.5%. The counter already excluded 799 outright duplicate pages, but these query-string variants slipped through as distinct URLs.\n\n**3. Part of the site may already be localized.** The crawl found links to language versions it didn't count — pt, ar, az, bg, bn and others — plus an uncounted `eu.wxrks.com` subdomain. Worth confirming what already exists before paying to translate it. Also 14 pages sit behind sign-in and weren't counted.\n\n## What I'd quote on\n\n- **Absolute ceiling:** 2,696,246 words\n- **Realistic scope** (drop API docs + forum): ~2,176,673 words\n- **If your vendor prices on unique words / TM leverage:** ~1,604,010 is the number that matters — the 39.5% repetition is mostly nav-adjacent boilerplate and recurring CTAs (\"Save your Spot\", the footer legal block appearing on 1,047 pages, the standard product tagline on 944), which translate once and leverage everywhere.\n\nThe CSV has all 2,494 rows with per-page word counts and per-page repeated-word counts, which is the right thing to hand a translation agency directly."
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{# English only, like every article: the page says so with lang="en" and
+   doesn't claim translations it doesn't have. Every figure below comes from
+   articles.EXPERIMENT, measured from the session logs. #}
+{% block title %}{{ article.title }} — {{ _(surface.name) }}{% endblock %}
+{% block description %}{{ article.description }}{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.description }}{% endblock %}
+{% block canonical %}{{ surface.url('/articles/' ~ article.slug) }}{% endblock %}
+{% block alternates %}<link rel="alternate" hreflang="en" href="{{ surface.url('/articles/' ~ article.slug) }}">{% endblock %}
+{% block head %}
+<meta property="article:published_time" content="{{ article.published }}">
+<script type="application/ld+json">{{ {
+  "@context": "https://schema.org", "@type": "Article", "headline": article.title,
+  "description": article.description, "datePublished": article.published,
+  "image": surface.url(article.image), "author": {"@type": "Organization", "name": "wxrks"},
+  "publisher": {"@type": "Organization", "name": "wxrks"}
+} | tojson }}</script>
+{% endblock %}
+{% set x = experiment %}
+{% set aq = x.alone_quick %}{% set ac = x.alone_careful %}{% set wq = x.with_quick %}{% set wf = x.with_full %}{% set cm = x.common %}
+{% set img = '/static/articles/claude-vs-word-counter/' %}
+{% macro n(v) %}{{ "{:,}".format(v) }}{% endmacro %}
+{% macro usd(v) %}${{ "%.2f" | format(v) }}{% endmacro %}
+{% macro dur(seconds) %}{% if seconds < 90 %}{{ seconds | round | int }} seconds{% else %}{{ (seconds / 60) | round(1) }} minutes{% endif %}{% endmacro %}
+{% macro figure(src, w, h, alt, caption) %}
+<figure class="article-figure">
+  <a href="{{ img }}{{ src }}" target="_blank" rel="noopener"><img src="{{ img }}{{ src }}" alt="{{ alt }}" width="{{ w }}" height="{{ h }}" loading="lazy"></a>
+  <figcaption>{{ caption | safe }}</figcaption>
+</figure>
+{% endmacro %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <main class="article" lang="en">
+    <header class="article-head">
+      <a class="back-link" href="{{ url('/articles') }}">← Articles</a>
+      <h1>{{ article.title }}</h1>
+      <p class="article-dek">We asked Claude Code how many words wxrks.com has — twice on its own, twice with Word Counter’s MCP server connected — and measured every answer: the number, the minutes, the dollars, and what was actually counted.</p>
+      <p class="article-meta">{{ x.published_label }} · {{ x.read_minutes }} min read · The Word Counter team at wxrks · <a href="#compare">Skip to the comparison</a></p>
+    </header>
+
+    <figure class="article-figure article-cover">
+      <img src="{{ img }}cover.png" alt="How many words does wxrks.com have? Claude Code alone: {{ n(aq.all_text_words) }} words, menus included. With Word Counter: {{ n(wf.main_words) }} on the main site, plus {{ n(wf.subdomain_words) }} on {{ wf.subdomains }} subdomains." width="1200" height="630">
+    </figure>
+
+    <section class="article-verdict" aria-label="The short version">
+      <h2>The short version</h2>
+      <ul>
+        <li><strong>Claude on its own is resourceful.</strong> It found the sitemap, wrote a crawler and fetched every English page of the main site in {{ dur(aq.seconds) }} — then counted every word in the HTML, menus and footers included: <strong>{{ n(aq.all_text_words) }}</strong>. Its own guess without the menus came within 4% of Word Counter’s count. Asked to be careful, it spent {{ dur(ac.seconds) }} and {{ usd(ac.cost) }} on a thorough analysis of {{ n(ac.pages_fetched) }} pages.</li>
+        <li><strong>With Word Counter connected</strong>, Claude had an estimate in {{ dur(wq.seconds) }} for {{ usd(wq.cost) }}. The full count: <strong>{{ n(wf.main_words) }} words on the main site</strong>, and {{ n(wf.subdomain_words) }} more on {{ wf.subdomains }} subdomains — the support center, the developer docs, the community — that Claude never looked at. {{ wf.repeated_pct }}% of it repeats text from other pages.</li>
+        <li><strong>The difference is what gets counted</strong>: the text a visitor reads, each page once, in the language you translate from, with the repetition measured — not every word in the HTML of every page, and not whatever the sitemap happens to list.</li>
+        <li><strong>You don’t need an assistant to get that number.</strong> The Word Counter website runs the same count for free, with no AI usage, and adds what an assistant can’t pass on: sign-in pages, exclusions, projects. <a href="#compare">All three, side by side</a>.</li>
+      </ul>
+    </section>
+
+    <div class="article-table-wrap">
+      <table class="article-table">
+        <thead><tr><th></th><th>Claude Code alone</th><th>Claude Code + Word Counter</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">The answer</th>
+              <td>{{ n(aq.all_text_words) }} words on {{ n(aq.pages) }} English pages of the main site — “{{ n(aq.body_words) }}” without menus, by its own estimate</td>
+              <td><strong>{{ n(wf.main_words) }} words on the main site’s {{ n(wf.main_pages) }} pages</strong> — {{ n(wf.words) }} on {{ n(wf.pages) }} pages with its {{ wf.subdomains }} subdomains</td></tr>
+          <tr><th scope="row">What was counted</th>
+              <td>Every word in each page’s HTML: menus, footers, hidden text</td>
+              <td>The text a visitor reads, without menus, footers and forms</td></tr>
+          <tr><th scope="row">Subdomains</th>
+              <td>Not found — the sitemap doesn’t list them</td>
+              <td>{{ wf.subdomains }} found and counted, each shown separately</td></tr>
+          <tr><th scope="row">Repetition</th>
+              <td>{{ x.alone_repetition }}</td>
+              <td>{{ wf.repeated_pct }}% of the words repeat other pages, measured by sentence</td></tr>
+          <tr><th scope="row">The {{ x.languages }} translated versions</th>
+              <td>Crawled too — {{ n(x.translated_pages) }} more pages</td>
+              <td>Set aside as translations, and listed</td></tr>
+          <tr><th scope="row">First answer</th>
+              <td>{{ dur(aq.seconds) }}, {{ usd(aq.cost) }}</td>
+              <td>{{ dur(wq.seconds) }}, {{ usd(wq.cost) }}</td></tr>
+          <tr><th scope="row">The careful version</th>
+              <td>{{ x.alone_careful_cell }}</td>
+              <td>{{ dur(wf.seconds) }}, {{ usd(wf.cost) }} — Claude checking in while Word Counter crawled</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section class="article-section article-compare-section" id="compare">
+      <h2>Three ways to count a website, side by side</h2>
+      <p>The table above is what happened on one site. This one covers what each way of counting can do on any site. There are three: ask an AI assistant to work it out on its own, count the site on the Word Counter website, or connect your assistant to Word Counter and ask it there. The last two are the same crawl: a count started from an assistant is also a report on the website.</p>
+      {% set states = {'yes': ('check', 'Yes'), 'partly': ('minus', 'Partly'), 'no': ('x', 'No')} %}
+      <div class="article-compare-wrap">
+        <table class="article-compare">
+          <caption class="visually-hidden">An assistant on its own, the Word Counter website, and an assistant connected to Word Counter, compared.</caption>
+          <thead>
+            <tr>
+              <td></td>
+              {% for col in comparison.columns %}
+              <th scope="col"{% if not loop.first %} class="ours"{% endif %}><span class="compare-col-name">{{ col.name }}</span><span class="compare-col-sub">{{ col.sub }}</span></th>
+              {% endfor %}
+            </tr>
+          </thead>
+          {% for group in comparison.groups %}
+          <tbody>
+            <tr class="compare-group"><th colspan="4" scope="colgroup">{{ group.name }}</th></tr>
+            {% for r in group.rows %}
+            <tr>
+              <th scope="row">{{ r.feature }}</th>
+              {% for cell in r.cells %}
+              {% set col = comparison.columns[loop.index0] %}
+              <td data-col="{{ col.name }}"{% if not loop.first %} class="ours"{% endif %}>
+                {% if cell.state %}<span class="compare-state is-{{ cell.state }}">{{ icon(states[cell.state][0], 14) }}{{ states[cell.state][1] }}</span>{% endif %}
+                <span class="compare-text{% if not cell.state %} is-figure{% endif %}">{{ cell.text }}</span>
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+      <p class="article-bar-note">Times and costs are from the four runs in this article. Assistant costs are at API prices; on a Claude subscription they come out of your usage limits. Both Word Counter columns are on the free plan; Pro crawls faster.</p>
+      <h3>Which one to use</h3>
+      <ul>
+        <li><strong>The Word Counter website</strong>, for a quote or a client report. It’s free, uses no AI at all, and it’s where you sign in to a site, leave folders out, download the text of every page, and put a client’s sites together in one project.</li>
+        <li><strong>Your assistant connected to Word Counter</strong>, when you’re already working in Claude or ChatGPT. You get the same count, and an assistant that reads it with you: what to quote on, what to leave out, which section is biggest.</li>
+        <li><strong>An assistant on its own</strong>, for a handful of pages, or a count with rules of your own, such as only the product descriptions. Then a script written for the occasion is the point.</li>
+      </ul>
+    </section>
+
+    <section class="article-section">
+      <h2>Why ask an assistant at all?</h2>
+      <p>“How many words does our website have?” is the first number in every website translation quote, and the first question in most migration and content audits. More and more, it’s typed into an AI assistant instead of a tool. So we tried it, with the assistant most likely to get it right: Claude Code, Anthropic’s agentic tool, which can browse, run shell commands and write its own programs.</p>
+      <p>The site was <a href="https://wxrks.com" rel="noopener">wxrks.com</a> — ours. It’s a good test: a Webflow site with a long blog, a mega-menu on every page, and complete translations into {{ x.languages }} languages. Its sitemap lists {{ n(x.sitemap_urls) }} addresses.</p>
+    </section>
+
+    <section class="article-section" id="setup">
+      <h2>How we ran it</h2>
+      <ul>
+        <li>Claude Code {{ x.claude_code }}, model <code>{{ x.model }}</code>, on {{ x.run_date }} — non-interactive, with the full log of every step kept.</li>
+        <li>A new, empty folder for every run: no memory, no project instructions, no MCP servers except the one being tested.</li>
+        <li>The same permissions every time — fetching web pages, web search, <code>curl</code>, <code>wc</code> and <code>python3</code> — what you’d approve if Claude asked. Spending caps of $5 for the quick question and $8 for the careful one.</li>
+        <li>Two questions. The quick one: <em>“How many words does the website wxrks.com have?”</em> The careful one: <em>“I need an accurate word count of the entire website wxrks.com for a translation quote: every page, the total number of words, how many pages there are, and how much of the text is repeated across pages. Count it as accurately as you can.”</em></li>
+        <li>Then both again with Word Counter’s MCP server connected — a copy running the same code as {{ counter_surface.host }}, at the free plan’s speed — and nothing else changed.</li>
+        <li>Times and costs are Claude Code’s own figures. Costs are at API prices; on a Claude subscription the same work comes out of your usage limits instead.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="alone-quick">
+      <h2>Round 1 — the quick question, Claude on its own</h2>
+      <p>Claude didn’t guess. It downloaded the homepage, noticed it was a Webflow site, found the sitemap ({{ x.sitemap_mb }} MB, {{ n(x.sitemap_urls) }} addresses) and worked out that {{ n(x.translated_pages) }} of them were translations. No HTML parsing library was installed, so it wrote one in Python, tested it on three pages, and set two crawlers loose in the background: one for the {{ n(x.english_pages) }} English pages, one for the rest.</p>
+      {{ figure('alone-quick.webp', 1600, 1956, 'Claude Code on its own: it downloads the sitemap, writes a crawler and reports 2,256,008 words for the English pages.', 'Round 1, rendered from the session log: the first steps, the last ones and the answer. ' ~ aq.tool_calls ~ ' tool calls in ' ~ dur(aq.seconds) ~ '; every step is in the published log.') }}
+      <p>{{ dur(aq.seconds) | capitalize }} and {{ usd(aq.cost) }} later, it reported:</p>
+      <blockquote>English site (complete): {{ n(aq.all_text_words) }} words across {{ n(aq.pages) }} pages — {{ n(aq.body_words) }} of those are unique body content — the other ~{{ (aq.chrome_words / 1000) | round | int }}k are the nav megamenu + footer ({{ aq.chrome_per_page }} words of chrome) repeated on every page.</blockquote>
+      <p>Then it said it would give the total for every language once the translated pages were done — and ended its turn. Nothing wakes a non-interactive session back up, so that total never came. In an interactive session it would have carried on, for more minutes and more tokens.</p>
+      <p>It’s a resourceful answer. It also counts every word in the HTML of each page — the first words of its homepage count are the menu: <em>“{{ x.home_text_start }}…”</em> — and the {{ n(aq.body_words) }} it offers instead comes from subtracting a guessed {{ aq.chrome_per_page }} words of “chrome” from every page.</p>
+    </section>
+
+    <section class="article-section" id="alone-careful">
+      <h2>Round 2 — “count it accurately”, Claude on its own</h2>
+      {% for paragraph in x.alone_careful_story %}<p>{{ paragraph | safe }}</p>{% endfor %}
+      {% if ac %}{{ figure('alone-careful.webp', ac.img_w, ac.img_h, 'Claude Code on its own, asked for an accurate count for a translation quote.', 'Round 2, rendered from the session log. ' ~ ac.tool_calls ~ ' tool calls in ' ~ dur(ac.seconds) ~ ', ' ~ usd(ac.cost) ~ '.') }}{% endif %}
+    </section>
+
+    <section class="article-section" id="with-quick">
+      <h2>Round 3 — the quick question, with Word Counter</h2>
+      <p>Same question, Word Counter connected. Claude loaded the tools and made one call, <code>count_words("wxrks.com")</code>. Word Counter started crawling — opening each page in a real browser — and at {{ n(wq.paused_words) }} words, on page {{ wq.paused_pages }}, paused the way it does for every large site: with an estimate of the whole from the sitemap, the repetition so far, the biggest sections and pages, and a question.</p>
+      {{ figure('with-quick.webp', 1600, 1197, 'Claude Code with Word Counter: one tool call, an estimate of about 2.2 million words on about 1,150 pages, and an offer to count every page.', 'Round 3, rendered from the session log: ' ~ wq.tool_calls ~ ' tool calls, ' ~ dur(wq.seconds) ~ ', ' ~ usd(wq.cost) ~ '.') }}
+      <p>{{ dur(wq.seconds) | capitalize }} and {{ usd(wq.cost) }}. The estimate — {{ n(wq.estimate_words) }} words on about {{ n(wq.estimate_pages) }} pages, from the sitemap — got the main site’s pages about right and its words high: the first {{ wq.paused_pages }} pages were mostly long blog guides, and it extrapolated from them. And no sitemap could tell it about the subdomains the full crawl would find. That’s why it’s labelled an estimate, and why Claude asked before counting everything.</p>
+    </section>
+
+    <section class="article-section" id="with-full">
+      <h2>Round 4 — the full count, with Word Counter</h2>
+      <p>Asked for an accurate count for a quote, Claude found the paused count, carried it on with <code>continue_word_count</code>, and checked in with <code>get_word_count</code> — {{ wf.checks }} times over {{ dur(wf.seconds) }} — while Word Counter worked through the site at the free plan’s speed: four pages at a time, each opened in a real browser. Following links rather than the sitemap, it went well past the main site, into {{ wf.subdomains }} subdomains.</p>
+      {{ figure('with-full.webp', wf.img_w, wf.img_h, 'Claude Code with Word Counter, asked for an accurate count: the full result by subdomain, with repetition and what to quote on.', 'Round 4, rendered from the session log: ' ~ wf.tool_calls ~ ' tool calls, ' ~ dur(wf.seconds) ~ ', ' ~ usd(wf.cost) ~ '. The 37 progress checks in the middle are folded away.') }}
+      <p>The result: <strong>{{ n(wf.words) }} words on {{ n(wf.pages) }} pages</strong> — {{ n(wf.main_words) }} of them on the main site’s {{ n(wf.main_pages) }} pages, {{ n(wf.subdomain_words) }} on the help center, the developer docs, the community forum and eight more subdomains. {{ n(wf.repeated) }} words ({{ wf.repeated_pct }}%) repeat a sentence found on another page, leaving {{ n(wf.new) }} new ones; {{ n(wf.duplicates) }} duplicate pages were counted once.</p>
+      <p>Claude then did what an assistant is good at: it read the numbers. It suggested leaving the machine-generated API reference and the user forum out of the quote ({{ n(chat_mock.quote_scope) }} words without them), pointed out that the forum’s <code>?sort=</code> pages repeat each other, and named {{ n(wf.new) }} new words as the figure for a vendor pricing by translation memory. One slip: it called the result “~20×” the estimate. It was 1.2×.</p>
+    </section>
+
+    <section class="article-section" id="side-by-side">
+      <h2>Side by side</h2>
+      <div class="article-bars" role="img" aria-label="The answers compared">
+        {% set top = wf.words %}
+        {% for label, value, ours in [
+            ('Claude alone — every word in the HTML, main site', aq.all_text_words, false),
+            ('Claude alone — its guess without menus', aq.body_words, false),
+            ('Word Counter — the main site', wf.main_words, true),
+            ('Word Counter — with its ' ~ wf.subdomains ~ ' subdomains', wf.words, true)] %}
+        <div class="article-bar">
+          <span class="article-bar-label">{{ label }}</span>
+          <span class="article-bar-track"><span class="article-bar-fill{% if ours %} ours{% endif %}" style="width: {{ (100 * value / top) | round(1) }}%;"></span></span>
+          <span class="article-bar-value">{{ n(value) }}</span>
+        </div>
+        {% endfor %}
+        <p class="article-bar-note">English only. Counting the translated versions as well would multiply the first two bars about nine times.</p>
+      </div>
+      <p>On the {{ n(cm.pages) }} pages both crawled, Claude’s script counted {{ n(cm.claude) }} words and Word Counter {{ n(cm.word_counter) }}: {{ cm.more_pct }}% more, a median of {{ cm.median_extra }} words a page. That’s the menu and the footer. On a quote priced per word, it’s the menu, translated {{ n(aq.pages) }} times.</p>
+      <p>Claude’s own correction — subtract {{ aq.chrome_per_page }} words of “chrome” from every page — landed within 4% of Word Counter’s count for the main site. It deserves credit for that. But it was one guessed number for {{ n(aq.pages) }} different pages, it said nothing about repetition, and the sitemap it trusted left out {{ n(wf.subdomain_words) }} words on {{ wf.subdomains }} subdomains.</p>
+    </section>
+
+    <section class="article-section" id="why">
+      <h2>Why the numbers differ</h2>
+      <h3>1. Menus and footers, on every page</h3>
+      <p>A one-off script counts every word in a page’s HTML. On wxrks.com that includes a mega-menu and a full footer — {{ cm.median_extra }} words, at the median — on all {{ n(aq.pages) }} pages. Word Counter opens each page in a browser and counts the main content: menus, footers, sidebars and forms are left out of each page — they get translated once, not once per page. Where a site builds its footer without the HTML that says so, as Webflow does here, the leftover links show up as the report’s most repeated text (1,047 times) — counted once as new, and as repetition everywhere else.</p>
+      <h3>2. What a visitor actually sees</h3>
+      <p>Raw HTML includes text a visitor never sees: in Round 1, Claude’s script noted that Webflow hides elements with <code>display:none</code> — and counted them anyway; in Round 2 it spent much of its hour deciding what to do about them. On many sites raw HTML also misses text that only arrives with JavaScript (wxrks.com renders on the server, so not here). Word Counter counts the page after it has loaded, as a visitor would read it.</p>
+      <h3>3. Repetition</h3>
+      <p>A translation quote prices repeated sentences differently from new ones. Word Counter splits every page into sentences and found {{ wf.repeated_pct }}% of the words repeating text from other pages — the CTAs, the disclaimers, the blocks reused across posts. {{ x.alone_repetition_why }}</p>
+      <h3>4. Where the site actually ends</h3>
+      <p>A sitemap lists what its owner remembered to list. wxrks.com’s doesn’t include its help center, its developer docs, its community or eight other subdomains — {{ n(wf.subdomain_words) }} words between them. Word Counter follows the links a visitor could follow, across the whole domain, and the report shows each subdomain on its own line, so leaving one out of a quote is a decision, not an accident. (You can also ask it to count one host only.)</p>
+      <h3>5. The language you translate from</h3>
+      <p>wxrks.com is already translated into {{ x.languages }} languages: {{ n(x.translated_pages) }} of its {{ n(x.sitemap_urls) }} addresses are translations. A quote counts the source, so Word Counter detected English and set the translated versions aside without fetching them, naming each one in the report. Claude, left to itself, set about crawling all {{ n(x.sitemap_urls) }} — and in Round 2, after fetching them, it rightly said the English count is the basis for the quote.</p>
+      <h3>6. Time and money</h3>
+      <p>Building and running a crawler cost Claude {{ dur(aq.seconds) }} and {{ usd(aq.cost) }} for the quick question{% if ac %}, and {{ dur(ac.seconds) }} and {{ usd(ac.cost) }} for the careful one{% endif %} — and the next site starts from zero again. With Word Counter the crawl runs on Word Counter’s servers and Claude spends its tokens on the question and the answer: {{ usd(wq.cost) }} for the estimate. Following a 35-minute count cost {{ usd(wf.cost) }}, nearly all of it Claude re-reading the conversation at each of its {{ wf.checks }} checks — asking once more at the end would cost cents.</p>
+    </section>
+
+    <section class="article-section" id="report">
+      <h2>What the report shows</h2>
+      <p>Every count started through the MCP server is also a Word Counter report, with every page, a CSV and a share link. Here is the one behind Round 4.</p>
+      {{ figure('report-summary.webp', x.report_imgs.summary[0], x.report_imgs.summary[1], 'Word Counter report for wxrks.com: the total, pages, and repeated words.', 'The top of the report: the total, the pages, and the repetition estimate.') }}
+      {% if x.report_imgs.repetition %}{{ figure('report-repetition.webp', x.report_imgs.repetition[0], x.report_imgs.repetition[1], 'The repetition section: new, repeated and near-repeated words, and the most repeated sentences.', 'Repetition, by sentence, with the text that repeats most.') }}{% endif %}
+      {% if x.report_imgs.folders %}{{ figure('report-folders.webp', x.report_imgs.folders[0], x.report_imgs.folders[1], 'Words by folder.', 'Where the words are: the blog, by a distance.') }}{% endif %}
+      {{ figure('report-subdomains.webp', x.report_imgs.subdomains[0], x.report_imgs.subdomains[1], 'Words by subdomain.', 'Every subdomain on its own line — the main site, the help center, the docs, the community.') }}
+      {{ figure('report-left-out.webp', x.report_imgs['left-out'][0], x.report_imgs['left-out'][1], 'What was left out: duplicate pages and pages behind a sign-in.', 'What was found but not counted: 799 duplicate pages and 14 behind a sign-in. The translated versions are listed under Languages.') }}
+    </section>
+
+    <section class="article-section" id="connect">
+      <h2>Connect it to your assistant</h2>
+      <p>It takes a minute. Get a personal connection URL, paste it into Claude, ChatGPT, Cursor or VS Code — or add it to Claude Code with one command — and ask about any website.</p>
+      {{ figure('guide-connect.webp', 1600, 1069, 'The guide: three steps, and the setup for each app.', 'The <a href="/mcp">guide</a> has the steps for each app.') }}
+      {{ figure('connect.webp', 1600, 1943, 'Making a connection: a personal URL, a Claude Code command and a key, shown once.', 'A connection is a personal URL and a key, shown once. You can revoke it at any time.') }}
+    </section>
+
+    <section class="article-section" id="method">
+      <h2>Notes on the method</h2>
+      <ul>
+        <li>One site, one model, one day. Assistants don’t answer the same way twice; run it again and the steps will differ, though the menus will still be in the HTML.</li>
+        <li>Word Counter’s count isn’t a law of nature either: it’s a definition — the main text of each page, as rendered — and the report shows exactly what it covers and what it left out.</li>
+        <li>The session logs, with local file paths removed, are here: {% for log in x.logs %}<a href="{{ img }}{{ log.file }}">{{ log.label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}.</li>
+      </ul>
+    </section>
+
+    <section class="article-cta">
+      <h2>Give your assistant the real number</h2>
+      <p>Word Counter’s MCP server works with Claude Code, Claude, ChatGPT, Cursor, VS Code and any app that speaks MCP. It’s free with a Word Counter account.</p>
+      <div class="doc-actions">
+        <a class="button" href="{{ url('/mcp') }}">Connect your assistant {{ icon('arrow-right', 16) }}</a>
+        <a class="button secondary" href="{{ url('/') }}">Count a website now</a>
+      </div>
+    </section>
+  </main>
+
+  {% include "_site_footer.html" %}
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>initUserMenu();</script>
+{% endblock %}

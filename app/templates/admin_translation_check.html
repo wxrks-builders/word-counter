@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% block title %}{{ check.host }} — Translation check — Admin{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% if progress %}<meta http-equiv="refresh" content="20">{% endif %}{% endblock %}
+{% macro n(v) %}{{ "{:,}".format(v or 0) }}{% endmacro %}
+{% macro pct(v) %}{{ "—" if v is none else ("%g%%"|format(v)) }}{% endmacro %}
+{% macro chips(codes) -%}
+  {%- if codes|length > 2 and codes|length == locale_names|length -%}
+    <span class="tc-chip">All {{ codes|length }}</span>
+  {%- else -%}
+    {%- for code in codes %}<span class="tc-chip" title="{{ locale_names.get(code, code) }}">{{ code }}</span>{% endfor -%}
+  {%- endif -%}
+{%- endmacro %}
+{% macro link(params) %}/admin/translations/{{ check.id }}?{% if lang %}lang={{ lang | urlencode }}&{% endif %}{{ params }}{% endmacro %}
+{% macro keep(row, in_lang=None) %}
+  {% set code = in_lang if in_lang is not none else lang %}
+  <form method="post" action="/admin/translations/{{ check.id }}/ignore" class="tc-keep">
+    <input type="hidden" name="key" value="{{ row.text_key }}">
+    <input type="hidden" name="text" value="{{ row.text }}">
+    <input type="hidden" name="locale" value="{{ code or '*' }}">
+    <input type="hidden" name="back" value="{{ back }}">
+    <button type="submit" class="secondary tc-small"
+            title="{{ 'Stays as it is in ' ~ locale_names.get(code, code) if code else 'Stays as it is in every language' }}: leave it out of this report and the next checks">Keep as is</button>
+  </form>
+{% endmacro %}
+{% macro cell_label(cell) -%}
+  {%- if cell.state == "missing" %}missing{% elif cell.state == "unchecked" %}—{% else %}{{ "%g"|format(cell.pct) if cell.pct is not none else "—" }}{% endif -%}
+{%- endmacro %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap tc-wrap">
+    <p class="subtitle tc-subnav">
+      <a href="/admin/translations">← All checks</a>
+      {% if has_detail and summary %}
+      <a href="/admin/translations/{{ check.id }}/findings.csv{% if lang %}?lang={{ lang | urlencode }}{% endif %}">Findings CSV ↓</a>
+      <a href="/admin/translations/{{ check.id }}/pages.csv{% if lang %}?lang={{ lang | urlencode }}{% endif %}">Pages CSV ↓</a>
+      {% endif %}
+    </p>
+
+    <h1 class="tc-title">{{ check.host }}</h1>
+    <p class="tc-meta">
+      {% if check.status in ("planning", "running") %}<span class="status-badge status-crawling">Running</span>
+      {% else %}<span class="status-badge status-{{ check.status }}">{{ check.status | capitalize }}</span>{% endif %}
+      <span class="run-date-iso" data-iso="{{ check.started_at }}"></span>
+      · {{ "weekly check" if check.trigger == "schedule" else "started by hand" }}
+      {% if summary.source_name %}· original in {{ summary.source_name }}, {{ summary.locales | length }} languages{% endif %}
+      {% if check.diff.previous_id and not check.diff.rules_changed %}
+        · compared with <a href="/admin/translations/{{ check.diff.previous_id }}">the previous check</a>
+      {% elif check.diff.rules_changed %}· the rules changed since the previous check, so it isn't compared{% endif %}
+    </p>
+
+    {% if progress %}
+    <div class="tc-progress">
+      {% if progress.total %}
+        <span>{{ n(progress.done) }} of {{ n(progress.total) }} pages checked, each with its versions in every language</span>
+        <span class="meter tc-meter"><span class="meter-fill" style="width: {{ (100 * progress.done / progress.total) | round | int }}%;"></span></span>
+      {% else %}
+        <span>Reading the sitemap…</span>
+      {% endif %}
+      {% if not check.cancel_requested and is_admin(user) %}
+      <form method="post" action="/admin/translations/{{ check.id }}/cancel">
+        <button type="submit" class="secondary tc-small">Cancel check</button>
+      </form>
+      {% elif check.cancel_requested %}<span class="muted">Cancelling…</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if check.error %}<p class="tc-notice tc-danger">{{ check.error }}</p>{% endif %}
+    {% if summary.capped %}<p class="tc-notice">This site has more pages than one check covers (TRANSLATION_CHECK_MAX_PAGES); the rest weren't checked.</p>{% endif %}
+
+    {% if summary.locales and not key_view %}
+    <div class="section-label tc-gap">By language</div>
+    <div class="table-scroll table-paged">
+      <table class="tc-langs">
+        <thead>
+          <tr>
+            <th>Language</th><th class="col-num">Checked</th><th class="col-num">Missing</th>
+            <th class="col-num" title="Share of the original's words that were translated, on the pages that exist">Translated</th>
+            <th class="col-num" title="Language versions with at least half their words still in the original">Still in {{ summary.source_name or "original" }}</th>
+            <th class="col-num">Open strings</th>
+            {% if check.diff.previous_id and not check.diff.rules_changed %}<th class="col-num">New</th><th class="col-num">Fixed</th>{% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="{{ 'tc-selected' if not lang }}">
+            <td><a href="/admin/translations/{{ check.id }}{% if section %}?section={{ section }}{% endif %}">All languages</a></td>
+            <td class="words-cell">{{ n(summary.locales | sum(attribute='checked')) }}</td>
+            <td class="words-cell">{{ n(summary.missing) }}</td>
+            <td class="words-cell">{{ pct(summary.translated_pct) }}</td>
+            <td class="words-cell">{{ n(summary.in_english) }}</td>
+            <td class="words-cell">{{ n(summary.strings) }}</td>
+            {% if check.diff.previous_id and not check.diff.rules_changed %}
+            <td class="words-cell">{{ n(check.diff.new) }}</td><td class="words-cell">{{ n(check.diff.fixed) }}</td>
+            {% endif %}
+          </tr>
+          {% for item in summary.locales %}
+          <tr class="{{ 'tc-selected' if lang == item.code }}">
+            <td>
+              <a href="/admin/translations/{{ check.id }}?lang={{ item.code | urlencode }}{% if section %}&section={{ section }}{% endif %}">{{ item.name }}</a>
+              <span class="tc-code">{{ item.code }}</span>
+            </td>
+            <td class="words-cell" title="{% if item.errors %}{{ item.errors }} couldn't be fetched{% endif %}">{{ n(item.checked) }}{% if item.errors %}<span class="tc-warn-mark">*</span>{% endif %}</td>
+            <td class="words-cell">{{ n(item.missing) }}</td>
+            <td class="words-cell">{{ pct(item.translated_pct) }}</td>
+            <td class="words-cell">{{ n(item.in_english) }}</td>
+            <td class="words-cell">{{ n(item.strings) }}</td>
+            {% if check.diff.previous_id and not check.diff.rules_changed %}
+            <td class="words-cell">{{ n(item.new) }}</td><td class="words-cell">{{ n(item.fixed) }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    {% if not has_detail and check.status == "completed" %}
+    <p class="tc-notice">The page-by-page detail is kept for the two latest checks of a site; this one has its summary only.</p>
+    {% endif %}
+
+    {% if section %}
+    <p class="tc-back"><a href="/admin/translations/{{ check.id }}{% if lang %}?lang={{ lang | urlencode }}{% endif %}">← Every section</a></p>
+    {% endif %}
+
+    {% if key_grid %}
+    <section class="tc-section" id="key-pages">
+      <div class="tc-section-head"><h2>Key pages <span class="tc-count">{{ n(key_grid | length) }}</span></h2></div>
+      <p class="tc-lead">The home page and every page the main menu links to, in each language: how much of it is
+        translated. Open one for its screenshot, with what's left untranslated outlined in red.</p>
+      <div class="table-scroll table-paged">
+        <table class="tc-grid">
+          <thead>
+            <tr><th>Page</th>{% for item in summary.locales %}<th title="{{ item.name }}">{{ item.code }}</th>{% endfor %}</tr>
+          </thead>
+          <tbody>
+            {% for row in key_grid %}
+            <tr>
+              <td class="tc-grid-page"><a href="{{ row.source_url }}" target="_blank" rel="noopener" title="{{ row.source_url }}">{{ row.path }}</a></td>
+              {% for cell in row.cells %}
+              <td class="tc-cell tc-{{ cell.state }}">
+                {% if cell.state in ("good", "warn", "bad") %}
+                <a href="/admin/translations/{{ check.id }}?section=key&source={{ row.source_url | urlencode }}&lang={{ cell.code | urlencode }}"
+                   title="{{ locale_names.get(cell.code, cell.code) }}: {{ cell_label(cell) }}% translated{% if cell.shot == 'ok' %} · screenshot{% endif %}">{{ cell_label(cell) }}{% if cell.shot == "ok" %}<span class="tc-shot-dot" aria-label="screenshot"></span>{% endif %}</a>
+                {% else %}<span title="{{ locale_names.get(cell.code, cell.code) }}: {{ 'no version in this language' if cell.state == 'missing' else 'not checked' }}">{{ cell_label(cell) }}</span>{% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="tc-legend"><span class="tc-cell tc-good">95+</span> % translated <span class="tc-cell tc-warn">75–94</span> <span class="tc-cell tc-bad">under 75</span> <span class="tc-cell tc-missing">missing</span> no version in that language · <span class="tc-shot-dot"></span> has a screenshot</p>
+    </section>
+    {% endif %}
+
+    {% if key_view %}
+    {% set kv = key_view %}
+    <section class="tc-section" id="key-page">
+      <div class="tc-section-head">
+        <h2>{{ kv.path }} <span class="tc-count">{{ locale_names.get(kv.lang, kv.lang) }}</span></h2>
+      </div>
+      <p class="tc-tabs">
+        {% for tab in kv.tabs %}
+        {% if tab.state in ("good", "warn", "bad") %}
+        <a class="tc-tab tc-{{ tab.state }}{{ ' tc-tab-on' if tab.code == kv.lang }}" href="/admin/translations/{{ check.id }}?section=key&source={{ kv.source_url | urlencode }}&lang={{ tab.code | urlencode }}">{{ tab.code }} <span>{{ cell_label(tab) }}%</span></a>
+        {% else %}<span class="tc-tab tc-missing" title="No version in this language">{{ tab.code }} <span>{{ cell_label(tab) }}</span></span>{% endif %}
+        {% endfor %}
+      </p>
+      {% if kv.row %}
+      <p class="tc-lead">
+        {% if kv.page.pct is not none %}{{ "%g"|format(kv.page.pct) }}% translated · {% endif %}
+        <a href="{{ kv.row.url }}" target="_blank" rel="noopener">Open this version ↗</a> ·
+        <a href="{{ kv.source_url }}" target="_blank" rel="noopener">Original ↗</a>
+      </p>
+      {% endif %}
+      {% if kv.shot and kv.shot.status == "ok" %}
+      <figure class="tc-shot">
+        <figcaption>{{ n(kv.shot.marks) }} untranslated block{{ "" if kv.shot.marks == 1 else "s" }} outlined in red. Text in closed menus, tabs or pop-ups can't be seen in a screenshot — it's in the list below.</figcaption>
+        <a href="/admin/translations/{{ check.id }}/shots/{{ kv.shot.file }}" target="_blank" rel="noopener">
+          <img src="/admin/translations/{{ check.id }}/shots/{{ kv.shot.file }}" alt="Screenshot of {{ kv.path }} in {{ locale_names.get(kv.lang, kv.lang) }} with untranslated text outlined" loading="lazy">
+        </a>
+      </figure>
+      {% elif kv.shot and kv.shot.status == "failed" %}
+      <p class="tc-notice">No screenshot: {{ kv.shot.error }}.</p>
+      {% elif kv.row and kv.row.status == "ok" %}
+      <p class="tc-notice">No screenshot of this one — each check takes up to TRANSLATION_CHECK_SCREENSHOTS, home and the menu's top-level pages first.</p>
+      {% endif %}
+
+      {% if kv.findings %}
+      <div class="table-scroll table-paged">
+        <table class="tc-table">
+          <thead><tr><th>Left untranslated</th><th>Kind</th><th></th></tr></thead>
+          <tbody>
+            {% for f in kv.findings %}
+            <tr>
+              <td class="tc-text">
+                <span class="tc-string" title="{{ f.text }}">{{ f.text }}</span>
+                <span class="tc-where">
+                  {% if f.detail and f.kind in ("meta", "attribute") %}{{ f.detail }} ·{% endif %}
+                  {% if f.kind == "english_link" and f.detail %}should be <a href="{{ f.detail }}" target="_blank" rel="noopener">{{ f.detail | replace("https://", "") }}</a> ·{% endif %}
+                  {% if f.where_hint and f.where_hint != "page" %}{{ where_labels.get(f.where_hint, f.where_hint) }}{% if f.component_label and f.where_hint == "component" %} {{ f.component_label }}{% endif %} ·{% endif %}
+                  <a href="{{ f.example_link }}" target="_blank" rel="noopener">See it ↗</a>
+                </span>
+              </td>
+              <td class="tc-kind">{{ kind_labels.get(f.kind, f.kind) }}</td>
+              <td class="tc-actions">{{ keep(f, kv.lang) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% elif kv.row and kv.row.status == "ok" %}
+      <p class="tc-notice tc-good">Nothing left untranslated on this page.</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% for sec in sections %}
+    <section class="tc-section" id="{{ sec.key }}">
+      <div class="tc-section-head">
+        <h2>{{ sec.title }} <span class="tc-count">{{ n(sec.total) }}</span></h2>
+        {% if not section and sec.total > sec.rows | length %}
+        <a href="{{ link('section=' ~ sec.key) }}">See all →</a>
+        {% endif %}
+      </div>
+      <p class="tc-lead">
+        {% if component %}Inside the <strong>{{ sec.rows[0].component_label if sec.rows else component }}</strong> component.
+        {% elif source %}On <a href="{{ source }}" target="_blank" rel="noopener">{{ source }}</a>.
+        {% else %}{{ sec.lead }}{% endif %}
+      </p>
+
+      {% if sec.key == "missing" and folders %}
+      <p class="tc-folders">
+        {% for folder, count in folders %}<span class="tc-folder"><strong>{{ folder }}</strong> {{ n(count) }}</span>{% endfor %}
+      </p>
+      {% endif %}
+
+      <div class="table-scroll table-paged">
+        <table class="tc-table">
+          {% if sec.mode == "english_pages" %}
+          <thead><tr><th>Original page</th><th class="col-left">Languages · share still untranslated</th><th class="col-num">Words</th><th></th></tr></thead>
+          <tbody>
+            {% for row in sec.rows %}
+            <tr>
+              <td class="tc-text"><a href="{{ row.source_url }}" target="_blank" rel="noopener">{{ row.source_url | replace("https://", "") }}</a></td>
+              <td class="tc-chips">
+                {% for v in row.versions %}<a class="tc-chip tc-chip-link" href="{{ v.url }}" target="_blank" rel="noopener" title="{{ locale_names.get(v.code, v.code) }}: {{ v.share }}% of the words still untranslated">{{ v.code }} {{ v.share }}%</a>{% endfor %}
+              </td>
+              <td class="words-cell" data-label="Words">{{ n(row.words) }}</td>
+              <td class="tc-actions">{{ keep(row) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif sec.mode == "components" %}
+          <thead><tr><th>Component</th><th class="col-num">Strings</th><th class="col-left">Languages</th><th class="col-num">Pages</th><th></th></tr></thead>
+          <tbody>
+            {% for row in sec.rows %}
+            <tr>
+              <td><strong>{{ row.label or "Component" }}</strong>{% if row.is_new %} <span class="tc-new">New</span>{% endif %}</td>
+              <td class="words-cell" data-label="Strings">{{ n(row.strings) }}</td>
+              <td class="tc-chips">{{ chips(row.locales) }}</td>
+              <td class="words-cell" data-label="Pages">{{ n(row.pages) }}</td>
+              <td class="open-cell"><a href="{{ link('section=components&component=' ~ (row.component_id | urlencode)) }}">Strings →</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% elif sec.mode == "sources" %}
+          <thead><tr><th>Page</th><th class="col-num">Strings</th><th class="col-num">Words</th><th>Languages</th><th></th></tr></thead>
+          <tbody>
+            {% for row in sec.rows %}
+            <tr>
+              <td class="tc-text"><a href="{{ row.source_url }}" target="_blank" rel="noopener">{{ row.source_url | replace("https://", "") }}</a>{% if row.is_new %} <span class="tc-new">New</span>{% endif %}</td>
+              <td class="words-cell" data-label="Strings">{{ n(row.strings) }}</td>
+              <td class="words-cell" data-label="Words">{{ n(row.words) }}</td>
+              <td class="tc-chips">{{ chips(row.locales) }}</td>
+              <td class="open-cell"><a href="{{ link('section=pages&source=' ~ (row.source_url | urlencode)) }}">Strings →</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% else %}
+          <thead><tr><th>{{ "Original page" if sec.key == "missing" else "Text" }}</th><th>Languages</th><th class="col-num">Pages</th><th></th></tr></thead>
+          <tbody>
+            {% for row in sec.rows %}
+            <tr>
+              <td class="tc-text">
+                {% if sec.key == "missing" %}
+                  <a href="{{ row.text }}" target="_blank" rel="noopener">{{ row.text | replace("https://", "") }}</a>
+                  {% if row.detail == "redirected" %}<span class="muted">· redirects away</span>{% endif %}
+                {% else %}
+                  <span class="tc-string" title="{{ row.text }}">{{ row.text }}</span>
+                {% endif %}
+                {% if row.is_new %}<span class="tc-new">New</span>{% endif %}
+                <span class="tc-where">
+                  {% if row.kind == "meta" or row.kind == "attribute" %}{{ row.detail }} ·{% endif %}
+                  {% if row.kind == "english_text" %}English not on the original page ·{% endif %}
+                  {% if row.kind == "english_link" and row.detail %}should be <a href="{{ row.detail }}" target="_blank" rel="noopener">{{ row.detail | replace("https://", "") }}</a> ·{% endif %}
+                  {% if row.where_hint and row.where_hint != "page" and sec.key != "missing" %}{{ where_labels.get(row.where_hint, row.where_hint) }}{% if row.component_label and row.where_hint == "component" %} {{ row.component_label }}{% endif %} ·{% endif %}
+                  {% if row.example_link and sec.key != "missing" %}<a href="{{ row.example_link }}" target="_blank" rel="noopener">See it ↗</a>{% endif %}
+                  {% if row.source_url and sec.key != "missing" %}· <a href="{{ row.source_url }}" target="_blank" rel="noopener">Original ↗</a>{% endif %}
+                </span>
+              </td>
+              <td class="tc-chips">{{ chips(row.locales) }}</td>
+              <td class="words-cell"{% if sec.key != "missing" %} data-label="Pages"{% endif %}>{{ n(row.pages) if sec.key != "missing" else "" }}</td>
+              <td class="tc-actions">{{ keep(row) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          {% endif %}
+        </table>
+      </div>
+      {% if section %}{% include "_pagination.html" %}{% endif %}
+    </section>
+    {% else %}
+      {% if has_detail and summary and not progress %}
+      <p class="tc-notice tc-good">Nothing left untranslated{% if lang %} in {{ locale_names.get(lang, lang) }}{% endif %}.</p>
+      {% endif %}
+    {% endfor %}
+
+    {% if ignores and not section %}
+    <section class="tc-section" id="kept">
+      <div class="tc-section-head"><h2>Kept as is <span class="tc-count">{{ n(ignores | length) }}</span></h2></div>
+      <p class="tc-lead">Left out of every check of this site. Undo to see them again.</p>
+      <div class="table-scroll table-paged">
+        <table class="tc-table">
+          <tbody>
+            {% for item in ignores %}
+            <tr>
+              <td class="tc-text"><span class="tc-string">{{ item.text }}</span></td>
+              <td class="tc-chips">{% if item.locale == "*" %}<span class="tc-chip">All</span>{% else %}<span class="tc-chip">{{ item.locale }}</span>{% endif %}</td>
+              <td class="tc-actions">
+                <form method="post" action="/admin/translations/{{ check.id }}/ignore" class="tc-keep">
+                  <input type="hidden" name="key" value="{{ item.text_key }}">
+                  <input type="hidden" name="locale" value="{{ item.locale }}">
+                  <input type="hidden" name="undo" value="1">
+                  <input type="hidden" name="back" value="{{ back }}">
+                  <button type="submit" class="secondary tc-small">Undo</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    formatRunDates();
+  </script>
+{% endblock %}

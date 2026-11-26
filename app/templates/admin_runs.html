@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}All Runs — Admin{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap">
+    <p class="subtitle">Every crawl ever saved, across every user. <a href="/admin/jobs">Server jobs →</a> <a href="/admin/estimates">Estimate accuracy →</a></p>
+
+    <form class="filter-row" method="get" action="/admin/runs">
+      <input type="search" name="q" value="{{ query }}" placeholder="Filter by site, owner email or name">
+      <button type="submit" class="secondary">Search</button>
+      {% if query %}<a href="/admin/runs">Clear</a>{% endif %}
+    </form>
+
+    <div class="section-label">
+      {{ "{:,}".format(total) }} run{{ "" if total == 1 else "s" }}{% if query %} matching “{{ query }}”{% endif %}
+    </div>
+
+    <div class="table-scroll table-paged">
+      <table>
+        <thead>
+          <tr>
+            <th>Site</th><th>Owner</th><th class="col-left">Status</th><th>Started</th>
+            <th class="col-num">Pages</th><th class="col-num">Words</th><th class="col-num">MD</th><th>Platform</th><th>Front page</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for run in runs %}
+          <tr>
+            <td class="url-cell" title="{{ run.source_url }}">{{ run.source_url }}</td>
+            <td title="{{ run.owner_email }}">{{ run.owner_name }}</td>
+            <td><span class="status-badge status-{{ run.status }}">{{ run.status | capitalize }}</span></td>
+            <td class="run-date run-date-iso" data-iso="{{ run.created_at }}"></td>
+            <td class="words-cell">{{ "{:,}".format(run.page_count) }}</td>
+            <td class="words-cell">{{ "{:,}".format(run.total_words) }}</td>
+            <td class="words-cell" title="Saved Markdown on disk">{{ (run.markdown_bytes // 1048576) ~ " MB" if run.markdown_bytes else "—" }}</td>
+            <td>
+              {# Picks the connector the run's banners pitch. #}
+              <form class="platform-form" method="post" action="/admin/runs/{{ run.id }}/platform">
+                <input type="hidden" name="back" value="{{ back }}">
+                <select name="cms" aria-label="Platform for {{ run.source_url }}">
+                  <option value=""{% if not run.detected_cms %} selected{% endif %}>Unknown</option>
+                  {% for name in platforms %}
+                  <option value="{{ name }}"{% if run.detected_cms == name %} selected{% endif %}>{{ name }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit" class="secondary">Set</button>
+              </form>
+            </td>
+            <td>
+              {% if run.status == "completed" %}
+              {# Featuring also turns the public link on: the front page links to it. #}
+              <form class="platform-form" method="post" action="/admin/runs/{{ run.id }}/example">
+                <input type="hidden" name="back" value="{{ back }}">
+                <input type="hidden" name="on" value="{{ '0' if run.is_example else '1' }}">
+                <button type="submit" class="secondary" title="{{ 'Remove from the front page' if run.is_example else 'Show as an example report on the front page (makes its share link public)' }}">{{ 'Featured ✓' if run.is_example else 'Feature' }}</button>
+              </form>
+              {% endif %}
+            </td>
+            <td class="open-cell"><a href="/crawl/{{ run.id }}">Open ↗</a></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="10" class="muted">{% if query %}No runs match that search.{% else %}No runs saved yet.{% endif %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include "_pagination.html" %}
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>
+    initUserMenu();
+    formatRunDates();
+  </script>
+{% endblock %}

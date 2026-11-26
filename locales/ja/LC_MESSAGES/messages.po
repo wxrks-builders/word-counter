@@ -1,0 +1,3227 @@
+# Japanese translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-26 16:43-0500\n"
+"PO-Revision-Date: 2026-08-20 10:34-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#, python-format
+msgid "%(n)s behind a login"
+msgstr ""
+
+#, python-format
+msgid "%(n)s blocked"
+msgstr ""
+
+#, python-format
+msgid "%(n)s crawls"
+msgstr ""
+
+#, python-format
+msgid "%(n)s duplicate pages aren’t in the total at all."
+msgstr ""
+
+#, python-format
+msgid "%(n)s duplicate pages within the sites"
+msgstr ""
+
+#, python-format
+msgid "%(n)s duplicates"
+msgstr ""
+
+#, python-format
+msgid "%(n)s failed"
+msgstr ""
+
+#, python-format
+msgid "%(n)s files"
+msgstr ""
+
+#, python-format
+msgid "%(n)s found, with %(words)s more words, each on its own line."
+msgstr ""
+
+#, python-format
+msgid "%(n)s min"
+msgstr ""
+
+#, python-format
+msgid "%(n)s more not fetched"
+msgstr ""
+
+#, python-format
+msgid "%(n)s new words"
+msgstr ""
+
+#, python-format
+msgid "%(n)s pages"
+msgstr ""
+
+#, python-format
+msgid "%(n)s pages at a time"
+msgstr ""
+
+#, python-format
+msgid "%(n)s pages behind a sign-in"
+msgstr ""
+
+#, python-format
+msgid "%(n)s read and set aside"
+msgstr ""
+
+#, python-format
+msgid "%(n)s same address"
+msgstr ""
+
+#, python-format
+msgid "%(n)s same text"
+msgstr ""
+
+#, python-format
+msgid "%(n)s still crawling"
+msgstr ""
+
+#, python-format
+msgid "%(n)s text changed"
+msgstr ""
+
+#, python-format
+msgid "%(n)s translated pages set aside, never fetched."
+msgstr ""
+
+#, python-format
+msgid "%(n)s words"
+msgstr ""
+
+#, python-format
+msgid "%(n)s words added up, each page once"
+msgstr ""
+
+#, python-format
+msgid "%(n)s words checked by page only."
+msgstr ""
+
+#, python-format
+msgid "%(n)s words in sentences"
+msgstr ""
+
+#, python-format
+msgid "%(name)s (you)"
+msgstr ""
+
+#, python-format
+msgid "%(pct)s of the words are in %(folder)s: %(words)s on %(pages)s pages."
+msgstr ""
+
+#, python-format
+msgid "%(pct)s of the words are in %(folder)s: %(words)s on 1 page."
+msgstr ""
+
+#, python-format
+msgid "%(pct)s%% measured on every count, by sentence."
+msgstr ""
+
+#, python-format
+msgid "%(pct)s%% of it repeats text from other pages; %(new)s words are new."
+msgstr ""
+
+#, python-format
+msgid "%(pct)s%% repeated in its own report"
+msgstr ""
+
+#, python-format
+msgid "%(person)s shared a report with you"
+msgstr ""
+
+#, python-format
+msgid "%(person)s shared a word-count report with you"
+msgstr ""
+
+#, python-format
+msgid "%(words)s words across %(pages)s pages"
+msgstr ""
+
+#, python-format
+msgid "%(words)s words on %(pages)s pages"
+msgstr ""
+
+#, python-format
+msgid "%(words)s words/min · %(pages)s pages/min"
+msgstr ""
+
+msgid "(root)"
+msgstr ""
+
+msgid "1 crawl"
+msgstr ""
+
+msgid "1 duplicate"
+msgstr ""
+
+msgid "1 duplicate page isn’t in the total at all."
+msgstr ""
+
+msgid "1 page"
+msgstr ""
+
+msgid "A chat transcript."
+msgstr ""
+
+msgid "A count you can check, not just a number"
+msgstr ""
+
+msgid "A page or a sentence on more than one site is counted once."
+msgstr ""
+
+msgid "A report link, a CSV of every page, the text as Markdown."
+msgstr ""
+
+msgid "A report you can send"
+msgstr ""
+
+msgid ""
+"A run can be in more than one project. In each, a page found in several "
+"crawls counts once."
+msgstr ""
+
+msgid "A website has 200 pages. But how much work is that?"
+msgstr ""
+
+#, python-format
+msgid "A word count for %(site)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"About %(words)s words, without the machine-generated API docs and the "
+"user forum."
+msgstr ""
+
+#, python-format
+msgid ""
+"About “%(n)s× faster” is measured, not arithmetic. Pro fetches %(raw)s× "
+"as many pages at once, but fetching is only part of the work — every page"
+" is also rendered and its text extracted, and that competes for CPU. The "
+"honest number is the smaller one."
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid ""
+"Add --scope user to have it in every project. Then type /mcp in Claude "
+"Code to check that word-counter is connected, and ask away."
+msgstr ""
+
+msgid "Add another…"
+msgstr ""
+
+msgid "Add existing runs"
+msgstr ""
+
+#, python-format
+msgid "Add existing runs to %(name)s"
+msgstr ""
+
+msgid "Add it to your app"
+msgstr ""
+
+msgid "Add people by email"
+msgstr ""
+
+msgid "Add the crawls you already have, or crawl a site straight into it."
+msgstr ""
+
+msgid "Add to a project"
+msgstr ""
+
+msgid "Add to project"
+msgstr ""
+
+msgid "Added since the last consolidation — in the next one."
+msgstr ""
+
+msgid "Added up: every page of every crawl"
+msgstr ""
+
+msgid "Added up: every page of every site"
+msgstr ""
+
+msgid "Address shown on this report"
+msgstr ""
+
+msgid "Adjust settings"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+#, python-format
+msgid "All %(n)s differences, side by side"
+msgstr ""
+
+msgid "All crawls"
+msgstr ""
+
+msgid "All your crawls"
+msgstr ""
+
+msgid "All your runs are in this project already."
+msgstr ""
+
+msgid ""
+"Already working in an AI assistant? Connect it to Word Counter and ask "
+"about any website in plain words. The crawl runs on Word Counter’s "
+"servers, and your assistant answers with the total, the repetition and "
+"the split by language, with a link to the full report."
+msgstr ""
+
+msgid "An AI assistant on its own"
+msgstr ""
+
+msgid "An assistant answering with Word Counter"
+msgstr ""
+
+msgid ""
+"An assistant writes a new crawler every time, and its steps change from "
+"one run to the next. Word Counter counts every site the same way, so next"
+" month’s count compares with this one."
+msgstr ""
+
+msgid ""
+"An estimate of the sentences repeated across pages, and the split by "
+"language, section and subdomain — the numbers a quote is built on."
+msgstr ""
+
+msgid ""
+"An estimate: each page is split into sentences, matched exactly across "
+"the pages counted, as CAT tools do at their simplest. Your TMS analysis "
+"will differ with its own segmentation, tags, numbers and translation "
+"memory."
+msgstr ""
+
+msgid ""
+"Any other app: use Streamable HTTP with the server URL and the key as a "
+"Bearer token — or, if it only takes a URL, your personal URL."
+msgstr ""
+
+msgid "Anyone with the link can view this project"
+msgstr ""
+
+msgid "Anyone with the link can view this report"
+msgstr ""
+
+msgid "Articles"
+msgstr ""
+
+msgid "Ask Claude or ChatGPT how many words a website has"
+msgstr ""
+
+msgid "Ask Claude or ChatGPT. Get the real count."
+msgstr ""
+
+msgid "Ask about any website"
+msgstr ""
+
+msgid "Ask your assistant the question it couldn’t answer before."
+msgstr ""
+
+#, python-format
+msgid ""
+"At %(n)s words, the crawl pauses and shows the projected word count, page"
+" count and time remaining. When a sitemap is available, it helps check "
+"the estimate."
+msgstr ""
+
+msgid ""
+"At about 50,000 words a count pauses with an estimate of the whole site. "
+"Ask your assistant to continue and it counts every page."
+msgstr ""
+
+msgid ""
+"Available in English, Arabic, Chinese, French, German, Italian, Japanese,"
+" Korean, Portuguese, Spanish and Swedish."
+msgstr ""
+
+msgid "Avg words / page"
+msgstr ""
+
+msgid "Back to the project"
+msgstr ""
+
+msgid "Before you count"
+msgstr ""
+
+msgid "Behind a login"
+msgstr ""
+
+msgid "Between"
+msgstr ""
+
+msgid "Big site? See the estimate before you keep going."
+msgstr ""
+
+msgid "Blocked by the host"
+msgstr ""
+
+msgid "Blocked or failed pages"
+msgstr ""
+
+msgid "Broken down where it's useful"
+msgstr ""
+
+msgid "Built for translation quotes"
+msgstr ""
+
+msgid "Built with AI"
+msgstr ""
+
+msgid "Busy server load"
+msgstr ""
+
+msgid "By folder"
+msgstr ""
+
+msgid "By language"
+msgstr ""
+
+msgid "By subdomain"
+msgstr ""
+
+msgid "CMS and site builders"
+msgstr ""
+
+msgid "CSV export, Markdown ZIP, shareable reports"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Cancel anytime, from your billing page"
+msgstr ""
+
+msgid "Cancel crawl"
+msgstr ""
+
+msgid "Cancel every active crawl on the server? This cannot be undone."
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid "Cancelling…"
+msgstr ""
+
+msgid "Carries a large site past its estimate to the very last page."
+msgstr ""
+
+msgid "Change language"
+msgstr ""
+
+msgid "Change the address this report shows"
+msgstr ""
+
+msgid "Check staging content before launch"
+msgstr ""
+
+#, python-format
+msgid ""
+"Checked by page only: %(sites)s. These crawls kept no sentences and saved"
+" no Markdown, so their pages count in full unless the same page is in "
+"another crawl. A new crawl checks them sentence by sentence."
+msgstr ""
+
+msgid "Choose Add custom connector."
+msgstr ""
+
+msgid "Claude (claude.ai and Claude Desktop)"
+msgstr ""
+
+msgid "Claude (web and desktop)"
+msgstr ""
+
+msgid "Claude Code — paste in a terminal"
+msgstr ""
+
+msgid "Claude Code, writing its own crawler"
+msgstr ""
+
+msgid "Claude alone vs. with Word Counter"
+msgstr ""
+
+msgid "Claude with and without it →"
+msgstr ""
+
+msgid "Client view"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid ""
+"Comma-separated subdomains and folders to leave out. A leading / excludes"
+" a folder, anything else a subdomain."
+msgstr ""
+
+msgid ""
+"Comma-separated. A leading / excludes a folder, anything else a subdomain"
+" — staging also matches web-staging.example.com. Useful with “Whole "
+"domain”, which otherwise includes every subdomain, staging mirrors "
+"included."
+msgstr ""
+
+msgid "Compare the word counts of our live site and our staging site."
+msgstr ""
+
+msgid "Comparing sentences…"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Connect Claude or ChatGPT"
+msgstr ""
+
+msgid "Connect Claude, ChatGPT or another assistant"
+msgstr ""
+
+msgid ""
+"Connect Word Counter to Claude, ChatGPT, Cursor or any MCP client and ask"
+" how many words a website has. It crawls every page and answers with the "
+"real total, the repetition and the split by language."
+msgstr ""
+
+msgid ""
+"Connect Word Counter to your AI assistant. When you ask about a website, "
+"it crawls every page and comes back with the real total — the same count "
+"as our reports, not a guess from the homepage."
+msgstr ""
+
+msgid "Connect an assistant"
+msgstr ""
+
+msgid "Connect in three steps"
+msgstr ""
+
+msgid "Connect your assistant"
+msgstr ""
+
+msgid "Consolidate"
+msgstr ""
+
+msgid "Consolidate again"
+msgstr ""
+
+msgid "Consolidated"
+msgstr ""
+
+msgid "Consolidating"
+msgstr ""
+
+msgid "Consolidating…"
+msgstr ""
+
+msgid "Copied"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Copy it now: this is the only time it’s shown. It works like a password."
+msgstr ""
+
+msgid "Copy link"
+msgstr ""
+
+msgid "Could not reach billing"
+msgstr ""
+
+msgid ""
+"Couldn't find a sign-in form there. Enter the address of the site's sign-"
+"in page."
+msgstr ""
+
+msgid "Count every word on a website"
+msgstr ""
+
+msgid "Count my website’s words"
+msgstr ""
+
+msgid "Count only www.example.com — leave out its subdomains."
+msgstr ""
+
+msgid "Count the content that belongs in your project"
+msgstr ""
+
+msgid "Count the words on example.com and tell me how much of it repeats."
+msgstr ""
+
+#, python-format
+msgid "Counted with %(product)s by wxrks"
+msgstr ""
+
+msgid ""
+"Counting relies on spaces between words, so totals for Chinese, Japanese "
+"and Thai will be much too low."
+msgstr ""
+
+msgid ""
+"Counts a website: the total, pages, repetition, and the split by "
+"language, section and subdomain, with a link to the full report. The "
+"whole domain by default, or one host only. Reuses an earlier count of the"
+" same site unless asked to count again."
+msgstr ""
+
+msgid "Counts each page once"
+msgstr ""
+
+#, python-format
+msgid "Covers %(checked)s of %(total)s words"
+msgstr ""
+
+msgid "Crawl"
+msgstr ""
+
+msgid "Crawl a site"
+msgstr ""
+
+msgid ""
+"Crawl a website and count every word it contains — total, per page, per "
+"folder."
+msgstr ""
+
+msgid "Crawl another site"
+msgstr ""
+
+msgid ""
+"Crawl any website and count every word — per page, per folder, in total. "
+"Built for sizing translation projects, with CSV export and a shareable "
+"report."
+msgstr ""
+
+msgid ""
+"Crawl any website and export every page as clean Markdown in a single "
+"ZIP. Main content only — ready to feed a language model, a RAG pipeline "
+"or a CMS migration."
+msgstr ""
+
+msgid "Crawl didn’t finish: counted only for what the other sites don’t have"
+msgstr ""
+
+msgid "Crawl finished"
+msgstr ""
+
+msgid "Crawl stopped"
+msgstr ""
+
+msgid "Crawled"
+msgstr ""
+
+#, python-format
+msgid "Crawled from %(url)s — only you see this."
+msgstr ""
+
+msgid "Crawled signed in on the site’s sign-in page"
+msgstr ""
+
+msgid "Crawling"
+msgstr ""
+
+msgid "Crawls"
+msgstr ""
+
+msgid "Crawls run at full speed"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Cursor — in ~/.cursor/mcp.json:"
+msgstr ""
+
+msgid "Cursor, VS Code and others"
+msgstr ""
+
+msgid ""
+"Custom MCP servers depend on your ChatGPT plan and, in a workspace, on "
+"what your admin allows."
+msgstr ""
+
+msgid "Delete project"
+msgstr ""
+
+msgid "Delete run"
+msgstr ""
+
+msgid ""
+"Delete this project? Its crawls stay, in your runs and in any other "
+"project."
+msgstr ""
+
+msgid "Delete this run and everything saved with it? This cannot be undone."
+msgstr ""
+
+msgid "Deleting…"
+msgstr ""
+
+msgid "Detected platform"
+msgstr ""
+
+#, python-format
+msgid "Detected platform: %(cms)s"
+msgstr ""
+
+msgid "Detected platform: Contentful (headless — sitemap conventions vary)"
+msgstr ""
+
+msgid ""
+"Didn’t finish: adds only the pages and sentences the crawls above don’t "
+"have."
+msgstr ""
+
+msgid "Didn’t load when the crawler asked for them."
+msgstr ""
+
+msgid ""
+"Different pages, but at least half of their words are sentences another "
+"crawl has."
+msgstr ""
+
+msgid "Differs only by numbers"
+msgstr ""
+
+#, python-format
+msgid "Download Markdown (%(size)s)"
+msgstr ""
+
+msgid "Download every page, with its new words (CSV)"
+msgstr ""
+
+msgid "Download the pages in more than one crawl (CSV)"
+msgstr ""
+
+msgid "Download the repeated sentences (CSV)"
+msgstr ""
+
+msgid "Duplicate pages"
+msgstr ""
+
+msgid "Duplicate pages within a crawl"
+msgstr ""
+
+msgid "Duplicate · listed separately"
+msgstr ""
+
+msgid ""
+"Each page is opened in a real browser and counted only once it has "
+"finished loading — usually a second or two more per page. Tools that read"
+" a page the moment it appears finish sooner, but miss text that loads "
+"afterwards; on some sites that’s whole sections."
+msgstr ""
+
+msgid ""
+"Each page is opened in a real browser and counted only once it has "
+"finished loading — usually a second or two more per page. Tools that read"
+" a page the moment it appears finish sooner, but miss text that loads "
+"afterwards; on some sites that’s whole sections. You don’t have to wait: "
+"if you’re signed in, you’ll get an email when the crawl finishes."
+msgstr ""
+
+msgid ""
+"Each page runs through a content filter that drops navigation and "
+"repeated chrome. That's the difference between a corpus you can search "
+"and one where every document matches the phrase “Book Now”."
+msgstr ""
+
+msgid ""
+"Each site’s own report has its pages, its repetition estimate and what it"
+" left out."
+msgstr ""
+
+msgid "Easy server load"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Email or username"
+msgstr ""
+
+msgid ""
+"English runs near 1.3 tokens per word. A 662,000-word site is about "
+"880,000 tokens of clean text — as raw HTML it would be several times "
+"that, nearly all of it markup."
+msgstr ""
+
+msgid "Enter a web address, such as https://www.example.com."
+msgstr ""
+
+msgid "Enter both the email (or username) and the password."
+msgstr ""
+
+msgid "Enter the sign-in page as a web address, like https://example.com/login."
+msgstr ""
+
+msgid "Enter your website URL"
+msgstr ""
+
+msgid "Estimate confidence"
+msgstr ""
+
+msgid "Estimate — before you crawl"
+msgstr ""
+
+#, python-format
+msgid ""
+"Estimated from saved Markdown: %(sites)s. These crawls are from before "
+"crawls kept their sentences, so their sentences come from the Markdown "
+"they saved — main content only — and each page’s words are split in the "
+"same proportions. A new crawl gives exact figures."
+msgstr ""
+
+msgid "Estimated total"
+msgstr ""
+
+msgid "Estimated total pages"
+msgstr ""
+
+msgid "Estimated total time"
+msgstr ""
+
+msgid ""
+"Every file opens with the URL it came from, so nothing loses its source "
+"on the way into a retrieval pipeline."
+msgstr ""
+
+#, python-format
+msgid "Every language crawled: %(n)s pages."
+msgstr ""
+
+msgid ""
+"Every page is rendered in a real browser, so content built by JavaScript "
+"is counted. Tools that only fetch HTML report a fraction of the truth."
+msgstr ""
+
+msgid "Everything else"
+msgstr ""
+
+msgid "Everything in Free"
+msgstr ""
+
+msgid "Example"
+msgstr ""
+
+msgid "Exclude subdomains or folders"
+msgstr ""
+
+msgid "Exclude subdomains or folders before continuing"
+msgstr ""
+
+#, python-format
+msgid "Excluded: %(entries)s"
+msgstr ""
+
+msgid "Excluded: none"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Export CSV"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Failed to load"
+msgstr ""
+
+msgid "Find out how much work is on your website."
+msgstr ""
+
+msgid ""
+"Find your longest pages and most content-heavy folders. Export a CSV with"
+" each page’s URL, title and word count to help build your scope."
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "Folders"
+msgstr ""
+
+msgid ""
+"Follows a count that’s still running, and returns the result when it’s "
+"done."
+msgstr ""
+
+msgid "Footer · not counted"
+msgstr ""
+
+msgid "For Claude and ChatGPT"
+msgstr ""
+
+msgid ""
+"For a site that asks for a username and password in a browser pop-up, "
+"like most staging sites. Sent only to that site, used only for this "
+"crawl, never stored."
+msgstr ""
+
+msgid ""
+"For a site where you sign in with an email and password. The crawler "
+"signs in before it starts and crawls as that account, so use one that can"
+" only read; it never opens a log-out, delete or cancel link. Sent only to"
+" that site, used only for this crawl, never stored."
+msgstr ""
+
+msgid "For developers"
+msgstr ""
+
+msgid ""
+"For staging sites protected by a browser username-and-password pop-up, "
+"enter the credentials to run the crawl. They’re sent only to that site, "
+"used only for that crawl and never stored."
+msgstr ""
+
+msgid "For your client"
+msgstr ""
+
+#, python-format
+msgid ""
+"Found a sitemap — this site has approximately %(pages)s pages. Crawling "
+"all of them may take a while."
+msgstr ""
+
+msgid "Found while crawling, but not in the total."
+msgstr ""
+
+msgid "Frameworks and hand-written code"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+#, python-format
+msgid ""
+"Free to use. No sign-up to start. Sites over %(n)s words require Google "
+"sign-in to finish."
+msgstr ""
+
+msgid ""
+"Free with a Word Counter account. Works with Claude Code, Claude, "
+"ChatGPT, Cursor, VS Code and any app that speaks MCP."
+msgstr ""
+
+#, python-format
+msgid ""
+"Free. No sign-up for sites under %(n)s words. Sign in with Google to "
+"finish larger sites."
+msgstr ""
+
+msgid "Full report, every page →"
+msgstr ""
+
+msgid "Get the Markdown"
+msgstr ""
+
+msgid "Get the text without the copy-paste"
+msgstr ""
+
+msgid "Get your connection URL"
+msgstr ""
+
+msgid "Give the project a name."
+msgstr ""
+
+msgid "Going through the crawls for the first time…"
+msgstr ""
+
+msgid "Good to know"
+msgstr ""
+
+msgid ""
+"Ground a support assistant in your own answers, audit content at a scale "
+"nobody can read, brief translators with real terminology, or move "
+"platforms without losing the writing."
+msgstr ""
+
+msgid ""
+"Groups this crawl with others of the same client: combined totals, each "
+"page counted once, and the overlap between crawls. Optional — a run can "
+"join a project later, from its report."
+msgstr ""
+
+msgid ""
+"Hand it to a translator, prepare a CMS migration or use it with an AI "
+"tool or search index."
+msgstr ""
+
+msgid "Header and menu · not counted"
+msgstr ""
+
+msgid "High confidence"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "How it works"
+msgstr ""
+
+msgid "How long does a count take?"
+msgstr ""
+
+msgid "How many words are in the German part of example.com?"
+msgstr ""
+
+msgid "How many words does wxrks.com have?"
+msgstr ""
+
+msgid "How the added-up words split"
+msgstr ""
+
+msgid "How the crawls come down to the new words"
+msgstr ""
+
+msgid "I counted every page with Word Counter:"
+msgstr ""
+
+msgid ""
+"If it opens in a browser, Word Counter can count it — whatever it was "
+"built with: a CMS, a site builder, a framework, hand-written code or an "
+"AI tool. It also recognises WordPress, Webflow, Drupal, Shopify, "
+"Squarespace, Wix, Ghost and Contentful, and names the platform in the "
+"report."
+msgstr ""
+
+#, python-format
+msgid ""
+"If your vendor prices by translation memory, the %(new)s new words are "
+"the number that matters."
+msgstr ""
+
+msgid "In a chat, add Word Counter from the + menu and ask your question."
+msgstr ""
+
+msgid "In a terminal, add the server with your key in a header:"
+msgstr ""
+
+msgid ""
+"Include the whole domain, a single subdomain or just the main site. Leave"
+" out folders and subdomains you don’t need, such as /careers, old "
+"archives or a staging copy."
+msgstr ""
+
+msgid "Includes content loaded by JavaScript"
+msgstr ""
+
+msgid ""
+"Includes waiting for each page to finish loading, so text that loads late"
+" isn’t missed."
+msgstr ""
+
+#, python-format
+msgid "Interactive report: %(url)s"
+msgstr ""
+
+msgid ""
+"Into Your runs, like any count you start here — each with its report, "
+"every page and a CSV."
+msgstr ""
+
+msgid "Is my URL safe to share?"
+msgstr ""
+
+msgid "Is our help center bigger than our blog?"
+msgstr ""
+
+msgid ""
+"It also assumes this app is what's slowing you down. A site that rate-"
+"limits or blocks a heavier crawler caps every plan at the same place; the"
+" report marks those pages, so you can see when that's what happened."
+msgstr ""
+
+msgid "It counts what a translator is handed"
+msgstr ""
+
+msgid "It counts what you would translate"
+msgstr ""
+
+msgid ""
+"It follows links the way a visitor does, so it finds the help centers, "
+"docs and subdomains a sitemap leaves out."
+msgstr ""
+
+msgid "It knows what repeats"
+msgstr ""
+
+msgid "It reads every page"
+msgstr ""
+
+msgid "It sees pages the way a reader does"
+msgstr ""
+
+msgid "Keep the scope under control"
+msgstr ""
+
+msgid "Keep translated copies out of the total"
+msgstr ""
+
+msgid "Key — for apps that send it as a header"
+msgstr ""
+
+msgid "Know how much content you’re dealing with."
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+#, python-format
+msgid "Language: %(lang)s"
+msgstr ""
+
+#, python-format
+msgid "Language: %(lang)s (auto)"
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+#, python-format
+msgid "Languages: %(primary)s + %(rest)s"
+msgstr ""
+
+msgid "Languages: All"
+msgstr ""
+
+msgid ""
+"Leave the advanced settings empty and add it. In a chat, make sure Word "
+"Counter is switched on in the tools menu. On the Free plan Claude allows "
+"one custom connector."
+msgstr ""
+
+msgid "Left out"
+msgstr ""
+
+msgid "Linked but not crawled"
+msgstr ""
+
+msgid ""
+"Linked from the pages crawled but not counted — outside this run’s "
+"settings, excluded, or not reached before it stopped."
+msgstr ""
+
+msgid "Linked subdomains not crawled"
+msgstr ""
+
+msgid "List the 20 longest pages under example.com/blog."
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Low confidence"
+msgstr ""
+
+msgid "MCP server"
+msgstr ""
+
+msgid "Main content, not the whole page"
+msgstr ""
+
+msgid "Main site"
+msgstr ""
+
+msgid "Make a connection"
+msgstr ""
+
+msgid ""
+"Make a connection for each app you use. Each one has its own URL and key,"
+" and you can revoke it without touching the others."
+msgstr ""
+
+msgid "Manage billing"
+msgstr ""
+
+msgid "Manage subscription"
+msgstr ""
+
+msgid ""
+"Many sites keep adding content after a page appears. Each page is counted"
+" only once it has finished loading, so lists, tabs and sections that load"
+" late are included. It takes a little longer, and the count is more "
+"complete."
+msgstr ""
+
+msgid "Markdown saved"
+msgstr ""
+
+msgid "Matching pages…"
+msgstr ""
+
+msgid "Measured only when asked."
+msgstr ""
+
+msgid "Medium confidence"
+msgstr ""
+
+msgid "Member logins aren’t supported."
+msgstr ""
+
+msgid "Member-only content stays out."
+msgstr ""
+
+#, python-format
+msgid ""
+"Menu and footer counted on every page: %(n)s%% more than the text people "
+"read"
+msgstr ""
+
+msgid "Menus, footers and forms, which repeat on every page"
+msgstr ""
+
+msgid "Moderate server load"
+msgstr ""
+
+msgid "More"
+msgstr ""
+
+msgid "More actions"
+msgstr ""
+
+msgid "Most repeated text"
+msgstr ""
+
+msgid "Name it Word Counter and paste your personal URL:"
+msgstr ""
+
+msgid ""
+"Navigation, footers, sidebars and forms are stripped before counting, so "
+"a 500-page site doesn't inflate by the same menu repeated 500 times."
+msgstr ""
+
+msgid ""
+"Need the content as well as the count? Select Save Markdown to download "
+"each page’s main text as a separate file, with its source URL included, "
+"all in one ZIP."
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New crawl"
+msgstr ""
+
+msgid "New project name"
+msgstr ""
+
+msgid "New project, e.g. the client’s name"
+msgstr ""
+
+msgid "New project…"
+msgstr ""
+
+msgid "New words"
+msgstr ""
+
+msgid "New words and repeated words"
+msgstr ""
+
+msgid "Newest first"
+msgstr ""
+
+msgid ""
+"No crawler on your laptop and no AI usage spent fetching pages. Close the"
+" tab: if you’re signed in, you’ll get an email when it’s done."
+msgstr ""
+
+msgid "No crawls in this project yet"
+msgstr ""
+
+msgid "No crawls yet"
+msgstr ""
+
+msgid "No crawls yet — add some from the project."
+msgstr ""
+
+msgid "No crawls yet — try one above."
+msgstr ""
+
+msgid "No finished crawls in this project yet."
+msgstr ""
+
+msgid "No further detail was recorded."
+msgstr ""
+
+msgid "No other subdomains were linked from the pages crawled."
+msgstr ""
+
+msgid "No page or sentence is in more than one crawl."
+msgstr ""
+
+msgid "No pages counted yet."
+msgstr ""
+
+msgid "No project"
+msgstr ""
+
+msgid ""
+"No projects yet. Make one above, then add crawls to it — from the project"
+" page, or from any report’s ⋯ menu."
+msgstr ""
+
+msgid "No sentence is in more than one crawl."
+msgstr ""
+
+#, python-format
+msgid ""
+"No sitemap found — this estimate is based only on pages discovered so far"
+" (approximately %(pages)s), so it may be less accurate. Crawling all of "
+"them may take a while."
+msgstr ""
+
+msgid "No sitemap needed"
+msgstr ""
+
+msgid ""
+"No — treat it like a password: anyone with it can count as you. You can "
+"revoke it at any time and make a new one."
+msgstr ""
+
+msgid "Nobody knows how many words are on their website."
+msgstr ""
+
+msgid "None found. It trusted the sitemap."
+msgstr ""
+
+msgid "None yet."
+msgstr ""
+
+msgid "Not checked"
+msgstr ""
+
+msgid "Not counted"
+msgstr ""
+
+msgid "Not in the total"
+msgstr ""
+
+msgid "Not in this count"
+msgstr ""
+
+msgid ""
+"Not the marketing lead, not the person who built it, and not the agency "
+"about to quote you for translating it. Point this at a URL and find out —"
+" page by page, folder by folder."
+msgstr ""
+
+msgid ""
+"Nothing could be counted because the starting page itself couldn't be "
+"accessed. If you know another page on this site that might be more "
+"accessible (e.g. a blog post or inner page rather than the homepage), try"
+" starting the crawl from that URL instead."
+msgstr ""
+
+msgid "Nothing extra: the same as counting on the website. Pro counts run faster."
+msgstr ""
+
+msgid "Nothing left out"
+msgstr ""
+
+msgid "Older →"
+msgstr ""
+
+msgid ""
+"On its own, an assistant estimates from the pages it opens — or, in "
+"Claude Code, writes a one-off crawler that counts the menu on every page."
+" Word Counter follows every link and the sitemap until there is nothing "
+"left to read."
+msgstr ""
+
+msgid ""
+"One client, every crawl that belongs to it, and the number that counts "
+"each page once."
+msgstr ""
+
+msgid "One file per page, provenance intact"
+msgstr ""
+
+msgid "One subdomain"
+msgstr ""
+
+msgid ""
+"Open Plugins and choose + → Add custom MCP server. (Some accounts have it"
+" under Settings → Apps & Connectors → Advanced → Developer mode → "
+"Create.)"
+msgstr ""
+
+msgid "Open Settings → Connectors (on some versions, Customize → Connectors)."
+msgstr ""
+
+msgid "Opening checkout…"
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "PDFs, Word and Excel files, images and videos aren’t counted."
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+#, python-format
+msgid "Page %(page)s of %(total)s"
+msgstr ""
+
+msgid ""
+"Page counts only tell you so much. Some pages have a paragraph. Others "
+"have thousands of words. Opening them one by one takes time you could "
+"spend doing the work."
+msgstr ""
+
+msgid "Pages"
+msgstr ""
+
+msgid "Pages appear below as they’re read."
+msgstr ""
+
+msgid ""
+"Pages behind a login or blocked by the site are listed separately, so you"
+" can see what the total leaves out."
+msgstr ""
+
+msgid "Pages behind a sign-in"
+msgstr ""
+
+msgid "Pages counted"
+msgstr ""
+
+msgid "Pages fetched so far"
+msgstr ""
+
+msgid "Pages in more than one crawl"
+msgstr ""
+
+msgid "Pages mostly repeated from another crawl"
+msgstr ""
+
+msgid "Pages need a link to be found."
+msgstr ""
+
+msgid ""
+"Pages open in Chrome, so text that appears after JavaScript runs can be "
+"counted too."
+msgstr ""
+
+msgid "Pages requiring a member login are listed but can’t be read."
+msgstr ""
+
+msgid "Pages so far"
+msgstr ""
+
+msgid "Pages with no links pointing to them may be missed."
+msgstr ""
+
+msgid ""
+"Part of this is estimated: some sites were crawled before their sentences"
+" were kept, so their repetition is worked out from their main content."
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password-protected"
+msgstr ""
+
+msgid "Password-protected site"
+msgstr ""
+
+msgid "Paused"
+msgstr ""
+
+#, python-format
+msgid "Paused at %(n)s words"
+msgstr ""
+
+msgid "People with access"
+msgstr ""
+
+msgid "Personal URL — for Claude, ChatGPT and apps that only take a URL"
+msgstr ""
+
+msgid "Pick your app below and paste it in. It takes a minute."
+msgstr ""
+
+msgid "Plans for teams of every size, billed monthly or yearly."
+msgstr ""
+
+msgid "Please enter a valid http(s) URL"
+msgstr ""
+
+msgid ""
+"Point this at a URL and get every page back as Markdown, in one ZIP — "
+"main content only, no navigation, no cookie banners, no markup burning "
+"tokens without carrying meaning."
+msgstr ""
+
+msgid "Preparing…"
+msgstr ""
+
+msgid ""
+"Press Enter or comma to add one. A leading / excludes a folder, anything "
+"else a subdomain — each entry is labelled with how it will be treated. "
+"Applies to the rest of this crawl; pages already counted stay counted."
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Pricing"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Print report"
+msgstr ""
+
+msgid "Pro"
+msgstr ""
+
+msgid "Proceed with crawl"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Project name"
+msgstr ""
+
+msgid "Projects"
+msgstr ""
+
+msgid "Public link"
+msgstr ""
+
+msgid "Questions people ask"
+msgstr ""
+
+msgid "Queued"
+msgstr ""
+
+msgid "Quote with a word count behind you"
+msgstr ""
+
+msgid ""
+"Quoting a translation, planning a website rewrite or moving to a new CMS?"
+" Get a word count for your site, broken down by page and folder, so you "
+"can scope the work before you commit."
+msgstr ""
+
+msgid "Re-crawl"
+msgstr ""
+
+msgid "Re-run to check every word"
+msgstr ""
+
+msgid "Read how Claude does with and without it →"
+msgstr ""
+
+msgid ""
+"Read in this order, each crawl adds what the ones above it don’t have: "
+"completed crawls first, newest first; a crawl that didn’t finish only "
+"fills the gaps. Of a site crawled twice, the latest completed crawl "
+"counts."
+msgstr ""
+
+msgid "Reading sentences…"
+msgstr ""
+
+msgid "Reading the crawls…"
+msgstr ""
+
+msgid "Ready for whatever comes next"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+#, python-format
+msgid "Remove %(entry)s"
+msgstr ""
+
+msgid "Removing…"
+msgstr ""
+
+msgid "Rename project"
+msgstr ""
+
+msgid "Repeated"
+msgstr ""
+
+msgid "Repeated from other crawls"
+msgstr ""
+
+msgid "Repeated within"
+msgstr ""
+
+msgid "Repeated words"
+msgstr ""
+
+msgid "Repeated · est."
+msgstr ""
+
+msgid "Repetition"
+msgstr ""
+
+msgid "Repetition estimate"
+msgstr ""
+
+msgid "Replaced by the newer crawl of this site — not counted."
+msgstr ""
+
+msgid "Report sections"
+msgstr ""
+
+msgid "Resuming…"
+msgstr ""
+
+msgid ""
+"Review the scope, exclude anything you don’t need and sign in with Google"
+" to finish for free."
+msgstr ""
+
+msgid "Revoke"
+msgstr ""
+
+msgid ""
+"Revoke this connection? Any app using it stops counting until you give it"
+" a new one."
+msgstr ""
+
+msgid "Runs not in a project"
+msgstr ""
+
+msgid "Runs on our servers, not your computer"
+msgstr ""
+
+msgid "Same page in another crawl"
+msgstr ""
+
+msgid "Same page in more than one crawl"
+msgstr ""
+
+msgid "Same page on more than one site"
+msgstr ""
+
+msgid "Same pages"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save Markdown"
+msgstr ""
+
+msgid "Save each page as Markdown"
+msgstr ""
+
+msgid ""
+"Save each page's main content as Markdown, downloadable as a ZIP when the"
+" crawl finishes."
+msgstr ""
+
+msgid "Saving…"
+msgstr ""
+
+msgid "Search your runs"
+msgstr ""
+
+msgid ""
+"Seconds for a small site, minutes for a large one. Your assistant waits "
+"up to a minute, then checks back on the count until it’s done."
+msgstr ""
+
+msgid "See a real report"
+msgstr ""
+
+#, python-format
+msgid "See all %(n)s"
+msgstr ""
+
+msgid ""
+"See how many words need translating, editing or rewriting. Repeated "
+"menus, headers and footers are left out, and duplicate pages don’t "
+"inflate the total."
+msgstr ""
+
+#, python-format
+msgid "See the %(cms)s connector"
+msgstr ""
+
+msgid "See what comes out"
+msgstr ""
+
+msgid "See what that costs →"
+msgstr ""
+
+msgid "See where the work is"
+msgstr ""
+
+msgid "Seems slow? Here’s why"
+msgstr ""
+
+msgid "Seen"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid ""
+"Send a public report link, share by email, print the results or export "
+"them. If you’re signed in, you’ll get an email when the crawl finishes."
+msgstr ""
+
+#, python-format
+msgid "Sent to %(email)s"
+msgstr ""
+
+msgid "Sentence"
+msgstr ""
+
+msgid "Sentences"
+msgstr ""
+
+msgid "Sentences estimated from saved Markdown."
+msgstr ""
+
+msgid ""
+"Sentences found in more than one crawl. Each counts once, where it was "
+"first seen; its other copies are the words removed."
+msgstr ""
+
+msgid "Sentences in common"
+msgstr ""
+
+msgid "Sentences repeated across crawls"
+msgstr ""
+
+msgid "Sentences repeated across sites"
+msgstr ""
+
+msgid "Sentences repeated within a crawl"
+msgstr ""
+
+msgid "Sentences repeated within a site"
+msgstr ""
+
+msgid "Session from your browser"
+msgstr ""
+
+msgid ""
+"Set Authentication to None — the key is already in the URL — and create "
+"it."
+msgstr ""
+
+msgid "Set aside: other languages"
+msgstr ""
+
+msgid "Set exclusions before the crawl or adjust them when the estimate appears."
+msgstr ""
+
+msgid "Settings applied"
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid ""
+"Share a link with your client, export every page to CSV, or put a "
+"client’s sites in one project that counts each page and sentence once."
+msgstr ""
+
+msgid "Share results"
+msgstr ""
+
+msgid "Share the scope. Get everyone working from the same numbers."
+msgstr ""
+
+msgid "Share this project"
+msgstr ""
+
+msgid "Share this report"
+msgstr ""
+
+msgid "Shared"
+msgstr ""
+
+msgid "Shared between the sites"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Show more"
+msgstr ""
+
+msgid "Showed a member login instead of the page."
+msgstr ""
+
+msgid ""
+"Shown on this report, its shared link and the CSV. It has to be on the "
+"site that was crawled. Leave it empty to show where the crawl started."
+msgstr ""
+
+msgid "Shows what’s missing"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Sign in to point it at your own site."
+msgstr ""
+
+msgid ""
+"Sign in to the site in Chrome, open View → Developer → Developer Tools, "
+"choose Network and reload the page. Click the first request, find "
+"“cookie” under Request Headers and copy its value here. It works until "
+"that session ends, and is never stored."
+msgstr ""
+
+msgid "Sign in to upgrade"
+msgstr ""
+
+msgid "Sign in with Google"
+msgstr ""
+
+msgid ""
+"Sign in with Google and make a connection. You get a personal URL — and a"
+" key for apps that take one — shown once."
+msgstr ""
+
+msgid "Sign in with Google to continue"
+msgstr ""
+
+msgid ""
+"Sign in with Google to count the rest. It’s free, and the crawl carries "
+"on from here."
+msgstr ""
+
+msgid "Sign in with Google to keep it"
+msgstr ""
+
+msgid "Sign-in email"
+msgstr ""
+
+msgid "Sign-in page"
+msgstr ""
+
+msgid "Sign-in page — optional, if the crawl starts on it"
+msgstr ""
+
+msgid "Sign-in password"
+msgstr ""
+
+msgid "Signed in"
+msgstr ""
+
+msgid ""
+"Signing in isn't available right now. Try again in a minute, or paste a "
+"session."
+msgstr ""
+
+msgid "Signs in with a code, or with Google or Microsoft? Paste a session instead"
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+msgid "Site password"
+msgstr ""
+
+msgid "Site to Markdown"
+msgstr ""
+
+msgid "Site username"
+msgstr ""
+
+msgid "Site with a sign-in page"
+msgstr ""
+
+msgid "Skipped as translations"
+msgstr ""
+
+msgid "Skips the queue when crawls are waiting"
+msgstr ""
+
+msgid "Some languages are undercounted."
+msgstr ""
+
+msgid ""
+"Some sites use bot protection such as Cloudflare or Akamai. Pages it "
+"blocks are listed separately, never counted as empty, so you can see the "
+"total is incomplete. If it’s your site, a staging copy often works best —"
+" including one behind a browser username-and-password pop-up."
+msgstr ""
+
+msgid "Something went wrong"
+msgstr ""
+
+msgid "Source code (AGPL-3.0)"
+msgstr ""
+
+msgid "Start re-crawl"
+msgstr ""
+
+msgid "Starting…"
+msgstr ""
+
+msgid "Still crawling — joins when it finishes."
+msgstr ""
+
+msgid ""
+"Streamable HTTP at the URL below, plain JSON responses, no sessions. "
+"Protocol versions 2025-03-26 to 2026-07-28. Authentication: a Bearer key,"
+" or the key in the URL path."
+msgstr ""
+
+msgid "Subdomain"
+msgstr ""
+
+msgid "Subdomains"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Support in your language"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Text not kept — first seen on"
+msgstr ""
+
+msgid ""
+"That doesn't look like a session. Copy the value of the “cookie” line "
+"from the browser's developer tools."
+msgstr ""
+
+msgid "That project isn't yours, or it no longer exists."
+msgstr ""
+
+msgid ""
+"That session didn't get past the sign-in page; it may have ended. Sign in"
+" again in your browser and copy a fresh one."
+msgstr ""
+
+msgid ""
+"The crawl counts the starting page’s language only. Every page is checked"
+" — by the language it declares, and by the script it’s written in — and "
+"pages in another language are set aside, whatever their address says. "
+"Folders such as /de/ are skipped without being fetched."
+msgstr ""
+
+#, python-format
+msgid ""
+"The full list of %(n)s pages, with each page’s title and word count, is "
+"in the CSV export."
+msgstr ""
+
+#, python-format
+msgid "The last consolidation didn’t finish: %(error)s"
+msgstr ""
+
+msgid ""
+"The link opens the client view: the combined total, the sites and where "
+"the words are. Each crawl’s own report stays private unless you share it "
+"too."
+msgstr ""
+
+msgid ""
+"The main text a visitor reads — without menus, footers and forms, and "
+"with each duplicate page counted once."
+msgstr ""
+
+msgid "The only thing that changes is how long you wait."
+msgstr ""
+
+msgid ""
+"The pages of a count with their words, largest first, optionally only one"
+" section."
+msgstr ""
+
+msgid ""
+"The same page in more than one crawl — the same address on one site, or "
+"the same text anywhere — counts once, from the crawl listed first above. "
+"Crawls can also share sentences without sharing a page."
+msgstr ""
+
+msgid "The same rules on every site"
+msgstr ""
+
+msgid "The same site, the same day"
+msgstr ""
+
+msgid ""
+"The same text as a page already counted, under another address. Counted "
+"once, not twice."
+msgstr ""
+
+#, python-format
+msgid ""
+"The server restarted during this crawl, so the estimate covers %(words)s "
+"of its words."
+msgstr ""
+
+msgid ""
+"The server restarted while this crawl was paused, and the site's password"
+" is never kept. Start a re-crawl and enter it again."
+msgstr ""
+
+msgid ""
+"The server restarted while this crawl was paused, and the site's sign-in "
+"is never kept. Start a re-crawl and sign in again."
+msgstr ""
+
+msgid "The sign-in page didn't load. Check its address and try again."
+msgstr ""
+
+msgid "The site didn't accept that username and password."
+msgstr ""
+
+msgid ""
+"The site didn't let the crawler in with that email and password, or it "
+"asked for more, like a code. For a code or a Google or Microsoft sign-in,"
+" paste a session instead."
+msgstr ""
+
+msgid "The sites"
+msgstr ""
+
+msgid "The sites you’ve counted, with their totals."
+msgstr ""
+
+msgid "The text people read, each page once"
+msgstr ""
+
+msgid "The token arithmetic is the argument"
+msgstr ""
+
+msgid "The tools"
+msgstr ""
+
+msgid "Their words"
+msgstr ""
+
+msgid ""
+"Then keep asking. Your assistant reads the numbers with you: which "
+"sections are biggest, what to leave out of a quote, how many words are "
+"new."
+msgstr ""
+
+msgid "They ran a word count on this site and gave you access to the full report."
+msgstr ""
+
+msgid "This crawl couldn't be completed."
+msgstr ""
+
+#, python-format
+msgid ""
+"This crawl stalled — no page was fetched for over %(minutes)s minutes — "
+"and was stopped automatically."
+msgstr ""
+
+msgid "This crawl was cancelled — showing partial results."
+msgstr ""
+
+msgid ""
+"This crawl was paused for an estimate and never resumed — showing partial"
+" results from before the pause."
+msgstr ""
+
+msgid ""
+"This crawl was stopped automatically — it was using too much memory to "
+"continue safely on this server."
+msgstr ""
+
+msgid ""
+"This crawl was stopped before it finished, so the report shows partial "
+"results."
+msgstr ""
+
+msgid "This project is being prepared. The page updates by itself."
+msgstr ""
+
+#, python-format
+msgid "This run was set to “%(scope)s”, so other subdomains weren’t crawled."
+msgstr ""
+
+#, python-format
+msgid "This site has more than %(n)s words."
+msgstr ""
+
+msgid ""
+"This site is password-protected. Enter the username and password its "
+"owner gave you."
+msgstr ""
+
+msgid "This subdomain only"
+msgstr ""
+
+msgid "Times"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Together"
+msgstr ""
+
+#, python-format
+msgid "Took %(time)s"
+msgstr ""
+
+msgid "Tool"
+msgstr ""
+
+msgid "Top pages by word count"
+msgstr ""
+
+msgid "Top-level domain only"
+msgstr ""
+
+msgid "Total words"
+msgstr ""
+
+msgid ""
+"Totals per folder and per page, your longest pages ranked, and a CSV of "
+"every URL — so a quote turns into a plan you can phase."
+msgstr ""
+
+msgid ""
+"Translation is priced per word, so the first question is one most site "
+"owners can only guess at. Guessing wrong by a factor of three is a budget"
+" that runs out halfway through."
+msgstr ""
+
+msgid "Translations"
+msgstr ""
+
+msgid "Turn any website into clean Markdown"
+msgstr ""
+
+msgid "Turned away by the site’s bot protection."
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Unlimited crawls, unlimited pages"
+msgstr ""
+
+msgid "Unlimited projects"
+msgstr ""
+
+#, python-format
+msgid "Up to %(n)s crawls in a project."
+msgstr ""
+
+msgid "Upgrade to Pro"
+msgstr ""
+
+msgid "Use an address on the site that was crawled."
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "VS Code — in .vscode/mcp.json:"
+msgstr ""
+
+msgid "View blocked/failed pages"
+msgstr ""
+
+msgid "View full report"
+msgstr ""
+
+msgid "View report"
+msgstr ""
+
+msgid "View the list"
+msgstr ""
+
+msgid "Waiting for a free slot. It starts on its own."
+msgstr ""
+
+msgid "Waiting to start…"
+msgstr ""
+
+msgid "Waits for each page to finish loading"
+msgstr ""
+
+msgid "Waits its turn when the server is busy"
+msgstr ""
+
+msgid ""
+"We tried it on our own site. Asked how many words wxrks.com has, Claude "
+"Code wrote a crawler, fetched the pages its sitemap lists and counted "
+"every word in their HTML. Word Counter counted the same site, the same "
+"day."
+msgstr ""
+
+msgid "Web pages only."
+msgstr ""
+
+msgid "What about very large sites?"
+msgstr ""
+
+msgid "What does it cost?"
+msgstr ""
+
+msgid "What every plan includes"
+msgstr ""
+
+msgid "What if the site blocks bots?"
+msgstr ""
+
+msgid "What is it for?"
+msgstr ""
+
+msgid "What it does"
+msgstr ""
+
+msgid "What overlapped"
+msgstr ""
+
+msgid "What should I quote on?"
+msgstr ""
+
+msgid "What that costs"
+msgstr ""
+
+msgid "What to ask"
+msgstr ""
+
+msgid "Where do my counts go?"
+msgstr ""
+
+msgid "Where the new words are"
+msgstr ""
+
+msgid "Where to paste it, app by app →"
+msgstr ""
+
+msgid "Which pages count as part of this site?"
+msgstr ""
+
+msgid "Which sections of example.com have the most text?"
+msgstr ""
+
+msgid "Whole domain"
+msgstr ""
+
+msgid "Whole domain (incl. subdomains)"
+msgstr ""
+
+msgid "Why does a crawl take a while?"
+msgstr ""
+
+msgid "Why it took this long"
+msgstr ""
+
+msgid "Why not just ask ChatGPT or Claude?"
+msgstr ""
+
+msgid "Why your assistant needs it"
+msgstr ""
+
+msgid "Word Counter"
+msgstr ""
+
+msgid ""
+"Word Counter checks for identical text, pages that identify another URL "
+"as their original, and URLs that differ only by tracking or sign-in "
+"parameters. Duplicates are listed separately."
+msgstr ""
+
+msgid ""
+"Word Counter detects the starting page’s language and skips translated "
+"versions under folders such as /fr/ and /de/, helping you scope one "
+"language at a time."
+msgstr ""
+
+msgid "Word Counter for Claude and ChatGPT (MCP server)"
+msgstr ""
+
+msgid ""
+"Word Counter opens your site’s linked pages in a real browser and adds up"
+" the main content. You get a total, a breakdown and a clearer picture of "
+"what’s ahead."
+msgstr ""
+
+msgid ""
+"Word Counter’s MCP server crawls every page and gives your assistant the "
+"real total — not a guess from the homepage."
+msgstr ""
+
+msgid "Word count · project"
+msgstr ""
+
+msgid "Words"
+msgstr ""
+
+msgid "Words each"
+msgstr ""
+
+msgid "Words on the main site"
+msgstr ""
+
+msgid "Words removed"
+msgstr ""
+
+msgid "Words so far"
+msgstr ""
+
+msgid "Works with"
+msgstr ""
+
+msgid "Works with any website"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have %(n)s connections, the most there can be. Revoke one to make "
+"another."
+msgstr ""
+
+msgid "You have as many connections as there can be. Revoke one to make another."
+msgstr ""
+
+#, python-format
+msgid "You're getting this because someone shared a %(product)s report with you."
+msgstr ""
+
+#, python-format
+msgid "You're getting this because you started this crawl on %(product)s."
+msgstr ""
+
+#, python-format
+msgid "You're number %(n)s in the queue. It'll start on its own."
+msgstr ""
+
+msgid "Your app"
+msgstr ""
+
+msgid "Your assistant picks these itself; you just ask in your own words."
+msgstr ""
+
+msgid "Your connection is ready"
+msgstr ""
+
+msgid "Your connections"
+msgstr ""
+
+msgid "Your crawl finished. Here's what it counted."
+msgstr ""
+
+msgid "Your current plan"
+msgstr ""
+
+#, python-format
+msgid "Your last crawl of %(domain)s found %(words)s words."
+msgstr ""
+
+msgid "Your recent runs"
+msgstr ""
+
+msgid "Your runs"
+msgstr ""
+
+msgid "Your website, as clean text a language model can actually read."
+msgstr ""
+
+#, python-format
+msgid "You’re not signed in, so this report is kept for %(days)s days."
+msgstr ""
+
+msgid "a tool by wxrks"
+msgstr ""
+
+#, python-format
+msgid "about %(n)s× faster"
+msgstr ""
+
+#, python-format
+msgid "about %(time)s on Pro"
+msgstr ""
+
+#, python-format
+msgid "also in %(site)s:"
+msgstr ""
+
+msgid "and anything else built with AI"
+msgstr ""
+
+#, python-format
+msgid "built with %(cms)s"
+msgstr ""
+
+#, python-format
+msgid "counted from %(site)s"
+msgstr ""
+
+#, python-format
+msgid "e.g. %(path)s"
+msgstr ""
+
+msgid "e.g. Claude Code on my laptop"
+msgstr ""
+
+#, python-format
+msgid "each page and each sentence once, across %(n)s crawls"
+msgstr ""
+
+msgid "each page and each sentence once, in 1 crawl"
+msgstr ""
+
+msgid "folder"
+msgstr ""
+
+msgid "for its careful count"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+#, python-format
+msgid "from %(sites)s"
+msgstr ""
+
+#, python-format
+msgid "in %(sites)s"
+msgstr ""
+
+msgid "last used"
+msgstr ""
+
+msgid "less than a minute"
+msgstr ""
+
+#, python-format
+msgid "linked from %(n)s pages"
+msgstr ""
+
+msgid "linked from 1 page"
+msgstr ""
+
+msgid "made"
+msgstr ""
+
+msgid "made just now"
+msgstr ""
+
+msgid "moved"
+msgstr ""
+
+msgid "new"
+msgstr ""
+
+#, python-format
+msgid ""
+"new words to translate across the %(n)s sites: each page and each "
+"sentence counted once."
+msgstr ""
+
+msgid ""
+"new words to translate on this site: each page and each sentence counted "
+"once."
+msgstr ""
+
+msgid "new words: each page and sentence once"
+msgstr ""
+
+msgid "not used yet"
+msgstr ""
+
+#, python-format
+msgid "of the %(n)s words checked"
+msgstr ""
+
+#, python-format
+msgid "on %(n)s pages"
+msgstr ""
+
+#, python-format
+msgid "on %(n)s pages so far"
+msgstr ""
+
+msgid "on 1 page"
+msgstr ""
+
+msgid "on 1 page so far"
+msgstr ""
+
+msgid "on our servers, no AI usage"
+msgstr ""
+
+msgid "or paste a session"
+msgstr ""
+
+msgid "renews"
+msgstr ""
+
+msgid "repeated across crawls"
+msgstr ""
+
+msgid "repeated within a crawl"
+msgstr ""
+
+msgid "same address"
+msgstr ""
+
+msgid "same page in another crawl"
+msgstr ""
+
+msgid "same text"
+msgstr ""
+
+msgid "staging, password-protected"
+msgstr ""
+
+msgid "staging, web-staging, /careers"
+msgstr ""
+
+msgid "start one"
+msgstr ""
+
+msgid "subdomain"
+msgstr ""
+
+msgid "text changed — counted from the crawl listed first"
+msgstr ""
+
+#, python-format
+msgid "the linked subdomains that weren’t crawled: %(hosts)s"
+msgstr ""
+
+msgid "vs."
+msgstr ""
+
+msgid "words counted"
+msgstr ""
+
+msgid "words, each page once"
+msgstr ""
+
+#, python-format
+msgid "written in %(script)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"wxrks has a %(cms)s connector: it pulls your content straight from "
+"%(cms)s, translates it with the best AI models and keeps it in sync."
+msgstr ""
+
+msgid ""
+"wxrks pulls the content and translates it with the best AI models, then "
+"keeps it in sync as the site changes."
+msgstr ""
+
+#, python-format
+msgid "~%(h)sh"
+msgstr ""
+
+#, python-format
+msgid "~%(h)sh %(m)sm"
+msgstr ""
+
+#, python-format
+msgid "~%(n)s min"
+msgstr ""
+
+msgid ""
+"“How many words does example.com have?” Your assistant starts the count, "
+"follows it, and answers with the total."
+msgstr ""
+
+msgid "← New crawl"
+msgstr ""
+
+msgid "← Newer"
+msgstr ""
+
+#~ msgid "Sign in with Google. Nothing to install, nothing to configure."
+#~ msgstr ""
+
+#~ msgid "Start with your site"
+#~ msgstr ""
+
+#~ msgid "Free with a Google account — sign in once and the crawl starts."
+#~ msgstr ""
+
+#~ msgid "Also in here"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Every crawl counts the words as it"
+#~ " goes, so you get the size of"
+#~ " the site alongside the content — "
+#~ "total, per folder and per page. "
+#~ "Useful the day somebody asks what "
+#~ "it would cost to translate."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Tick one box before a crawl and"
+#~ " every page is also saved as "
+#~ "Markdown — main content only, no "
+#~ "navigation — and handed back as a"
+#~ " single ZIP. Ready to feed a "
+#~ "language model, a search index or "
+#~ "a CMS migration."
+#~ msgstr ""
+
+#~ msgid "%(words)s words · %(pages)s pages"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A big site pauses once %(n)s words"
+#~ " are counted and shows the projected"
+#~ " total, the number of pages and "
+#~ "how long the rest will take — "
+#~ "checked against the site’s sitemap when"
+#~ " it has one — so you decide "
+#~ "before the long part."
+#~ msgstr ""
+
+#~ msgid "A link, an email or a printout"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A total for every folder and every"
+#~ " page, the longest pages first, and"
+#~ " a CSV with the address, title "
+#~ "and word count of each page."
+#~ msgstr ""
+
+#~ msgid "An estimate at %(n)s words"
+#~ msgstr ""
+
+#~ msgid "Before and after a big crawl"
+#~ msgstr ""
+
+#~ msgid "By page and by folder"
+#~ msgstr ""
+
+#~ msgid "Choosing what gets crawled"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Copies are caught three ways: pages "
+#~ "that name another page as their "
+#~ "original, pages with identical text, and"
+#~ " addresses that differ only by "
+#~ "tracking or sign-in parameters. They’re"
+#~ " listed as duplicates, not added to"
+#~ " the total."
+#~ msgstr ""
+
+#~ msgid "Count the words"
+#~ msgstr ""
+
+#~ msgid "Counting"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Decide whether blog.example.com and "
+#~ "shop.example.com count as part of "
+#~ "example.com."
+#~ msgstr ""
+
+#~ msgid "Each page counted once"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "English, Arabic, Chinese, French, German, "
+#~ "Italian, Japanese, Korean, Portuguese, Spanish"
+#~ " and Swedish."
+#~ msgstr ""
+
+#~ msgid "Every page as Markdown"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Every page is loaded in Chrome, so"
+#~ " text that only appears after "
+#~ "JavaScript runs is counted too."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Exclude subdomains or folders — a "
+#~ "staging copy, /careers, an archive — "
+#~ "before the crawl starts, or at the"
+#~ " estimate, once you can see what’s"
+#~ " there."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For a staging site behind a "
+#~ "browser sign-in pop-up, enter its"
+#~ " username and password. They’re sent "
+#~ "only to that site, used only for"
+#~ " that crawl, and never stored."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Free, no sign-up to start. Sites"
+#~ " over %(n)s words ask you to "
+#~ "sign in with Google to finish."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Free. Sites under %(n)s words need "
+#~ "no sign-up; bigger ones ask you"
+#~ " to sign in with Google to "
+#~ "finish."
+#~ msgstr ""
+
+#~ msgid "Getting the text out"
+#~ msgstr ""
+
+#~ msgid "In eleven languages"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It can’t read what’s behind a "
+#~ "member login. Those pages are listed,"
+#~ " not counted."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It counts web pages only. PDFs, "
+#~ "Word and Excel files, images and "
+#~ "video are skipped."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It counts words by the spaces "
+#~ "between them. Chinese, Japanese and Thai"
+#~ " don’t put spaces between words, so"
+#~ " their totals come out far too "
+#~ "low."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It finds pages by following links, "
+#~ "so a page that nothing links to"
+#~ " won’t be found."
+#~ msgstr ""
+
+#~ msgid "Leave parts out"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Loading a site into a language "
+#~ "model or a search index, giving "
+#~ "translators the actual text, moving "
+#~ "content to another CMS, or reading "
+#~ "a whole site’s content in one "
+#~ "place."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Menus, headers, footers, sidebars and "
+#~ "forms are left out, so a menu "
+#~ "that appears on every page isn’t "
+#~ "counted once per page. Their links "
+#~ "are still followed, so no page is"
+#~ " missed."
+#~ msgstr ""
+
+#~ msgid "One language at a time"
+#~ msgstr ""
+
+#~ msgid "Only the words a reader reads"
+#~ msgstr ""
+
+#~ msgid "Open the full report"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Pages behind a login and pages the"
+#~ " site refused to serve are counted"
+#~ " separately and listed, so you know"
+#~ " exactly what the total leaves out."
+#~ msgstr ""
+
+#~ msgid "Pages opened in a real browser"
+#~ msgstr ""
+
+#~ msgid "Password-protected sites"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Share a report with a public link"
+#~ " or by email, print it, or "
+#~ "export it. When you’re signed in, "
+#~ "an email tells you when a crawl"
+#~ " has finished."
+#~ msgstr ""
+
+#~ msgid "Sharing the result"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Site to Markdown opens every page "
+#~ "of a website in a real browser,"
+#~ " keeps the main content and gives "
+#~ "it back as one Markdown file per"
+#~ " page, in a single ZIP — with"
+#~ " a word count of everything it "
+#~ "collected."
+#~ msgstr ""
+
+#~ msgid "The platform behind the site"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The starting page’s language is detected"
+#~ " and translated copies under /fr/, "
+#~ "/de/ and the like are skipped, so"
+#~ " a site in five languages isn’t "
+#~ "counted five times."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Tick “Save Markdown” and the main "
+#~ "content of each page is saved as"
+#~ " its own Markdown file, with the "
+#~ "page’s address at the top, all in"
+#~ " one ZIP."
+#~ msgstr ""
+
+#~ msgid "Website address"
+#~ msgstr ""
+
+#~ msgid "What a report looks like"
+#~ msgstr ""
+
+#~ msgid "What it does"
+#~ msgstr ""
+
+#~ msgid "What it doesn’t do"
+#~ msgstr ""
+
+#~ msgid "What people use it for"
+#~ msgstr ""
+
+#~ msgid "What wasn’t counted, and why"
+#~ msgstr ""
+
+#~ msgid "Whole domain, one subdomain, or the main site"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Word Counter opens every page of a"
+#~ " website in a real browser, counts"
+#~ " the words a reader would read, "
+#~ "and adds them up by page and "
+#~ "by folder. Tick one box and you"
+#~ " also get the text of every "
+#~ "page as Markdown."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "WordPress, Webflow, Drupal, Shopify, "
+#~ "Squarespace, Wix, Ghost and Contentful "
+#~ "are recognised from the pages "
+#~ "themselves."
+#~ msgstr ""
+
+#~ msgid "A paragraph"
+#~ msgstr ""
+
+#~ msgid "Thousands of words"
+#~ msgstr ""
+
+#~ msgid "Pause motion"
+#~ msgstr ""
+
+#~ msgid "Play motion"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The crawl counts the starting page’s "
+#~ "language only, and treats a first "
+#~ "folder such as /de/ or /ch/ as "
+#~ "a language. These were linked from "
+#~ "the pages crawled but not counted."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Word Counter also identifies supported "
+#~ "platforms, including WordPress, Webflow, "
+#~ "Drupal, Shopify, Squarespace, Wix, Ghost "
+#~ "and Contentful."
+#~ msgstr ""
+
+#~ msgid "%(words)s words · %(pct)s"
+#~ msgstr ""
+
+#~ msgid "Blocked · host"
+#~ msgstr ""
+
+#~ msgid "Blocked · login"
+#~ msgstr ""
+
+#~ msgid "Duplicates"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Pages that returned a login wall "
+#~ "instead of real content — hidden "
+#~ "from the list below and excluded "
+#~ "from the word total"
+#~ msgstr ""
+
+#~ msgid "Status"
+#~ msgstr ""
+
+#~ msgid "seen %(n)s times · %(words)s repeated words"
+#~ msgstr ""
+
+#~ msgid "— %(n)s crawled"
+#~ msgstr ""
+
+#~ msgid "Download CSV"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Each site counts once, with its "
+#~ "latest finished crawl. “Adds” is what"
+#~ " only that crawl brings to the "
+#~ "total; the rest it shares with "
+#~ "another crawl."
+#~ msgstr ""
+
+#~ msgid "Crawl didn’t finish: counted with the pages it reached"
+#~ msgstr ""
+
+#~ msgid "Didn’t finish — counted anyway, with the pages it reached."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not in this total: %(sites)s, which "
+#~ "didn’t finish. Its row under Sites "
+#~ "shows the pages and words it "
+#~ "shares with the other crawls; “Count "
+#~ "it anyway” adds the pages it "
+#~ "reached, each page once."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "%(n)s of the %(total)s pages it "
+#~ "reached (%(words)s words) are already "
+#~ "counted, from %(sites)s."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "%(n)s pages (%(words)s words) are new"
+#~ " to the project, mostly in "
+#~ "%(folder)s: %(fpages)s pages, %(fwords)s "
+#~ "words."
+#~ msgstr ""
+
+#~ msgid "%(n)s pages (%(words)s words) are new to the project."
+#~ msgstr ""
+
+#~ msgid "%(n)s pages in more than one site"
+#~ msgstr ""
+
+#~ msgid "%(n)s words counted twice removed"
+#~ msgstr ""
+
+#~ msgid "%(pct)s%% repeated"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "1 of the %(total)s pages it "
+#~ "reached (%(words)s words) is already "
+#~ "counted, from %(sites)s."
+#~ msgstr ""
+
+#~ msgid "1 page (%(words)s words) is new to the project."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Added up on their own, the reports"
+#~ " come to %(n)s words. A page "
+#~ "found in more than one of them "
+#~ "— a staging copy and the live "
+#~ "site, the same legal text on two"
+#~ " sites — counts once here, from "
+#~ "the most recent crawl."
+#~ msgstr ""
+
+#~ msgid "Adds"
+#~ msgstr ""
+
+#~ msgid "Adds to the total"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "All %(n)s are in the CSV, with "
+#~ "where each page was counted from "
+#~ "and where else it is."
+#~ msgstr ""
+
+#~ msgid "Count it anyway"
+#~ msgstr ""
+
+#~ msgid "Counted once"
+#~ msgstr ""
+
+#~ msgid "Counted once and counted twice"
+#~ msgstr ""
+
+#~ msgid "Counted twice"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Crawl didn’t finish: counted only for"
+#~ " the pages the other crawls don’t "
+#~ "have"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Didn’t finish — counted anyway: it "
+#~ "adds only the pages no finished "
+#~ "crawl has."
+#~ msgstr ""
+
+#~ msgid "Didn’t finish — not counted."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Each site counts once, with its "
+#~ "latest finished crawl. “Adds” is what"
+#~ " only that crawl brings to the "
+#~ "total; the rest it shares with "
+#~ "another crawl. “Shares with” gives the"
+#~ " pages each crawl has in common "
+#~ "with the others, and its own words"
+#~ " on them."
+#~ msgstr ""
+
+#~ msgid "Earlier crawl — not counted; the newer crawl of this site replaces it."
+#~ msgstr ""
+
+#~ msgid "How the total splits between the crawls"
+#~ msgstr ""
+
+#~ msgid "If added up"
+#~ msgstr ""
+
+#~ msgid "Joins the total when it finishes."
+#~ msgstr ""
+
+#~ msgid "Largest shared pages"
+#~ msgstr ""
+
+#~ msgid "No pages in common"
+#~ msgstr ""
+
+#~ msgid "None of the pages it reached are in the counted crawls."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not compared by text: %(sites)s. These"
+#~ " crawls are from before pages kept"
+#~ " a fingerprint of their text, and "
+#~ "saved no Markdown to rebuild one "
+#~ "from, so their pages only match "
+#~ "pages at the same address on the"
+#~ " same site. Re-crawl them to "
+#~ "find the same text anywhere."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not compared by text: re-crawl it"
+#~ " to find the same text on the"
+#~ " other sites."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not in this total: %(site)s, which "
+#~ "didn’t finish. Counting it would add "
+#~ "%(words)s words, from the %(pages)s "
+#~ "pages no other crawl has — the "
+#~ "rest it shares with them. “Count "
+#~ "it anyway” is on its row under "
+#~ "Sites."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not in this total: %(site)s, which "
+#~ "didn’t finish. Counting it would add "
+#~ "%(words)s words, from the one page "
+#~ "no other crawl has — the rest "
+#~ "it shares with them. “Count it "
+#~ "anyway” is on its row under Sites."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Not in this total: %(site)s, which "
+#~ "didn’t finish. Counting it would add "
+#~ "nothing: every page it reached is "
+#~ "already counted."
+#~ msgstr ""
+
+#~ msgid "Overlap"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Pages found in more than one "
+#~ "crawl: the same address on one "
+#~ "site (a staging copy and the live"
+#~ " site), or the same text anywhere."
+#~ " Each counts once, from the latest"
+#~ " crawl."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Repetition is in each crawl’s own "
+#~ "report: it can’t be combined across "
+#~ "crawls."
+#~ msgstr ""
+
+#~ msgid "Shares with"
+#~ msgstr ""
+
+#~ msgid "Sites"
+#~ msgstr ""
+
+#~ msgid "Stop counting it"
+#~ msgstr ""
+
+#~ msgid "Where a page’s text changed between two crawls, the latest one counts."
+#~ msgstr ""
+
+#~ msgid "Where the words are"
+#~ msgstr ""
+
+#~ msgid "Words, each page counted once"
+#~ msgstr ""
+
+#~ msgid "counted from %(site)s, also in %(others)s"
+#~ msgstr ""
+
+#~ msgid "counted once"
+#~ msgstr ""
+
+#~ msgid "counted twice"
+#~ msgstr ""
+
+#~ msgid "counted twice and removed"
+#~ msgstr ""
+
+#~ msgid "if counted"
+#~ msgstr ""
+
+#~ msgid "new so far"
+#~ msgstr ""
+
+#~ msgid "not checked by text — see below"
+#~ msgstr ""
+
+#~ msgid "not counted"
+#~ msgstr ""
+
+#~ msgid "on %(pages)s pages, from %(n)s crawls"
+#~ msgstr ""
+
+#~ msgid "on %(pages)s pages, from 1 crawl"
+#~ msgstr ""
+
+#~ msgid "text changed — the latest crawl counts"
+#~ msgstr ""
+
+#~ msgid "the reports’ own totals"
+#~ msgstr ""
+
+#~ msgid "words on %(n)s shared pages, removed"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "words to translate across the %(n)s "
+#~ "sites, with every page counted once."
+#~ msgstr ""
+
+#~ msgid "words to translate on this site."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "About %(pct)s%% of it repeats text "
+#~ "from other pages, so roughly %(new)s "
+#~ "words are new."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Asked on its own, an assistant "
+#~ "opens a few pages and estimates "
+#~ "the rest. Word Counter follows every "
+#~ "link and the sitemap until there "
+#~ "is nothing left to read."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Connect Word Counter to your AI "
+#~ "assistant and ask how many words a"
+#~ " website has. Instead of guessing "
+#~ "from the few pages it opens, your"
+#~ " assistant has every page counted —"
+#~ " and answers with the total, the "
+#~ "repetition and the split by language."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Counts a website: the total, pages, "
+#~ "repetition, and the split by language,"
+#~ " section and subdomain, with a link"
+#~ " to the full report. Reuses an "
+#~ "earlier count of the same site "
+#~ "unless asked to count again."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Connect Word Counter to your AI "
+#~ "assistant and ask how many words a"
+#~ " website has. Instead of guessing, or"
+#~ " writing a one-off crawler that "
+#~ "counts the menu on every page, "
+#~ "your assistant has every page counted"
+#~ " — and answers with the total, "
+#~ "the repetition and the split by "
+#~ "language."
+#~ msgstr ""
+

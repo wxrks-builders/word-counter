@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Estimate Accuracy — Admin{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block body %}
+  {% include "_topbar.html" %}
+
+  <div class="page-wrap">
+    <p class="subtitle">Estimate accuracy — what was predicted at the 50k-word pause vs. what each crawl actually turned out to be. <a href="/admin/jobs">Server jobs →</a> <a href="/admin/runs">All runs →</a></p>
+
+    <div class="section-label">By confidence tier</div>
+    <table class="folder-table" style="margin-bottom:32px;">
+      <thead>
+        <tr><th>Confidence</th><th>Runs</th><th>Avg signed error</th><th>Avg abs error</th></tr>
+      </thead>
+      <tbody>
+        {% for key, stats in by_confidence.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ stats.count }}</td>
+          <td>{{ "%+.1f"|format(stats.avg_signed_pct) }}%</td>
+          <td>{{ stats.avg_abs_pct }}%</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="muted">No completed comparisons yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="section-label">By detected CMS</div>
+    <table class="folder-table" style="margin-bottom:32px;">
+      <thead>
+        <tr><th>CMS</th><th>Runs</th><th>Avg signed error</th><th>Avg abs error</th></tr>
+      </thead>
+      <tbody>
+        {% for key, stats in by_cms.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ stats.count }}</td>
+          <td>{{ "%+.1f"|format(stats.avg_signed_pct) }}%</td>
+          <td>{{ stats.avg_abs_pct }}%</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="muted">No completed comparisons yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="section-label">By concurrency level</div>
+    <table class="folder-table" style="margin-bottom:32px;">
+      <thead>
+        <tr><th>Concurrent crawls</th><th>Samples</th><th>Avg words/min</th></tr>
+      </thead>
+      <tbody>
+        {% for key, stats in by_concurrency.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ stats.count }}</td>
+          <td>{{ "{:,}".format(stats.avg_words_per_minute) }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="muted">No timing data recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="section-label">All estimates</div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Site</th><th>Confidence</th><th>CMS</th><th>Sitemap</th>
+            <th>Est. words</th><th>Actual words</th><th>Word error</th>
+            <th>Est. pages</th><th>Actual pages</th><th>Page error</th>
+            <th>Concurrency</th><th>Words/min</th><th>Pages/min</th><th>Est. duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            <td class="url-cell">{{ row.source_url }}</td>
+            <td>{{ row.confidence }}</td>
+            <td>{{ row.detected_cms or "—" }}</td>
+            <td>{{ "Yes" if row.sitemap_found else "No" }}</td>
+            <td>{{ "{:,}".format(row.estimated_total_words) }}</td>
+            <td>{{ "{:,}".format(row.actual_total_words) if row.actual_total_words is not none else "pending" }}</td>
+            <td>{{ "%+.1f"|format(row.word_error_pct) + "%" if row.word_error_pct is not none else "—" }}</td>
+            <td>{{ "{:,}".format(row.estimated_total_pages) }}</td>
+            <td>{{ "{:,}".format(row.actual_total_pages) if row.actual_total_pages is not none else "pending" }}</td>
+            <td>{{ "%+.1f"|format(row.page_error_pct) + "%" if row.page_error_pct is not none else "—" }}</td>
+            <td>{{ row.concurrent_crawls if row.concurrent_crawls is not none else "—" }}</td>
+            <td>{{ "{:,}".format(row.words_per_minute) if row.words_per_minute is not none else "—" }}</td>
+            <td>{{ row.pages_per_minute if row.pages_per_minute is not none else "—" }}</td>
+            <td>{{ (row.estimated_duration_seconds // 60) ~ " min" if row.estimated_duration_seconds is not none else "—" }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="14" class="muted">No estimates recorded yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v={{ asset_v }}"></script>
+  <script>initUserMenu();</script>
+{% endblock %}

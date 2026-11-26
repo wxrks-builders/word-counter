@@ -1,0 +1,17 @@
+{# The public pages' footer: what the tool is, where to read more, the
+   other surface(s) when the page passes them, and where its source lives. #}
+<footer class="landing-footer">
+  <div class="page-wrap">
+    <span>{{ _(surface.name) }} — {{ _('a tool by wxrks') }}</span>
+    <nav class="footer-links" aria-label="{{ _('More') }}">
+      <a href="{{ url('/mcp') }}">{{ _('For Claude and ChatGPT') }}</a>
+      <a href="{{ url('/articles') }}">{{ _('Articles') }}</a>
+      {% for other in other_surfaces or [] %}
+      <a href="{{ other.url() }}">{{ _(other.name) }} ↗</a>
+      {% endfor %}
+      <a href="{{ source_code_url }}">{{ _('Source code (AGPL-3.0)') }} ↗</a>
+    </nav>
+    {# Crawl4AI's license asks every public use to carry this sentence, as written. #}
+    <p class="footer-credit" translate="no">This product includes software developed by UncleCode (<a href="https://x.com/unclecode">https://x.com/unclecode</a>) as part of the Crawl4AI project (<a href="https://github.com/unclecode/crawl4ai">https://github.com/unclecode/crawl4ai</a>).</p>
+  </div>
+</footer>
