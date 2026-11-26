@@ -5,8 +5,11 @@ WORKDIR /app
 # System libraries Chromium needs to actually run (fonts, graphics libs, etc.)
 # playwright install --with-deps installs these via apt on Debian/Ubuntu.
 COPY requirements.txt .
+# libatomic1: Playwright's bundled Node driver links against it, and the slim
+# Debian image stopped shipping it — without it `playwright install` exits 127
+# before it can install anything else.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        wget ca-certificates \
+        wget ca-certificates libatomic1 \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir -r requirements.txt \
     && python -m playwright install --with-deps chromium \
