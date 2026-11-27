@@ -16,9 +16,11 @@ For a security problem, follow [SECURITY.md](SECURITY.md) instead.
 1. Set up the app as in the [README](README.md#running-it-locally).
 2. Make your change, with a test that fails without it. Tests live in `tests/`
    and run with `pytest`.
-3. If you added or changed text people read, wrap it in `_()` and regenerate the
-   catalogues (README, "Translating the interface"). New strings show in English
-   until they're translated.
+3. If you added or changed text people read, wrap it in `_()` — `ngettext()` if
+   it has a number in it, never `if n == 1` — add a `Translators:` note when the
+   context isn't obvious, and regenerate the catalogues (README, "Translating
+   the interface"). [LOCALIZATION.md](LOCALIZATION.md) has the rules. New
+   strings show in English until they're translated.
 4. Open a pull request saying what changed and why.
 
 A few things this code relies on, worth knowing before changing them:

@@ -11,7 +11,8 @@
       <a class="logo" href="{{ url('/') }}">
         <img class="logo-img" src="/static/brand/logo.svg" alt="wxrks" width="123" height="28">
         <span class="logo-sep"></span>
-        <span class="logo-name">{{ _(surface.name) }}</span>
+        {# The lockup is the brand mark, as in _topbar.html. #}
+        <span class="logo-name" translate="no">{{ surface.name }}</span>
       </a>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         {% include "_lang_menu.html" %}
@@ -22,20 +23,26 @@
 
   <div class="page-wrap">
     <h1 class="pricing-title">{{ _('The only thing that changes is how long you wait.') }}</h1>
+    {# Translators: %(pro)s is "N pages" in bold (how many pages Pro fetches at
+       once) and %(free)s is the Free plan's number, in bold, with the noun left
+       out ("instead of 4"). %(counter)s and %(markdown)s are the two product
+       names. #}
     <p class="subtitle pricing-lede">
-      Same crawler, same counting, same reports. Pro fetches
-      <strong>{{ pro_concurrency }}</strong> pages at once instead of
-      <strong>{{ free_concurrency }}</strong>, and starts ahead of everyone else
-      when the queue is busy. One subscription covers both Word Counter and Site
-      to Markdown — they're the same account.
+      {{ _('Same crawler, same counting, same reports. Pro fetches %(pro)s at once instead of %(free)s, and starts ahead of everyone else when the queue is busy. One subscription covers both %(counter)s and %(markdown)s — they’re the same account.',
+           pro=('<strong>%s</strong>' | safe) % ngettext('%(n)s page', '%(n)s pages', pro_concurrency, n=num(pro_concurrency)),
+           free=('<strong>' ~ num(free_concurrency) ~ '</strong>') | safe,
+           counter=_('Word Counter'), markdown=_('Site to Markdown')) }}
     </p>
 
     <div class="plan-grid">
       <div class="plan-card">
         <div class="section-label">{{ _('Free') }}</div>
-        <div class="plan-price">£0</div>
+        {# Pounds, the currency the Pro price is charged in, whatever the
+           language: only how the amount is written follows the reader. #}
+        <div class="plan-price">{{ money(0, "GBP", whole=True) }}</div>
         <ul class="plan-features">
-          <li>{{ _('%(n)s pages at a time', n=free_concurrency) }}</li>
+          {# Translators: how many pages a plan fetches at the same time. #}
+          <li>{{ ngettext('%(n)s page at a time', '%(n)s pages at a time', free_concurrency, n=num(free_concurrency)) }}</li>
           <li>{{ _('Unlimited crawls, unlimited pages') }}</li>
           <li>{{ _('CSV export, Markdown ZIP, shareable reports') }}</li>
           <li>{{ _('Waits its turn when the server is busy') }}</li>
@@ -45,15 +52,21 @@
 
       <div class="plan-card plan-card-pro">
         <div class="section-label">{{ _('Pro') }}</div>
-        <div class="plan-price">{{ _('about %(n)s× faster', n=speedup) }}</div>
+        {# Translators: %(n)s is a whole number: how many times faster Pro is. #}
+        <div class="plan-price">{{ _('about %(n)s× faster', n=num(speedup)) }}</div>
         <ul class="plan-features">
-          <li><strong>{{ _('%(n)s pages at a time', n=pro_concurrency) }}</strong></li>
+          <li><strong>{{ ngettext('%(n)s page at a time', '%(n)s pages at a time', pro_concurrency, n=num(pro_concurrency)) }}</strong></li>
           <li>{{ _('Skips the queue when crawls are waiting') }}</li>
           <li>{{ _('Everything in Free') }}</li>
           <li>{{ _('Cancel anytime, from your billing page') }}</li>
         </ul>
         {% if user and user.is_pro %}
-          <p class="muted plan-current">{{ _('Your current plan') }}{% if user.plan_renews_at %} · {{ _('renews') }} <span class="run-date-iso" data-iso="{{ user.plan_renews_at }}"></span>{% endif %}</p>
+          {% if user.plan_renews_at %}
+          {# Translators: %(date)s is the date the subscription renews, filled in by the browser. #}
+          <p class="muted plan-current">{{ _('Your current plan · renews %(date)s', date=('<span class="run-date-iso" data-iso="' ~ user.plan_renews_at ~ '"></span>') | safe) }}</p>
+          {% else %}
+          <p class="muted plan-current">{{ _('Your current plan') }}</p>
+          {% endif %}
           <button type="button" class="secondary" data-billing-portal>{{ _('Manage subscription') }}</button>
         {% elif user %}
           <button type="button" id="upgrade-btn">{{ _('Upgrade to Pro') }}</button>
@@ -67,7 +80,8 @@
     </div>
 
     <p class="muted pricing-fineprint">
-      {{ _('About “%(n)s× faster” is measured, not arithmetic. Pro fetches %(raw)s× as many pages at once, but fetching is only part of the work — every page is also rendered and its text extracted, and that competes for CPU. The honest number is the smaller one.', n=speedup, raw=(pro_concurrency / free_concurrency) | round | int) }}
+      {# Translators: %(n)s and %(raw)s are whole-number multiples ("3", "4"). #}
+      {{ _('About “%(n)s× faster” is measured, not arithmetic. Pro fetches %(raw)s× as many pages at once, but fetching is only part of the work — every page is also rendered and its text extracted, and that competes for CPU. The honest number is the smaller one.', n=num(speedup), raw=num((pro_concurrency / free_concurrency) | round | int)) }}
     </p>
     <p class="muted pricing-fineprint">
       {{ _('It also assumes this app is what\'s slowing you down. A site that rate-limits or blocks a heavier crawler caps every plan at the same place; the report marks those pages, so you can see when that\'s what happened.') }}

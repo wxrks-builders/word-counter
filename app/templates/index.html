@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ surface.name }} — {{ surface.tagline }}{% endblock %}
+{% block title %}{{ _(surface.name) }} — {{ _(surface.tagline) }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% block body %}
   {% include "_topbar.html" %}
@@ -18,11 +18,13 @@
          the server-side filter all still work, so unhiding is deleting one
          attribute. Language still applies either way — with nothing entered
          the crawler restricts to the starting page's own declared language. #}
-      <input type="text" id="language" class="language-input" hidden placeholder="Primary language (auto)" title="Only crawl this language's pages, for sites with a /en/, /fr/, ... path per language. Leave blank to auto-detect the starting page's language. Comma-separate multiple codes to keep more than one (e.g. en, pt, es).">
+      {# Translators: a field for language codes such as en or pt; "auto" means detected automatically. #}
+      <input type="text" id="language" class="language-input" hidden placeholder="{{ _('Primary language (auto)') }}" title="{{ _('Only crawl this language’s pages, for sites with a /en/, /fr/, ... path per language. Leave blank to auto-detect the starting page’s language. Comma-separate multiple codes to keep more than one (e.g. en, pt, es).') }}">
       <label class="checkbox-label" title="{{ _('Save each page\'s main content as Markdown, downloadable as a ZIP when the crawl finishes.') }}">
         <input type="checkbox" id="capture-markdown"{% if surface.default_capture_markdown %} checked{% endif %}> {{ _('Save Markdown') }}
       </label>
-      <button type="submit" id="submit-btn">{{ _('Crawl') }}</button>
+      {# Translators: the button that starts counting a website (a verb). #}
+      <button type="submit" id="submit-btn">{{ pgettext('button', 'Crawl') }}</button>
     </form>
     <details class="crawl-advanced"{% if preselect_project %} open{% endif %}>
       <summary>{{ _('Advanced') }}</summary>
@@ -31,7 +33,9 @@
         <span data-tag-list></span>
         {# Not associated with the form: Enter inside a tag input means "commit
            this entry", not "start the crawl". #}
-        <input type="text" placeholder="staging, web-staging, /careers">
+        {# Translators: example entries for a field of subdomains and folders to leave out.
+           Keep the leading / on folders; the names may be adapted. #}
+        <input type="text" placeholder="{{ _('staging, web-staging, /careers') }}">
       </div>
       <p class="muted advanced-hint">
         {{ _('Comma-separated. A leading / excludes a folder, anything else a subdomain — staging also matches web-staging.example.com. Useful with “Whole domain”, which otherwise includes every subdomain, staging mirrors included.') }}
@@ -75,7 +79,7 @@
       </p>
       <details class="site-session" id="site-session">
         <summary>{{ _('Signs in with a code, or with Google or Microsoft? Paste a session instead') }}</summary>
-        <textarea id="login-session" rows="3" spellcheck="false" autocomplete="off" placeholder="session=…; csrftoken=…" aria-label="{{ _('Session from your browser') }}"></textarea>
+        <textarea id="login-session" rows="3" spellcheck="false" autocomplete="off" translate="no" dir="ltr" placeholder="session=…; csrftoken=…" aria-label="{{ _('Session from your browser') }}"></textarea>
         <p class="muted advanced-hint">
           {{ _('Sign in to the site in Chrome, open View → Developer → Developer Tools, choose Network and reload the page. Click the first request, find “cookie” under Request Headers and copy its value here. It works until that session ends, and is never stored.') }}
         </p>
@@ -96,7 +100,8 @@
       <div class="list-head">
         <div class="section-label">{{ _('Your recent runs') }}</div>
         {% if total_runs > recent_runs|length %}
-        <a href="{{ url('/runs') }}">{{ _('See all %(n)s', n=num(total_runs)) }} →</a>
+        {# Translators: a link to every crawl; %(n)s is how many there are. #}
+        <a href="{{ url('/runs') }}">{{ ngettext('See all %(n)s →', 'See all %(n)s →', total_runs, n=num(total_runs)) }}</a>
         {% endif %}
       </div>
       {% if recent_runs %}
@@ -118,7 +123,9 @@
         {# The markup is marked safe on the PARAMETER: newstyle gettext escapes
            interpolated values, so |safe on the result arrives too late — it
            blesses text that already reads '&lt;strong&gt;'. #}
-        {{ _('Your last crawl of %(domain)s found %(words)s words.', domain=p.domain, words=('<strong>' ~ num(p.total_words) ~ '</strong>') | safe) }}
+        {# Translators: %(domain)s is a website's address; %(words)s is a number of words, in bold. #}
+        {{ ngettext('Your last crawl of %(domain)s found %(words)s word.', 'Your last crawl of %(domain)s found %(words)s words.',
+                    p.total_words or 0, domain=p.domain, words=('<strong>' ~ num(p.total_words) ~ '</strong>') | safe) }}
       </p>
       <p class="promo-body">
         {%- if p.cms %}
@@ -127,8 +134,9 @@
         {{ _('wxrks pulls the content and translates it with the best AI models, then keeps it in sync as the site changes.') }}
         {%- endif %}
       </p>
+      {# Translators: %(cms)s is a website platform such as WordPress or Webflow. #}
       <a class="button" href="{{ p.url }}" target="_blank" rel="noopener">
-        {% if p.cms %}{{ _('See the %(cms)s connector', cms=p.cms) }}{% else %}{{ _('What that costs') }}{% endif %} →
+        {% if p.cms %}{{ _('See the %(cms)s connector', cms=p.cms) }}{% else %}{{ _('What that costs') }}{% endif %} <span aria-hidden="true">{{ '←' if lang_dir == 'rtl' else '→' }}</span>
       </a>
     </aside>
     {% endif %}

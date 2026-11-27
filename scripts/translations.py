@@ -11,6 +11,10 @@
         -> validates every returned .po BEFORE anything lands in locales/,
            then writes, compiles, and prints per-language coverage.
 
+    python scripts/translations.py compile
+        -> locales/<lang>/LC_MESSAGES/messages.mo for every catalogue, with
+           untranslated messages left out (the Dockerfile runs this).
+
 The validation exists because of one specific failure: 38 strings carry
 %(name)s placeholders, and a translation that drops or renames one raises at
 RENDER time — one bad string and the page using it 500s, in that language
@@ -29,6 +33,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+from babel.messages.mofile import write_mo
 from babel.messages.pofile import read_po, write_po
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -51,17 +56,33 @@ Rules that keep the app running:
 1. **`%(name)s` placeholders must survive exactly** — same names, same count.
    They are substituted at runtime; a translation that drops or renames one
    crashes the page that uses it. "%(n)s pages at a time" -> the %(n)s moves
-   wherever the language needs it, but it must still be %(n)s.
-2. **Short strings live in small chips.** Anything under ~20 characters in
+   wherever the language needs it, but it must still be %(n)s. The one
+   exception: a plural form may say its number in words (Arabic "one page",
+   "two pages") and leave %(n)s out. It may never add or rename one.
+2. **Plural messages have one `msgstr[i]` per form your language has** (the
+   Plural-Forms line at the top of each file says how many: Arabic six,
+   French and German two, Japanese, Korean and Chinese one). Fill every form.
+3. **Read the `#.` comments.** They say where a string appears, what each
+   placeholder holds, and when a string sits in a small chip or button.
+4. **Short strings live in small chips.** Anything under ~20 characters in
    English probably sits in a pill or button; German and French run long, and
    a 50-character label will look wrong even though nothing breaks.
-3. Product names — Word Counter, Site to Markdown, wxrks, Pro — are names.
+5. Product names — Word Counter, Site to Markdown, wxrks, Pro — are names.
    Translate around them, not through them, unless local convention says
-   otherwise.
-4. Arrows and separators (→, ·, ⟶) are layout, keep them.
+   otherwise. The glossary and tone per language are in LOCALIZATION.md.
+6. Separators (·, ⟶) are layout, keep them. Arrows that point along the
+   reading direction (→, ←) follow your language: Arabic flips them.
+
+A language is listed to search engines once 90% of its catalogue is
+translated (PUBLISH_AT in app/i18n.py); until then its pages work but aren't
+advertised.
 
 Return the same folder structure: <lang>/LC_MESSAGES/messages.po.
 """
+
+# The extraction everyone runs, so translator comments (# Translators: in
+# Python, {# Translators: #} in templates) reach the catalogue as #. lines.
+EXTRACT_ARGS = ["-F", "babel.cfg", "--no-location", "--sort-output", "--add-comments=Translators:"]
 
 
 def fail(message: str) -> None:
@@ -76,14 +97,16 @@ def _pot_is_stale() -> bool:
         fresh = Path(handle.name)
     try:
         subprocess.run(
-            [sys.executable, "-m", "babel.messages.frontend", "extract",
-             "-F", "babel.cfg", "-o", str(fresh), "--no-location", "--sort-output", "."],
+            [sys.executable, "-m", "babel.messages.frontend", "extract", *EXTRACT_ARGS, "-o", str(fresh), "."],
             cwd=ROOT, check=True, capture_output=True,
         )
 
-        def strings(path: Path) -> set[str]:
+        def strings(path: Path) -> set:
+            # The comments are compared too: a note added for translators is
+            # worth sending, and a pot without it is as stale as one missing
+            # a string.
             with path.open("rb") as fh:
-                return {m.id for m in read_po(fh) if m.id}
+                return {(m.id, m.context, tuple(m.auto_comments)) for m in read_po(fh) if m.id}
 
         return strings(fresh) != strings(LOCALES / "messages.pot")
     finally:
@@ -118,29 +141,82 @@ def _validate_po(path: Path, lang: str) -> tuple[list[str], list[str], int, int]
 
     translated = total = 0
     for message in catalog:
-        if not message.id or isinstance(message.id, tuple) is None:
+        if not message.id:
             continue
-        source = message.id if isinstance(message.id, str) else message.id[0]
+        sources = [message.id] if isinstance(message.id, str) else list(message.id)
+        source = sources[0]
         if not source:
             continue
         total += 1
-        target = message.string if isinstance(message.string, str) else (message.string or [""])[0]
-        if not target:
+        targets = [message.string] if isinstance(message.string, str) else list(message.string or [""])
+        if not any(targets):
+            continue
+        if not all(targets):
+            errors.append(f"{lang}: {source[:60]!r} has some plural forms filled and others empty — fill all "
+                          f"{len(targets)}, or none")
             continue
         translated += 1
 
-        want = sorted(PLACEHOLDER_RE.findall(source))
-        got = sorted(PLACEHOLDER_RE.findall(target))
-        if want != got:
-            errors.append(
-                f"{lang}: placeholders changed in {source[:60]!r} — "
-                f"source has {want or 'none'}, translation has {got or 'none'}"
-            )
-        if any(ord(ch) < 32 and ch not in "\n" for ch in target):
-            errors.append(f"{lang}: control character in translation of {source[:60]!r}")
+        want = sorted(PLACEHOLDER_RE.findall(sources[-1]))
+        for index, target in enumerate(targets):
+            got = sorted(PLACEHOLDER_RE.findall(target))
+            if len(sources) > 1:
+                # A plural form may leave a number out — Arabic says "one page"
+                # and "two pages" in words — and Python's % doesn't mind. A
+                # placeholder the source doesn't have is a KeyError at render.
+                unknown = sorted(set(got) - set(want))
+                if unknown:
+                    errors.append(f"{lang}: {source[:60]!r} (form {index}) has placeholders the source "
+                                  f"doesn't: {unknown}")
+                elif set(want) - set(got):
+                    warnings.append(f"{lang}: {source[:40]!r} (form {index}) leaves out "
+                                    f"{sorted(set(want) - set(got))} — fine for a number said in words")
+            elif want != got:
+                errors.append(
+                    f"{lang}: placeholders changed in {source[:60]!r} — "
+                    f"source has {want or 'none'}, translation has {got or 'none'}"
+                )
+            if any(ord(ch) < 32 and ch not in "\n" for ch in target):
+                errors.append(f"{lang}: control character in translation of {source[:60]!r}")
+        target = targets[0]
         if len(source) <= 20 and len(target) > 3 * max(len(source), 8):
             warnings.append(f"{lang}: {source[:40]!r} grew from {len(source)} to {len(target)} chars — check the chip it lives in")
     return errors, warnings, translated, total
+
+
+def compile_catalog(po: Path, mo: Path) -> tuple[int, int]:
+    """Compile one catalogue, leaving out every message that isn't translated.
+    Returns (compiled, left out).
+
+    pybabel compile keeps an untranslated plural and fills its forms with the
+    English pair, so a language whose plural rule isn't English's picks the
+    wrong one: Arabic uses form 1 for n == 1 and showed "1 pages", Japanese
+    has one form and showed "5 page". Left out of the .mo, the message falls
+    back to English by English rules, both in gettext on the server and in
+    plural_variants for the browser, until someone translates it. Fuzzy
+    entries and plurals with only some forms filled are left out too."""
+    with po.open("rb") as handle:
+        catalog = read_po(handle, locale=po.parent.parent.name)
+    left_out = 0
+    for message in list(catalog):
+        if not message.id:
+            continue
+        forms = (message.string,) if isinstance(message.string, str) else tuple(message.string or ("",))
+        if message.fuzzy or not all(forms):
+            catalog.delete(message.id, context=message.context)
+            left_out += 1
+    with mo.open("wb") as handle:
+        write_mo(handle, catalog)
+    return sum(1 for m in catalog if m.id), left_out
+
+
+def cmd_compile() -> None:
+    catalogs = sorted(LOCALES.glob("*/LC_MESSAGES/messages.po"))
+    if not catalogs:
+        fail(f"no catalogues under {LOCALES}")
+    for po in catalogs:
+        compiled, left_out = compile_catalog(po, po.with_suffix(".mo"))
+        print(f"  {po.parent.parent.name}  {compiled} compiled, {left_out} left out (untranslated or fuzzy)")
 
 
 def cmd_import(source: str) -> None:
@@ -188,15 +264,14 @@ def cmd_import(source: str) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, dest)
 
-    subprocess.run(
-        [sys.executable, "-m", "babel.messages.frontend", "compile", "-d", str(LOCALES)],
-        cwd=ROOT, check=True, capture_output=True,
-    )
+    for po in sorted(LOCALES.glob("*/LC_MESSAGES/messages.po")):
+        compile_catalog(po, po.with_suffix(".mo"))
 
-    print("\ncoverage:")
+    print("\ncoverage (published to search engines at 90%):")
     for lang, (translated, total) in sorted(report.items()):
         bar = "#" * int(20 * translated / total) if total else ""
-        print(f"  {lang}  {translated:>4}/{total:<4} {bar}")
+        published = "published" if total and translated / total >= 0.9 else ""
+        print(f"  {lang}  {translated:>4}/{total:<4} {bar:<20} {published}")
     missing = [lang for lang in LANGS if lang not in incoming]
     if missing:
         print(f"  not in this batch: {', '.join(missing)}")
@@ -209,6 +284,8 @@ def main() -> None:
         cmd_export()
     elif len(sys.argv) >= 3 and sys.argv[1] == "import":
         cmd_import(sys.argv[2])
+    elif len(sys.argv) >= 2 and sys.argv[1] == "compile":
+        cmd_compile()
     else:
         print(__doc__)
         sys.exit(2)

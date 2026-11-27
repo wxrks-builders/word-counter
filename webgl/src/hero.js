@@ -104,12 +104,15 @@ const n=135,swarm=new THREE.InstancedMesh(extractedWordGeo,extractedWordMat,n);s
 const dustCount=110, dust=new THREE.InstancedMesh(wordGeo,new THREE.MeshStandardMaterial({color:0xacb3be,metalness:.3,roughness:.5,transparent:true,opacity:.35}),dustCount);scene.add(dust);
 const debris=[];for(let i=0;i<14;i++){const mesh=i%3===0?new THREE.Mesh(new THREE.TorusGeometry(.1,.013,6,24),silver):box(.15,.15,.025,paper,.025);scene.add(mesh);debris.push(mesh);}
 const pointer=new THREE.Vector2();let paused=matchMedia('(prefers-reduced-motion: reduce)').matches,visible=true,t=0,last=0,halfW=10,halfH=5,mobile=false;
+// The copy sits on the reading side — the left in English, the right in Arabic —
+// so the scene takes the other one. Mirroring the canvas instead would mirror the digits.
+const side=document.documentElement.dir==='rtl'?-1:1;
 // It runs continuously; only a reduced-motion preference holds it still.
 let dirty=true;matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{paused=e.matches;dirty=true});
 hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width-.5,(e.clientY-r.top)/r.height-.5)});hero.addEventListener('pointerleave',()=>pointer.set(0,0));new IntersectionObserver(e=>visible=e[0].isIntersecting).observe(hero);
 function resize(){dirty=true;const w=host.clientWidth,h=host.clientHeight;mobile=w<801;camera.aspect=w/h;camera.position.z=16;camera.updateProjectionMatrix();renderer.setSize(w,h);halfH=Math.tan(THREE.MathUtils.degToRad(17))*camera.position.z;halfW=halfH*camera.aspect;
  // On a phone the canvas is its own band under the copy (style.css), so the scene is centred in it rather than pushed below a full-hero canvas.
- rig.position.set(mobile?0:halfW*.46,mobile?-.35:0,0);rig.scale.setScalar(mobile?.92:1.03);}new ResizeObserver(resize).observe(host);resize();
+ rig.position.set(mobile?0:side*halfW*.46,mobile?-.35:0,0);rig.scale.setScalar(mobile?.92:1.03);}new ResizeObserver(resize).observe(host);resize();
 const ease=x=>x*x*(3-2*x),v=new THREE.Vector3();let priorPhase=-1,lastCount=-1;
 function draw(ms){requestAnimationFrame(draw);const dt=Math.min((ms-last)/1000,.04);last=ms;if(!visible||document.hidden)return;
  // Reduced motion: one still frame, then nothing until something changes.
@@ -134,7 +137,7 @@ function draw(ms){requestAnimationFrame(draw);const dt=Math.min((ms-last)/1000,.
  dummy.position.z+=Math.sin(q*Math.PI)*.5;dummy.rotation.set(q*.3,q*2,.1*Math.sin(i));
  dummy.scale.setScalar(Math.min(1,q*9,(1-q)*9)*.68);dummy.updateMatrix();swarm.setMatrixAt(i,dummy.matrix);
  }swarm.instanceMatrix.needsUpdate=true;
- for(let i=0;i<dustCount;i++){const x=Math.sin(i*128.13)*halfW*.97,y=Math.cos(i*73.71)*halfH*.92;const copyZone=mobile?y>0:x<halfW*.06;dummy.position.set(x+Math.sin(t*.13+i)*.12,y+Math.cos(t*.19+i)*.12,-1+Math.sin(i*1.3));dummy.rotation.set(i+t*.07,i*.4+t*.1,i);dummy.scale.setScalar(copyZone?.18:.45);dummy.updateMatrix();dust.setMatrixAt(i,dummy.matrix);}dust.instanceMatrix.needsUpdate=true;
- debris.forEach((m,i)=>{const a=i/14*Math.PI*2+t*.025;const x=Math.cos(a)*halfW*.91,y=Math.sin(a)*halfH*.83;const small=mobile?y>0:x<halfW*.06;m.position.set(x,y,-.2+Math.sin(i)*.4);m.scale.setScalar(small?.2:.75);m.rotation.set(t*.2+i,t*.14+i*.3,i+t*.07);});
+ for(let i=0;i<dustCount;i++){const x=Math.sin(i*128.13)*halfW*.97,y=Math.cos(i*73.71)*halfH*.92;const copyZone=mobile?y>0:side*x<halfW*.06;dummy.position.set(x+Math.sin(t*.13+i)*.12,y+Math.cos(t*.19+i)*.12,-1+Math.sin(i*1.3));dummy.rotation.set(i+t*.07,i*.4+t*.1,i);dummy.scale.setScalar(copyZone?.18:.45);dummy.updateMatrix();dust.setMatrixAt(i,dummy.matrix);}dust.instanceMatrix.needsUpdate=true;
+ debris.forEach((m,i)=>{const a=i/14*Math.PI*2+t*.025;const x=Math.cos(a)*halfW*.91,y=Math.sin(a)*halfH*.83;const small=mobile?y>0:side*x<halfW*.06;m.position.set(x,y,-.2+Math.sin(i)*.4);m.scale.setScalar(small?.2:.75);m.rotation.set(t*.2+i,t*.14+i*.3,i+t*.07);});
  renderer.render(scene,camera);
 }requestAnimationFrame(draw);

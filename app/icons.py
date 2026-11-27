@@ -44,9 +44,11 @@ _SHAPES: dict[str, str] = {
 
 
 def icon(name: str, size: int = 17, label: str = "") -> Markup:
-    """An inline SVG. Decorative unless given a label."""
+    """An inline SVG. Decorative unless given a label. The icon-<name> class
+    lets style.css mirror the ones that point along the reading direction
+    (arrow-right) under dir="rtl", and leave a printer or a lock alone."""
     a11y = f'role="img" aria-label="{Markup.escape(label)}"' if label else 'aria-hidden="true"'
     return Markup(
-        f'<svg class="icon" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+        f'<svg class="icon icon-{name}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
         f' stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" {a11y}>{_SHAPES[name]}</svg>'
     )

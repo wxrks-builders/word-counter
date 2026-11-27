@@ -13,12 +13,13 @@
 
   {# Canonical per surface. Both hostnames are served by the same app, so
      without this they'd compete with each other for the same searches. #}
-  <link rel="canonical" href="{% block canonical %}{{ surface.url(request.url.path) }}{% endblock %}">
+  <link rel="canonical" href="{% block canonical %}{{ surface.url(canonical_path) }}{% endblock %}">
 
-  {# Every language declares every other, including itself, which is what
-     hreflang requires. The codes are regional (de-DE, pt-BR) against short
-     paths (/de, /pt) — the same pairing wxrks.com publishes, so the two
-     properties agree about what a language is. #}
+  {# Every published language declares every other, including itself, which
+     is what hreflang requires. The codes are regional (de-DE, pt-BR) against
+     short paths (/de, /pt) — the same pairing wxrks.com publishes, so the two
+     properties agree about what a language is. A language joins once its
+     catalogue is translated (PUBLISH_AT in app/i18n.py). #}
   {% block alternates %}
   {% for code, alt_path in alternates %}
   <link rel="alternate" hreflang="{{ code }}" href="{{ surface.url(alt_path) }}">
@@ -29,9 +30,8 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ _(surface.name) }}">
   <meta property="og:title" content="{% block og_title %}{{ _(surface.name) }} — {{ _(surface.tagline) }}{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}{{ surface.description }}{% endblock %}">
-  <meta property="og:url" content="{{ surface.url(request.url.path) }}">
-  <meta property="og:image" content="{{ surface.url(surface.og_image) }}">
+  <meta property="og:description" content="{% block og_description %}{{ _(surface.description) }}{% endblock %}">
+  <meta property="og:url" content="{{ surface.url(canonical_path) }}">  <meta property="og:image" content="{{ surface.url(surface.og_image) }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
@@ -55,8 +55,21 @@
   <script id="i18n-data" type="application/json">{{ js_strings | tojson }}</script>
   <script>
     window.I18N = JSON.parse(document.getElementById("i18n-data").textContent);
-    window.LOCALE = {{ hreflang | tojson }};
+    window.LOCALE = {{ intl_locale | tojson }};
+    window.LANG_PREFIX = {{ lang_prefix | tojson }};
+    window.LANG_COOKIE = {{ cookie_name | tojson }};
   </script>
+  {% if suggestion %}
+  {# Written in the language it offers, not the page's: someone who would
+     rather read German may not read the English around it. app.js remembers
+     either answer, so it is asked once. #}
+  <div class="lang-suggest" lang="{{ suggestion.hreflang }}" dir="{{ suggestion.dir }}" data-lang-suggest>
+    <span class="lang-suggest-text">{{ suggestion.text }}</span>
+    <a class="lang-suggest-switch" href="{{ suggestion.href }}" hreflang="{{ suggestion.hreflang }}"
+       data-lang-choice="{{ suggestion.code }}">{{ suggestion.switch }}</a>
+    <button type="button" class="lang-suggest-dismiss" data-lang-choice="en" data-lang-dismiss>{{ suggestion.dismiss }}</button>
+  </div>
+  {% endif %}
   {% block body %}{% endblock %}
 </body>
 </html>

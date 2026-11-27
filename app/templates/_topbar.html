@@ -2,7 +2,9 @@
   <a class="logo" href="{{ url('/') }}">
     <img class="logo-img" src="/static/brand/logo.svg" alt="wxrks" width="123" height="28">
     <span class="logo-sep"></span>
-    <span class="logo-name">{{ surface.name }}</span>
+    {# The lockup is the brand mark, like the logo beside it, so it stays as
+       written; running text names the product through _(surface.name). #}
+    <span class="logo-name" translate="no">{{ surface.name }}</span>
   </a>
 
   {# The chip is the menu button. Everything that used to sit inline beside the
@@ -43,18 +45,21 @@
   
         {# is_admin() is the same function require_admin uses, so this lists
            exactly the pages that will actually open. #}
+        {# The admin pages stay in English on purpose (LOCALIZATION.md), so
+           their links say so with lang="en" — a screen reader then reads them
+           as English inside a German or Japanese menu. #}
         {% if is_admin(user) %}
           <div class="user-menu-sep"></div>
-          <div class="user-menu-label">Admin</div>
-          <a role="menuitem" href="/admin/health">Server health</a>
-          <a role="menuitem" href="/admin/jobs">Running crawls</a>
-          <a role="menuitem" href="/admin/runs">All runs</a>
-          <a role="menuitem" href="/admin/estimates">Estimate accuracy</a>
-          <a role="menuitem" href="/admin/translations">Translation check</a>
+          <div class="user-menu-label" lang="en">Admin</div>
+          <a role="menuitem" href="/admin/health" lang="en">Server health</a>
+          <a role="menuitem" href="/admin/jobs" lang="en">Running crawls</a>
+          <a role="menuitem" href="/admin/runs" lang="en">All runs</a>
+          <a role="menuitem" href="/admin/estimates" lang="en">Estimate accuracy</a>
+          <a role="menuitem" href="/admin/translations" lang="en">Translation check</a>
         {% elif can_view_translations(user) %}
           {# TRANSLATION_CHECK_VIEWERS: the reports, without the rest of admin. #}
           <div class="user-menu-sep"></div>
-          <a role="menuitem" href="/admin/translations">Translation check</a>
+          <a role="menuitem" href="/admin/translations" lang="en">Translation check</a>
         {% endif %}
   
         <div class="user-menu-sep"></div>

@@ -164,7 +164,11 @@
         </article>
         <article>
           <h3>{{ _('What about very large sites?') }}</h3>
-          <p>{{ _('At about 50,000 words a count pauses with an estimate of the whole site. Ask your assistant to continue and it counts every page.') }}</p>
+          {# Translators: %(n)s is a number of words (where a count pauses to estimate). #}
+          {% set mcp_pause = pause_at_words | default(50000) %}
+          <p>{{ ngettext('At about %(n)s word a count pauses with an estimate of the whole site. Ask your assistant to continue and it counts every page.',
+                         'At about %(n)s words a count pauses with an estimate of the whole site. Ask your assistant to continue and it counts every page.',
+                         mcp_pause, n=num(mcp_pause)) }}</p>
         </article>
         <article>
           <h3>{{ _('Where do my counts go?') }}</h3>

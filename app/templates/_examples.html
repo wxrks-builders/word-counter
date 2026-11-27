@@ -5,8 +5,9 @@
   <span class="examples-label">{{ _(surface.demo_label) }}</span>
   {% for ex in examples %}
   <a class="example-chip" href="{{ url('/share/' ~ ex.id) }}">
-    <span class="example-host">{{ (ex.shown_url or ex.source_url).split('//')[-1].split('/')[0] | replace('www.', '') }}</span>
-    <span class="example-words">{{ _('%(n)s words', n=num(ex.total_words)) }}</span>
+    <span class="example-host" translate="no">{{ (ex.shown_url or ex.source_url).split('//')[-1].split('/')[0] | replace('www.', '') }}</span>
+    {# Translators: a site's word count, in a small chip beside its address. #}
+    <span class="example-words">{{ ngettext('%(n)s word', '%(n)s words', ex.total_words or 0, n=num(ex.total_words)) }}</span>
   </a>
   {% endfor %}
 </div>

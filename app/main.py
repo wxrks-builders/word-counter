@@ -19,11 +19,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from babel.dates import format_datetime
 from crawl4ai.utils import get_base_domain
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, Response, StreamingResponse
+from fastapi.exception_handlers import http_exception_handler
 from fastapi.staticfiles import StaticFiles
 from starlette.datastructures import MutableHeaders
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -39,6 +42,7 @@ from app.models import (CrawlRequest, DisplayUrlRequest, McpKeyRequest, ProjectR
 from app.notifications import absolute_url, remember_origin, send_server_alert, send_share_notification
 from app.plans import active_page_load, resolve_concurrency
 from app.health import pending_alerts, snapshot as health_snapshot
+from app.i18n import N_, gettext_for
 from app.promos import home_pitch, pro_upsell, rank_page_promos, wxrks_pitch
 from app.templates import ASSET_VERSION, templates
 from app.url_policy import parse_exclusions
@@ -214,6 +218,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
+@app.exception_handler(StarletteHTTPException)
+async def _not_found_page(request: Request, exc: StarletteHTTPException):
+    """A person opening a missing report gets a page in their language rather
+    than {"detail": "Crawl not found"} in English. Everything else — app.js,
+    assistants, redirects raised as exceptions — gets FastAPI's usual answer."""
+    if exc.status_code == 404 and i18n.is_page_view(request) and hasattr(request.state, "surface"):
+        user = await get_current_user(request)
+        return templates.TemplateResponse(request, "not_found.html", {"user": user}, status_code=404)
+    return await http_exception_handler(request, exc)
+
 # Secure by default, opt out for local http:// development.
 #
 # This used to read RENDER, which the host set automatically — so the moment
@@ -314,6 +329,16 @@ async def _record_origin(request: Request, call_next):
     # So a shared or bookmarked URL keeps its language, and so caches don't
     # serve one language's page under another's URL.
     response.headers.setdefault("Content-Language", i18n.HREFLANG.get(lang, lang))
+    if i18n.is_page_view(request):
+        if lang == i18n.DEFAULT_LANG:
+            # The English page offers the visitor's own language (base.html),
+            # so it differs by what their browser asks for.
+            response.headers.append("Vary", "Accept-Language")
+        elif lang in i18n.LANGUAGES and request.cookies.get(i18n.LANG_COOKIE) != lang:
+            # Opening a page in a language is choosing it: remembered, so the
+            # English root offers it back next time instead of guessing.
+            response.set_cookie(i18n.LANG_COOKIE, lang, max_age=365 * 86_400, samesite="lax",
+                                secure=SECURE_COOKIES)
     return response
 
 
@@ -516,7 +541,7 @@ def _guest_may_start(ip: str) -> bool:
 async def start_pending_crawl(request: Request, user: User | None = Depends(get_current_user)):
     lang = request.state.lang
     if user is None:
-        return RedirectResponse("/login", status_code=303)
+        return RedirectResponse(i18n.localized_path("/login", lang), status_code=303)
     url = request.session.pop("pending_crawl", None)
     home = i18n.localized_path("/", lang)
     if not url:
@@ -762,12 +787,13 @@ async def crawl_page(
     preview: str = "",
     viewer: User | None = Depends(get_viewer),
 ):
+    login = i18n.localized_path("/login", request.state.lang)
     if viewer is None:
-        raise HTTPException(status_code=303, headers={"Location": "/login"})
+        raise HTTPException(status_code=303, headers={"Location": login})
     job = get_job(run_id)
     guest = viewer.is_guest
     if guest and not await _guest_owns(viewer, run_id):
-        raise HTTPException(status_code=303, headers={"Location": "/login"})
+        raise HTTPException(status_code=303, headers={"Location": login})
     # A guest gets the page without anything that needs an account: no share,
     # no re-crawl, no "emailed to" — and a way to sign in to keep it.
     user = None if guest else viewer
@@ -798,7 +824,7 @@ async def crawl_page(
                 "source_url": job.source_url,
                 "display_url": job.source_url,
                 "started_at": job.started_at,
-                "initial_status_payload": job.status_payload(),
+                "initial_status_payload": _localized_event(job.status_payload(), request.state.lang),
                 "user": user,
                 "share_recipients": share_recipients,
                 **live_choices,
@@ -850,10 +876,10 @@ async def crawl_page(
             "is_owner": user is not None and run.user_id == user.id,
             **(await _project_choices(user, [run_id]) if user is not None and run.user_id == user.id else {}),
             # For the printed report's last line, when there is a link to give.
-            "share_link": _share_url(run_id, request.state.surface) if run.is_public else None,
+            "share_link": _share_url(run_id, request.state.surface, request.state.lang) if run.is_public else None,
             "run": run,
-            "summary": _report_summary(run),
-            "initial_pages": [report.page_row(p) for p in run.pages[: report.PAGE_ROWS]],
+            "summary": _report_summary(run, request.state.lang),
+            "initial_pages": [report.page_row(p, request.state.lang) for p in run.pages[: report.PAGE_ROWS]],
             "user": user,
             "share_recipients": share_recipients,
             # Both resolved here rather than in the template — see app/promos.py
@@ -869,12 +895,12 @@ async def crawl_page(
     )
 
 
-def _report_summary(run) -> dict:
+def _report_summary(run, lang: str = i18n.DEFAULT_LANG) -> dict:
     """The saved report's totals, plus what the crawled pages link to that the
     run didn't count — so a subdomain or /de/ folder left out by the settings
     is named instead of silently missing."""
     return {
-        **report.summarize(run.pages),
+        **report.summarize(run.pages, lang),
         **report.left_out(run.pages, run.linked_hosts, run.linked_languages, run.other_languages),
         "scope": run.domain_scope,
         "repetition": run.repetition or None,
@@ -906,10 +932,10 @@ async def shared_crawl_page(run_id: str, request: Request):
             "run_id": run_id,
             "source_url": run.source_url,
             "display_url": run.shown_url,
-            "share_link": _share_url(run_id, request.state.surface),
+            "share_link": _share_url(run_id, request.state.surface, request.state.lang),
             "run": run,
-            "summary": _report_summary(run),
-            "initial_pages": [report.page_row(p) for p in run.pages[: report.PAGE_ROWS]],
+            "summary": _report_summary(run, request.state.lang),
+            "initial_pages": [report.page_row(p, request.state.lang) for p in run.pages[: report.PAGE_ROWS]],
             "user": None,
             "share_recipients": [],
             # Nobody is signed in here, so there is no Pro to sell — but this is
@@ -939,7 +965,10 @@ async def delete_crawl(run_id: str, user: User = Depends(require_user_api)):
     # exists, and would re-save itself on finishing. Make the caller stop it.
     job = get_job(run_id)
     if job is not None and job.status not in _FINISHED_STATUSES:
-        raise HTTPException(status_code=409, detail="Stop this crawl before deleting it")
+        # A code, like the crawl form's errors, so app.js says it in the
+        # reader's language; detail stays for anything reading the English.
+        return JSONResponse({"code": "stop_before_delete", "detail": "Stop this crawl before deleting it"},
+                            status_code=409)
 
     in_projects = await db.project_ids_for_run(run_id)
     await db.delete_run(run_id)
@@ -949,7 +978,7 @@ async def delete_crawl(run_id: str, user: User = Depends(require_user_api)):
 
 
 @app.get("/crawl/{run_id}/pages")
-async def crawl_pages(run_id: str, offset: int = 0, limit: int = report.PAGE_ROWS,
+async def crawl_pages(request: Request, run_id: str, offset: int = 0, limit: int = report.PAGE_ROWS,
                       user: User | None = Depends(get_viewer)):
     """Rows for the pages table, fetched as the reader asks for more. Embedding
     all of them is what made a large report unopenable."""
@@ -957,8 +986,9 @@ async def crawl_pages(run_id: str, offset: int = 0, limit: int = report.PAGE_ROW
     offset = max(0, offset)
     limit = max(1, min(limit, 1000))
     rows = run.pages[offset : offset + limit]
+    lang = _reader_lang(request, None if user is None or user.is_guest else user)
     return JSONResponse({
-        "pages": [report.page_row(p) for p in rows],
+        "pages": [report.page_row(p, lang) for p in rows],
         "offset": offset,
         "total": len(run.pages),
         "has_more": offset + len(rows) < len(run.pages),
@@ -1007,8 +1037,55 @@ async def export_csv(run_id: str, user: User | None = Depends(get_viewer)):
     )
 
 
+# Why saving Markdown stopped early, by the state the crawler records
+# (job_store.Job.markdown_state) — for the archive's README.
+_MARKDOWN_STOPPED = {
+    # Translators: in the README inside a Markdown download, after "Capture
+    # stopped before the end of the crawl": the reason it stopped.
+    "stopped_disk": N_("the server was running out of disk space"),
+    "stopped_run_cap": N_("this crawl reached the most Markdown one crawl may save"),
+    "stopped_global_cap": N_("the server reached the most Markdown it keeps"),
+}
+
+
+def _markdown_readme(run, lang: str) -> str:
+    """The README.txt at the top of a Markdown download, in the reader's language."""
+    _ = gettext_for(lang)
+    ngettext = i18n.ngettext_for(lang)
+    try:
+        crawled = format_datetime(datetime.fromisoformat(run.created_at), "long",
+                                  tzinfo=timezone.utc, locale=i18n.locale_for(lang))
+    except (TypeError, ValueError):
+        crawled = run.created_at
+    lines = [
+        # Translators: the first line of the README inside a Markdown download.
+        # %(product)s is the product's name; %(site)s is the address crawled.
+        _("%(product)s — saved Markdown for %(site)s") % {"product": _(surfaces.COUNTER.name), "site": run.shown_url},
+        # Translators: %(date)s is the date and time of the crawl.
+        _("Crawled: %(date)s") % {"date": crawled},
+        # Translators: %(saved)s is how many pages are in the download and
+        # %(total)s how many the crawl counted.
+        ngettext("Pages in this archive: %(saved)s of %(total)s crawled",
+                 "Pages in this archive: %(saved)s of %(total)s crawled", run.page_count)
+        % {"saved": i18n.format_number(run.markdown_pages, lang), "total": i18n.format_number(run.page_count, lang)},
+        "",
+        _("Main page content only — site navigation, footers and other repeated chrome are stripped. "
+          "Each file starts with the URL it came from."),
+    ]
+    readme = "\n".join(lines)
+    if run.markdown_state.startswith("stopped"):
+        reason = _MARKDOWN_STOPPED.get(run.markdown_state)
+        # Translators: %(reason)s says why, such as "the server was running out
+        # of disk space".
+        readme += "\n\n" + _(
+            "Capture stopped before the end of the crawl because %(reason)s, so this archive covers only "
+            "the pages listed above. The word count itself is complete."
+        ) % {"reason": _(reason) if reason else run.markdown_state}
+    return readme
+
+
 @app.get("/crawl/{run_id}/markdown.zip")
-async def export_markdown(run_id: str, user: User | None = Depends(get_viewer)):
+async def export_markdown(request: Request, run_id: str, user: User | None = Depends(get_viewer)):
     """Readable by the owner or through a live public link, matching Export CSV
     and the report itself — a shared report that withholds half its exports
     isn't really shared. Worth knowing this is the app's one large download, so
@@ -1018,20 +1095,7 @@ async def export_markdown(run_id: str, user: User | None = Depends(get_viewer)):
         raise HTTPException(status_code=404, detail="No Markdown was saved for this crawl")
 
     host = (urlsplit(run.shown_url).hostname or "crawl").replace("www.", "")
-    readme = "\n".join([
-        f"Word Counter — saved Markdown for {run.shown_url}",
-        f"Crawled: {run.created_at}",
-        f"Pages in this archive: {run.markdown_pages:,} of {run.page_count:,} crawled",
-        "",
-        "Main page content only — site navigation, footers and other repeated",
-        "chrome are stripped. Each file starts with the URL it came from.",
-    ])
-    if run.markdown_state.startswith("stopped"):
-        readme += (
-            "\n\nCapture stopped before the end of the crawl"
-            f" ({run.markdown_state.removeprefix('stopped_')}), so this archive covers"
-            " only the pages listed above. The word count itself is complete."
-        )
+    readme = _markdown_readme(run, _reader_lang(request, None if user is None or user.is_guest else user))
 
     return StreamingResponse(
         markdown_store.iter_zip(run_id, [p.url for p in run.pages], readme=readme),
@@ -1040,10 +1104,44 @@ async def export_markdown(run_id: str, user: User | None = Depends(get_viewer)):
     )
 
 
-def _share_url(run_id: str, surface=None) -> str | None:
+def _share_url(run_id: str, surface=None, lang: str = i18n.DEFAULT_LANG) -> str | None:
     """Built from the surface the sharer is looking at, so a link copied on the
-    Markdown domain doesn't hand the recipient the other brand."""
-    return absolute_url(f"/share/{run_id}", surface)
+    Markdown domain doesn't hand the recipient the other brand — and in the
+    sharer's language, the one the invitation email is written in."""
+    return absolute_url(i18n.localized_path(f"/share/{run_id}", lang), surface)
+
+
+def _reader_lang(request: Request, user: User | None = None) -> str:
+    """The language of the page a request came from.
+
+    app.js sends its fetches, the event stream and the downloads with the
+    page's prefix (localPath), so request.state.lang is usually it. A browser
+    still running the previous app.js sends them unprefixed, and reads English;
+    for that one the page is in the Referer, from the same site, and failing
+    that the account's saved language."""
+    if request.state.lang != i18n.DEFAULT_LANG:
+        return request.state.lang
+    referer = urlsplit(request.headers.get("referer") or "")
+    if referer.path and referer.netloc in ("", request.url.netloc):
+        return i18n.split_path(referer.path)[0]
+    if user is not None and not user.is_guest and user.lang in i18n.LANGUAGES:
+        return user.lang
+    return i18n.DEFAULT_LANG
+
+
+def _localized_event(event: dict, lang: str) -> dict:
+    """A crawl event with the crawler's stored English sentences (why it
+    stopped, why a page failed) in the reader's language. A copy: the same
+    event goes to every subscriber, each in their own language."""
+    if lang == i18n.DEFAULT_LANG:
+        return event
+    event = dict(event)
+    for key in ("stopped_reason", "error"):
+        if event.get(key):
+            event[key] = report.stored_text(event[key], lang)
+    if isinstance(event.get("page"), dict) and event["page"].get("error"):
+        event["page"] = {**event["page"], "error": report.stored_text(event["page"]["error"], lang)}
+    return event
 
 
 @app.post("/crawl/{run_id}/share")
@@ -1057,7 +1155,8 @@ async def toggle_share(
 
     new_state = payload.is_public if payload is not None and payload.is_public is not None else not run.is_public
     await db.set_run_public(run_id, new_state)
-    return JSONResponse({"is_public": new_state, "share_url": _share_url(run_id, request.state.surface)})
+    return JSONResponse({"is_public": new_state,
+                         "share_url": _share_url(run_id, request.state.surface, _reader_lang(request, user))})
 
 
 @app.post("/crawl/{run_id}/display-url")
@@ -1091,7 +1190,8 @@ async def email_share(
 
     email = payload.email.strip()
     if not email:
-        raise HTTPException(status_code=400, detail="An email address is required")
+        return JSONResponse({"code": "share_email_required", "detail": "An email address is required"},
+                            status_code=400)
 
     # The invite carries the public link, so it can't work while the report is
     # private — inviting someone is itself the intent to make the link work.
@@ -1099,21 +1199,22 @@ async def email_share(
         await db.set_run_public(run_id, True)
 
     await db.add_run_share(run_id, email)
+    # The sender's language: whoever receives this has no account to have a
+    # preference on, and the person choosing to share is the one whose words
+    # introduce it. Read from the page they shared from (see _reader_lang).
+    lang = _reader_lang(request, user)
     await send_share_notification(
         to_email=email,
         # The name reads better than a raw address in "X shared a report with
         # you", but not everyone's Google profile has one worth showing.
         shared_by=user.name or user.email,
         source_url=run.shown_url,
-        share_url=_share_url(run_id, request.state.surface),
+        share_url=_share_url(run_id, request.state.surface, lang),
         total_words=run.total_words,
         page_count=run.page_count,
         surface=request.state.surface,
         detected_cms=run.detected_cms,
-        # The sender's language: whoever receives this has no account to have a
-        # preference on, and the person choosing to share is the one whose
-        # words introduce it.
-        lang=request.state.lang,
+        lang=lang,
     )
     return JSONResponse(
         {"sent": True, "is_public": True, "recipients": await db.list_run_shares(run_id)}
@@ -1172,10 +1273,13 @@ async def crawl_events(job_id: str, request: Request, user: User | None = Depend
     if job is None or (user.is_guest and job.user_id != user.id):
         raise HTTPException(status_code=404, detail="Job not found")
 
+    lang = _reader_lang(request, None if user.is_guest else user)
+
     async def event_stream():
         for page in job.pages.values():
-            yield _sse("page", {"type": "page", "page": page.model_dump(), "total_words": job.total_words})
-        yield _sse("status", job.status_payload())
+            yield _sse("page", _localized_event(
+                {"type": "page", "page": page.model_dump(), "total_words": job.total_words}, lang))
+        yield _sse("status", _localized_event(job.status_payload(), lang))
 
         if job.status in _TERMINAL_STATUSES:
             return
@@ -1191,7 +1295,7 @@ async def crawl_events(job_id: str, request: Request, user: User | None = Depend
                 except asyncio.TimeoutError:
                     yield ": keep-alive\n\n"
                     continue
-                yield _sse(event["type"], event)
+                yield _sse(event["type"], _localized_event(event, lang))
                 if event["type"] == "status" and event.get("status") in _TERMINAL_STATUSES:
                     break
         finally:
@@ -1787,8 +1891,9 @@ async def _owned_runs(user: User, run_ids: list[str]) -> list[str]:
     return owned
 
 
-def _project_share_url(project_id: str, surface=None) -> str | None:
-    return absolute_url(f"/projects/share/{project_id}", surface)
+def _project_share_url(project_id: str, surface=None, lang: str = i18n.DEFAULT_LANG) -> str | None:
+    """In the sharer's language, like _share_url."""
+    return absolute_url(i18n.localized_path(f"/projects/share/{project_id}", lang), surface)
 
 
 # ---------- Articles, robots.txt and the sitemap ----------
@@ -1812,24 +1917,37 @@ async def article_page(slug: str, request: Request, user: User | None = Depends(
 async def robots_txt(request: Request):
     """Reports, projects and accounts stay out of search; the front door, the
     MCP guide and the articles are in the sitemap."""
-    lines = ["User-agent: *", "Disallow: /crawl/", "Disallow: /share/", "Disallow: /projects", "Disallow: /runs",
-             "Disallow: /admin", "Disallow: /account", "Disallow: /mcp/", "Allow: /",
-             f"Sitemap: {request.state.surface.url('/sitemap.xml')}"]
+    private = ["/crawl/", "/share/", "/projects", "/runs", "/admin", "/account", "/mcp/"]
+    # Robots rules match by prefix, so /share/ alone leaves /de/share/ open:
+    # every language's copy of a private path is listed too.
+    lines = ["User-agent: *"]
+    for code in i18n.LANGUAGES:
+        lines += [f"Disallow: {i18n.localized_path(path, code)}" for path in private]
+    lines += ["Allow: /", f"Sitemap: {request.state.surface.url('/sitemap.xml')}"]
     return Response("\n".join(lines) + "\n", media_type="text/plain")
 
 
 @app.get("/sitemap.xml")
 async def sitemap_xml(request: Request):
+    """Each published language's version is its own <url>, and each lists the
+    full set (itself and x-default included), which is what hreflang in a
+    sitemap requires. Articles are English only, so they have no alternates."""
     surface = request.state.surface
+    published = i18n.published_languages()
     paths = ["/", "/mcp", "/articles"] + [f"/articles/{a.slug}" for a in articles.ARTICLES]
     entries = []
     for path in paths:
+        if path.startswith("/articles/"):
+            entries.append(f"<url><loc>{escape(surface.url(path))}</loc></url>")
+            continue
         alternates = "".join(
             f'<xhtml:link rel="alternate" hreflang="{i18n.HREFLANG.get(code, code)}" '
             f'href="{escape(surface.url(i18n.localized_path(path, code)))}"/>'
-            for code in i18n.LANGUAGES
-        ) if not path.startswith("/articles/") else ""
-        entries.append(f"<url><loc>{escape(surface.url(path))}</loc>{alternates}</url>")
+            for code in published
+        ) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{escape(surface.url(path))}"/>'
+        for code in published:
+            loc = surface.url(i18n.localized_path(path, code))
+            entries.append(f"<url><loc>{escape(loc)}</loc>{alternates}</url>")
     body = ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
             + "".join(entries) + "</urlset>\n")
@@ -1903,6 +2021,9 @@ async def mcp_page(request: Request, user: User | None = Depends(get_current_use
         "user": user,
         "endpoint": request.state.surface.url("/mcp"),
         "tools": mcp_server.TOOLS,
+        # The page quotes the pause threshold as a number, formatted there for
+        # the reader rather than written into the copy.
+        "pause_at_words": PAUSE_AT_WORDS,
     })
 
 
@@ -1961,7 +2082,9 @@ async def mcp_no_sessions_with_key(token: str):
 @app.get("/projects")
 async def projects_home(request: Request, user: User = Depends(require_user)):
     if user.is_guest:
-        return RedirectResponse("/auth/login?" + urlencode({"next": "/projects"}), status_code=303)
+        return RedirectResponse(
+            "/auth/login?" + urlencode({"next": i18n.localized_path("/projects", request.state.lang)}),
+            status_code=303)
     loose = await db.list_runs_not_in_project(user.id, limit=20)
     return templates.TemplateResponse(
         request,
@@ -1977,7 +2100,7 @@ async def projects_home(request: Request, user: User = Depends(require_user)):
 
 
 @app.post("/projects")
-async def create_project(payload: ProjectRequest, user: User = Depends(require_user_api)):
+async def create_project(payload: ProjectRequest, request: Request, user: User = Depends(require_user_api)):
     if user.is_guest:
         raise HTTPException(status_code=403, detail="Sign in to make projects")
     if not payload.name.strip():
@@ -1987,7 +2110,10 @@ async def create_project(payload: ProjectRequest, user: User = Depends(require_u
     if run_ids:
         await db.add_runs_to_project(project["id"], run_ids[: projects.MAX_RUNS])
     await consolidation_job.refresh(project["id"], "created")
-    return JSONResponse({"id": project["id"], "url": f"/projects/{project['id']}"})
+    # app.js goes straight there, so it opens in the language of the page
+    # the project was made from.
+    url = i18n.localized_path(f"/projects/{project['id']}", _reader_lang(request, user))
+    return JSONResponse({"id": project["id"], "url": url})
 
 
 @app.get("/projects/share/{project_id}")
@@ -1999,7 +2125,7 @@ async def shared_project_page(project_id: str, request: Request):
     return await _project_client_view(request, project, None)
 
 
-async def _project_view(project_id: str) -> dict:
+async def _project_view(project_id: str, lang: str = i18n.DEFAULT_LANG) -> dict:
     """What a project page shows: the last consolidation, the job's state, and
     a row per crawl — the consolidated ones in the order they were read, then
     any it doesn't have yet (still crawling, or added since)."""
@@ -2024,7 +2150,7 @@ async def _project_view(project_id: str) -> dict:
         names = {**result.get("names", {}), **names}
     return {
         "c": result,
-        "job": await consolidation_job.status(project_id),
+        "job": report.consolidation_status(await consolidation_job.status(project_id), lang),
         "rows": rows,
         "names": names,
         "run_count": len(summaries),
@@ -2033,7 +2159,7 @@ async def _project_view(project_id: str) -> dict:
 
 
 async def _project_client_view(request: Request, project: dict, user: User | None):
-    view = await _project_view(project["id"])
+    view = await _project_view(project["id"], request.state.lang)
     return templates.TemplateResponse(
         request,
         "project_client.html",
@@ -2042,7 +2168,8 @@ async def _project_client_view(request: Request, project: dict, user: User | Non
             "project": project,
             **view,
             "is_owner": user is not None,
-            "share_link": _project_share_url(project["id"], request.state.surface) if project["is_public"] else None,
+            "share_link": (_project_share_url(project["id"], request.state.surface, request.state.lang)
+                           if project["is_public"] else None),
         },
     )
 
@@ -2056,7 +2183,7 @@ async def project_client_preview(project_id: str, request: Request, user: User =
 @app.get("/projects/{project_id}")
 async def project_page(project_id: str, request: Request, user: User = Depends(require_user)):
     project = await _project_or_404(user, project_id)
-    view = await _project_view(project_id)
+    view = await _project_view(project_id, request.state.lang)
     return templates.TemplateResponse(
         request,
         "project.html",
@@ -2066,7 +2193,7 @@ async def project_page(project_id: str, request: Request, user: User = Depends(r
             **view,
             "addable_runs": await db.list_runs_not_in_project(user.id, project_id, limit=100),
             "max_runs": projects.MAX_RUNS,
-            "share_link": _project_share_url(project_id, request.state.surface),
+            "share_link": _project_share_url(project_id, request.state.surface, request.state.lang),
         },
     )
 
@@ -2086,7 +2213,8 @@ async def share_project(project_id: str, request: Request, payload: ShareToggleR
     project = await _project_or_404(user, project_id)
     state = payload.is_public if payload is not None and payload.is_public is not None else not project["is_public"]
     await db.set_project_public(project_id, state)
-    return JSONResponse({"is_public": state, "share_url": _project_share_url(project_id, request.state.surface)})
+    return JSONResponse({"is_public": state, "share_url": _project_share_url(
+        project_id, request.state.surface, _reader_lang(request, user))})
 
 
 @app.delete("/projects/{project_id}")
@@ -2118,18 +2246,18 @@ async def remove_project_run(project_id: str, run_id: str, user: User = Depends(
 
 
 @app.post("/projects/{project_id}/consolidate")
-async def consolidate_project(project_id: str, user: User = Depends(require_user_api)):
+async def consolidate_project(project_id: str, request: Request, user: User = Depends(require_user_api)):
     """The Consolidate button: goes through every crawl in the project again."""
     await _project_or_404(user, project_id)
     await consolidation_job.request(project_id, "button")
-    return JSONResponse(await consolidation_job.status(project_id))
+    return JSONResponse(report.consolidation_status(await consolidation_job.status(project_id), request.state.lang))
 
 
 @app.get("/projects/{project_id}/consolidation")
-async def project_consolidation_status(project_id: str, user: User = Depends(require_user_api)):
+async def project_consolidation_status(project_id: str, request: Request, user: User = Depends(require_user_api)):
     """Polled by the project page while a consolidation runs."""
     await _project_or_404(user, project_id)
-    return JSONResponse(await consolidation_job.status(project_id))
+    return JSONResponse(report.consolidation_status(await consolidation_job.status(project_id), request.state.lang))
 
 
 @app.post("/crawl/{run_id}/projects")

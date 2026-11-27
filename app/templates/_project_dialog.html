@@ -15,10 +15,11 @@
         <label class="project-option">
           <input type="checkbox" name="project" value="{{ p.id }}">
           <span class="project-option-name">{{ p.name }}</span>
+          {# Translators: how many crawls a project holds, in a project's one-line summary. #}
           <span class="project-option-meta">
-            {%- if p.run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(p.run_count)) }}{% endif -%}
-            {%- if p.cached_new_words is not none %} · {{ _('%(n)s new words', n=num(p.cached_new_words)) }}
-            {%- elif p.cached_words %} · {{ _('%(n)s words', n=num(p.cached_words)) }}{% endif -%}
+            {{- ngettext('%(n)s crawl', '%(n)s crawls', p.run_count or 0, n=num(p.run_count)) }}
+            {%- if p.cached_new_words is not none %} · {{ ngettext('%(n)s new word', '%(n)s new words', p.cached_new_words, n=num(p.cached_new_words)) }}
+            {%- elif p.cached_words %} · {{ ngettext('%(n)s word', '%(n)s words', p.cached_words, n=num(p.cached_words)) }}{% endif -%}
           </span>
         </label>
         {% endfor %}

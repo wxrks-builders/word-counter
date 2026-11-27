@@ -6,7 +6,8 @@
     <a class="logo" href="{{ url('/') }}">
       <img class="logo-img" src="/static/brand/logo.svg" alt="wxrks" width="123" height="28">
       <span class="logo-sep"></span>
-      <span class="logo-name">{{ surface.name }}</span>
+      {# The lockup is the brand mark, as in _topbar.html. #}
+      <span class="logo-name" translate="no">{{ surface.name }}</span>
     </a>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
       {% include "_lang_menu.html" %}
@@ -33,7 +34,10 @@
           </label>
         </form>
         {% if start_error %}<p class="field-error">{{ _('Please enter a valid http(s) URL') }}</p>{% endif %}
-        <p class="home-fine">{% include "_google_g.html" %} {{ _('Free to use. No sign-up to start. Sites over %(n)s words require Google sign-in to finish.', n=num(pause_at_words)) }}</p>
+        {# Translators: %(n)s is a number of words (the size at which a guest crawl pauses). #}
+        <p class="home-fine">{% include "_google_g.html" %} {{ ngettext('Free to use. No sign-up to start. Sites over %(n)s word require Google sign-in to finish.',
+                                                                        'Free to use. No sign-up to start. Sites over %(n)s words require Google sign-in to finish.',
+                                                                        pause_at_words, n=num(pause_at_words)) }}</p>
         {% include "_examples.html" %}
       </div>
       {# The WebGL scene fills the hero behind the copy. It is loaded after the
@@ -77,7 +81,8 @@
           <p>{{ _('Share a link with your client, export every page to CSV, or put a client’s sites in one project that counts each page and sentence once.') }}</p>
         </div>
       </div>
-      <p class="home-vs-more"><a href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}#compare">{{ _('All %(n)s differences, side by side', n=vs_ai.differences) }} {{ icon('arrow-right', 16) }}</a></p>
+      {# Translators: a link to a comparison table; %(n)s is how many rows it has. #}
+      <p class="home-vs-more"><a href="{{ url('/articles/how-many-words-claude-vs-word-counter') }}#compare">{{ ngettext('All %(n)s differences, side by side', 'All %(n)s differences, side by side', vs_ai.differences, n=num(vs_ai.differences)) }} {{ icon('arrow-right', 16) }}</a></p>
     </section>
     {% endif %}
 
@@ -109,7 +114,10 @@
     <section class="home-final">
       <h2>{{ _('Find out how much work is on your website.') }}</h2>
       <a class="button home-final-button" href="#site-url" data-focus-form>{{ _('Count my website’s words') }} {{ icon('arrow-right', 17) }}</a>
-      <p>{{ _('Free. No sign-up for sites under %(n)s words. Sign in with Google to finish larger sites.', n=num(pause_at_words)) }}</p>
+      {# Translators: %(n)s is a number of words (the size at which a guest crawl pauses). #}
+      <p>{{ ngettext('Free. No sign-up for sites under %(n)s word. Sign in with Google to finish larger sites.',
+                     'Free. No sign-up for sites under %(n)s words. Sign in with Google to finish larger sites.',
+                     pause_at_words, n=num(pause_at_words)) }}</p>
     </section>
   </main>
 

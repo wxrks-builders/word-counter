@@ -20,11 +20,14 @@
     <div class="user-menu-label">{{ _('Language') }}</div>
     <div class="lang-grid">
       {% for l in language_links %}
-      <a role="menuitem" href="{{ l.href }}" hreflang="{{ l.code }}"
+      {# lang on the name so a screen reader says "Deutsch" in German and
+         "日本語" in Japanese rather than spelling them out in the page's
+         language. data-lang-choice is what app.js remembers. #}
+      <a role="menuitem" href="{{ l.href }}" hreflang="{{ l.code }}" data-lang-choice="{{ l.code }}"
          class="lang-option{% if l.current %} is-current{% endif %}"
          {% if l.current %}aria-current="true"{% endif %}>
-        <span>{{ l.name }}</span>
-        <span class="lang-option-code">{{ l.code | upper }}</span>
+        <span lang="{{ l.code }}">{{ l.name }}</span>
+        <span class="lang-option-code" aria-hidden="true">{{ l.code | upper }}</span>
       </a>
       {% endfor %}
     </div>

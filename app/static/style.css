@@ -54,7 +54,9 @@
   --shadow-menu: 0 16px 64px #11141814; /* wx-shadow: menus and dialogs only */
   --ease: cubic-bezier(0.2, 0, 0, 1);
   /* The CJK and Arabic faces are fallbacks, not downloads: Urbanist has no
-     glyphs for ja, ko, zh or ar, and every OS ships one that does. */
+     glyphs for ja, ko, zh or ar, and every OS ships one that does. This stack
+     is for the Latin languages and for crawled text of unknown language; each
+     script gets its own below, by lang. */
   --font-sans: "Urbanist", -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
                "Yu Gothic UI", "Malgun Gothic", "Microsoft YaHei", "Geeza Pro",
                "Noto Sans Arabic", sans-serif;
@@ -63,6 +65,34 @@
   --font-mono: var(--font-sans);
   --font-code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
+
+/* A stack per script, chosen by lang. Chinese, Japanese and Korean share
+   characters drawn differently in each, so the one stack above (Japanese
+   faces first) gave Chinese readers Japanese glyph shapes. Urbanist stays
+   first: its unicode-range is Latin only, so digits, URLs and brand names
+   keep the house face and everything else falls through to the script's. */
+:lang(ar) {
+  --font-sans: "Urbanist", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Arabic",
+               "Geeza Pro", Tahoma, sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "Noto Sans Arabic", "Geeza Pro", monospace;
+}
+:lang(ja) {
+  --font-sans: "Urbanist", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic",
+               Meiryo, "Noto Sans JP", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "Hiragino Sans", "Yu Gothic UI", Meiryo, monospace;
+}
+:lang(ko) {
+  --font-sans: "Urbanist", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "Apple SD Gothic Neo", "Malgun Gothic", monospace;
+}
+:lang(zh) {
+  --font-sans: "Urbanist", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "PingFang SC", "Microsoft YaHei", monospace;
+}
+/* font-family inherits as a resolved list, so text in another language inside
+   a page (the language menu's 日本語, the "also in" banner) re-reads the stack
+   for its own lang. :where() keeps this below every class rule. */
+:where([lang]:not(html)) { font-family: var(--font-sans); }
 
 * { box-sizing: border-box; }
 
@@ -123,7 +153,9 @@ header.topbar {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 5px 14px 5px 5px;
+  /* The avatar sits at the start, so the tight side is the start side. */
+  padding-block: 5px;
+  padding-inline: 5px 14px;
   font-size: 13px;
 }
 .user-chip img, .user-chip .avatar {
@@ -138,6 +170,7 @@ header.topbar {
 /* The chip is a button now, so it has to shed the global button styling. */
 button.user-chip {
   height: auto;
+  min-height: 0;
   font-size: 13px;
   font-weight: 400;
   color: var(--text);
@@ -157,6 +190,33 @@ button.user-chip:hover { background: var(--card); border-color: #757D88; }
   }
   .user-chip .chev { display: none; }
   button.user-chip { padding: 4px; }
+}
+
+/* Both halves of the bar may shrink, so neither one's min-content can push
+   the page sideways — which a long "Sign in" (German, French) did on every
+   page at phone widths, off the right edge or, in Arabic, the left. */
+header.topbar > * { min-width: 0; }
+header.topbar > :not(.logo) { flex: 0 1 auto; }
+@media (max-width: 480px) {
+  /* The wordmark stays; the product name beside it goes to screen readers
+     only, since the logo, the language menu and a translated "Sign in" don't
+     fit beside it at 360px. */
+  header.topbar .logo-name {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  }
+  header.topbar .logo-sep { display: none; }
+  .topbar-right { gap: 8px; }
+  button.lang-btn { padding: 0 10px; }
+  .lang-btn .chev { display: none; }
+  /* Wraps onto two lines before it pushes anything off the screen. */
+  header.topbar .button.secondary {
+    min-width: 0;
+    padding: 4px 12px;
+    line-height: 1.2;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
 }
 
 .user-menu { position: relative; }
@@ -242,7 +302,9 @@ select.domain-scope, select#recrawl-domain-scope {
 }
 
 input.language-input {
-  width: 190px;
+  /* Sized for the placeholder in the longer languages, not for English. */
+  width: 14rem;
+  max-width: 100%;
   border: 1px solid var(--border-control);
   border-radius: 6px;
   height: 42px;
@@ -253,11 +315,14 @@ input.language-input {
   text-align: start;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   Heights are minimums throughout: a label that wraps in German or on a
+   phone grows the button instead of spilling out of it. Controls that must
+   stay a fixed square (icon buttons, the switch) reset min-height. */
 button, .button {
   border: none;
   border-radius: 6px;
-  height: 42px;
+  min-height: 42px;
   padding: 0 26px;
   font-size: 15px;
   font-weight: 600;
@@ -278,7 +343,7 @@ button.secondary, .button.secondary {
   background: var(--card);
   border: 1px solid var(--border-control);
   color: var(--text);
-  height: 38px;
+  min-height: 38px;
   padding: 0 18px;
   font-size: 13px;
 }
@@ -290,7 +355,7 @@ button.danger-outline {
   background: var(--card);
   border: 1px solid var(--border-control);
   color: var(--danger-text);
-  height: 38px;
+  min-height: 38px;
   padding: 0 18px;
   font-size: 13px;
   font-weight: 600;
@@ -303,7 +368,9 @@ button.danger-outline:hover { border-color: var(--danger-text); background: var(
   gap: 7px;
   font-size: 13px;
   color: var(--muted);
-  white-space: nowrap;
+  /* Wraps rather than nowrap: in a flex-wrap row it still moves to the next
+     line whole, and only wraps when one label is wider than a phone. */
+  white-space: normal;
   cursor: pointer;
   padding: 0 4px;
 }
@@ -388,7 +455,7 @@ button.danger-outline:hover { border-color: var(--danger-text); background: var(
 .promo .button,
 .promo a.button {
   flex-shrink: 0;
-  height: 34px;
+  min-height: 34px;
   padding: 0 15px;
   font-size: 12.5px;
   font-weight: 600;
@@ -537,7 +604,9 @@ input.exclusions-input {
   background: var(--brand-tint);
   color: var(--brand);
   border-radius: 6px;
-  padding: 4px 4px 4px 9px;
+  /* Tight on the end side, where the × sits. */
+  padding-block: 4px;
+  padding-inline: 9px 4px;
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.4;
@@ -557,6 +626,7 @@ button.tag-remove {
   font-size: 15px;
   line-height: 1;
   height: auto;
+  min-height: 0;
   padding: 0 4px;
   cursor: pointer;
   opacity: 0.6;
@@ -767,6 +837,7 @@ ul.recent-runs a.run-row:hover { background: #F7F8FA; text-decoration: none; }
   justify-content: center;
   width: 32px;
   height: 32px;
+  min-height: 0;
   padding: 0;
   color: var(--muted);
   background: none;
@@ -790,7 +861,7 @@ ul.recent-runs a.run-row:hover { background: #F7F8FA; text-decoration: none; }
   border-radius: 6px;
 }
 .edit-url-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.edit-url-row button { height: 40px; padding: 0 18px; font-size: 13px; }
+.edit-url-row button { min-height: 40px; padding: 0 18px; font-size: 13px; }
 .edit-url-hint { margin: 6px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
 .crawled-from { margin-top: 2px; font-size: 12.5px; }
 .header-actions {
@@ -807,7 +878,7 @@ ul.recent-runs a.run-row:hover { background: #F7F8FA; text-decoration: none; }
   min-width: 0;
   margin-top: 8px;
 }
-.header-actions #share-btn { gap: 9px; height: 38px; padding: 0 20px; font-size: 13px; }
+.header-actions #share-btn { gap: 9px; min-height: 38px; padding: 0 20px; font-size: 13px; }
 .header-actions #share-btn svg { width: 15px; height: 15px; }
 
 /* The Export and ⋯ menus — same panel the header's other menus use, because
@@ -831,6 +902,7 @@ ul.recent-runs a.run-row:hover { background: #F7F8FA; text-decoration: none; }
   display: block;
   width: 100%;
   height: auto;
+  min-height: 0;
   padding: 8px 10px;
   border: none;
   border-radius: 6px;
@@ -1000,15 +1072,16 @@ ul.issues-list .issue-reason {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 34px;
-  padding: 0 14px;
+  /* A minimum, and allowed to wrap: "3 blocked · 12 failed" runs long in
+     German, and on a phone one chip can be wider than the screen. */
+  min-height: 34px;
+  padding: 4px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--card);
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  white-space: nowrap;
   list-style: none;
 }
 .run-chip::-webkit-details-marker { display: none; }
@@ -1018,6 +1091,9 @@ ul.issues-list .issue-reason {
   color: var(--faint);
   transition: transform 0.15s ease;
 }
+/* Closed, the triangle points along the reading direction; open, it points
+   down, which is the same in both. */
+[dir="rtl"] .run-chip::after { transform: scaleX(-1); }
 .run-disclosure[open] > .run-chip::after { transform: rotate(90deg); }
 .run-chip:hover { border-color: #757D88; }
 
@@ -1052,10 +1128,12 @@ ul.issues-list .issue-reason {
 #recrawl-form .field,
 #recrawl-form input,
 #recrawl-form select { height: 34px; font-size: 13px; }
-#recrawl-form input.language-input { width: 150px; }
-#recrawl-form input.recrawl-exclusions { width: 210px; }
+/* Wide enough for the placeholder in the longer languages ("Sprache
+   (automatisch)"); the form wraps, so the extra width costs nothing. */
+#recrawl-form input.language-input { width: 11rem; }
+#recrawl-form input.recrawl-exclusions { width: 16rem; max-width: 100%; }
 #recrawl-form select { font-size: 12.5px; }
-#recrawl-form button[type="submit"] { height: 34px; padding: 0 16px; font-size: 13px; }
+#recrawl-form button[type="submit"] { min-height: 34px; height: auto; padding: 0 16px; font-size: 13px; }
 
 /* ---------- Share modal ---------- */
 .modal-overlay {
@@ -1100,8 +1178,10 @@ ul.issues-list .issue-reason {
   font-size: 22px;
   line-height: 1;
   height: auto;
+  min-height: 0;
   padding: 2px 4px;
-  margin: -2px -4px 0 0;
+  margin-block: -2px 0;
+  margin-inline: 0 -4px;
 }
 .modal-close:hover { background: none; color: var(--text); }
 .modal-body { padding: 18px 24px 20px; }
@@ -1125,7 +1205,7 @@ ul.issues-list .issue-reason {
 }
 .share-invite-row button[type="submit"] {
   flex-shrink: 0;
-  height: 44px;
+  min-height: 44px;
   padding: 0 22px;
   border-radius: 10px;
   font-size: 14px;
@@ -1177,6 +1257,7 @@ ul.issues-list .issue-reason {
   border: none;
   color: var(--faint);
   height: auto;
+  min-height: 0;
   padding: 4px 6px;
   font-size: 17px;
   line-height: 1;
@@ -1190,6 +1271,7 @@ ul.issues-list .issue-reason {
   justify-content: flex-start;
   width: 46px;
   height: 26px;
+  min-height: 0;
   padding: 3px;
   border: none;
   border-radius: 999px;
@@ -1208,6 +1290,9 @@ ul.issues-list .issue-reason {
   transition: transform 0.18s ease;
 }
 .switch[aria-checked="true"] .switch-knob { transform: translateX(20px); }
+/* The knob starts at the inline start (justify-content: flex-start), which is
+   the right in Arabic, so "on" moves it left rather than off the track. */
+[dir="rtl"] .switch[aria-checked="true"] .switch-knob { transform: translateX(-20px); }
 
 .share-link-row {
   display: flex;
@@ -1227,7 +1312,7 @@ ul.issues-list .issue-reason {
   background: var(--card);
   color: var(--muted);
 }
-.share-link-row button { height: 42px; border-radius: 10px; flex-shrink: 0; }
+.share-link-row button { min-height: 42px; border-radius: 10px; flex-shrink: 0; }
 
 /* ---------- Pre-crawl estimate panel ---------- */
 .estimate-panel {
@@ -1257,12 +1342,14 @@ ul.issues-list .issue-reason {
 .estimate-duration .big { font-family: var(--font-mono); font-size: 30px; font-weight: 600; }
 .estimate-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* minmax(0, …): a bare 1fr can't shrink below its longest word, so one
+     long German label pushed the grid past a phone's edge. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
   margin: 14px 0;
 }
 @media (max-width: 640px) {
-  .estimate-stats { grid-template-columns: repeat(2, 1fr); }
+  .estimate-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .estimate-stat .muted {
   font-size: 11px;
@@ -1403,7 +1490,7 @@ button.lang-btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  height: 36px;
+  min-height: 36px;
   padding: 0 13px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -1497,7 +1584,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 
 .platform-form { display: flex; gap: 6px; align-items: center; }
 .platform-form select { height: 30px; font-size: 12.5px; }
-.platform-form button { height: 30px; padding: 0 10px; font-size: 12.5px; }
+.platform-form button { min-height: 30px; padding: 0 10px; font-size: 12.5px; }
 
 
 .examples {
@@ -1603,7 +1690,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
   border: 1px solid var(--border-control);
   border-radius: 6px;
 }
-.home-form-row button { height: 48px; padding: 0 20px; font-size: 15px; }
+.home-form-row button { min-height: 48px; padding: 0 20px; font-size: 15px; }
 .home-md { margin-top: 12px; font-size: 14px; color: var(--muted); }
 .home-fine { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; font-size: 13px; color: var(--muted); }
 .home-fine svg { flex-shrink: 0; width: 16px; height: 16px; }
@@ -1676,7 +1763,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
   text-wrap: balance;
 }
 .home-final h2::before { content: ""; display: block; width: 28px; height: 4px; margin: 0 auto 24px; background: var(--brand-green); border-radius: 2px; }
-.home-final .home-final-button { gap: 8px; height: 48px; margin-top: 32px; padding: 0 22px; color: #181B1F; background: #F1F4F7; }
+.home-final .home-final-button { gap: 8px; min-height: 48px; margin-top: 32px; padding: 0 22px; color: #181B1F; background: #F1F4F7; }
 .home-final .home-final-button:hover { color: #181B1F; background: #DDE3E9; text-decoration: none; }
 .home-final p { margin: 16px 0 0; font-size: 14px; color: #B0BBC7; }
 
@@ -1716,6 +1803,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 .mock-bar { position: absolute; inset-block: 0; inset-inline-start: 0; width: var(--w); background: var(--folder-bar); border-radius: 4px; transform-origin: left center; }
 [dir="rtl"] .mock-bar { transform-origin: right center; }
 .mock-bars li:first-child .mock-bar, .mock-toplist li:first-child .mock-bar { box-shadow: inset 3px 0 0 var(--brand-green); }
+[dir="rtl"] .mock-bars li:first-child .mock-bar, [dir="rtl"] .mock-toplist li:first-child .mock-bar { box-shadow: inset -3px 0 0 var(--brand-green); }
 .mock-bar-name, .mock-bar-value { position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mock-bar-value { flex-shrink: 0; font-weight: 600; }
 .mock-csv { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding-top: 14px; font-size: 13px; font-weight: 500; border-top: 1px solid var(--border); }
@@ -1739,6 +1827,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 .wire-h { width: 55%; height: 12px; background: var(--text); border-radius: 3px; }
 .wire-line { position: relative; width: var(--w); height: 7px; overflow: hidden; background: var(--folder-bar); border-radius: 3px; }
 .wire-line::after { content: ""; position: absolute; inset: 0; background: var(--text); opacity: 0.72; transform-origin: left center; }
+[dir="rtl"] .wire-line::after { transform-origin: right center; }
 .wire-count {
   position: absolute;
   inset-inline-end: -18px;
@@ -1781,6 +1870,8 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
   transform: translate(calc(var(--i) * 14px), calc(var(--i) * -12px));
   opacity: calc(1 - var(--i) * 0.3);
 }
+/* The files behind fan out towards the end side, in either direction. */
+[dir="rtl"] .md-file { transform: translate(calc(var(--i) * -14px), calc(var(--i) * -12px)); }
 /* The front file is in the flow and sets the stack's height; the two behind it fill that. */
 .md-front { position: relative; z-index: 1; padding: 12px 16px 16px; }
 .md-name { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; padding-bottom: 8px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); }
@@ -1788,20 +1879,23 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 .md-zip { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 13px; font-weight: 500; background: var(--card); border: 1px solid var(--border); border-radius: 6px; }
 .md-zip-count { font-weight: 400; color: var(--muted); }
 
-/* One height for all three, so the icons and headings below line up across the cards. */
-.mini { display: grid; place-content: center; height: 156px; margin-bottom: 20px; padding: 16px; overflow: hidden; background: var(--surface-subtle); border-radius: 7px; }
-.mini-seg { display: inline-flex; overflow: hidden; font-size: 12px; border: 1px solid var(--border-control); border-radius: 6px; }
-.mini-seg span { padding: 6px 9px; white-space: nowrap; background: var(--card); }
+/* One height for all three, so the icons and headings below line up across
+   the cards — as a minimum, so a longer translation grows the box instead of
+   being clipped by it. */
+.mini { display: grid; place-content: center; min-height: 156px; margin-bottom: 20px; padding: 16px; overflow: hidden; background: var(--surface-subtle); border-radius: 7px; }
+.mini-seg { display: inline-flex; max-width: 100%; overflow: hidden; font-size: 12px; border: 1px solid var(--border-control); border-radius: 6px; }
+/* Each segment wraps its own label, so the three stay one control. */
+.mini-seg span { display: flex; align-items: center; padding: 6px 9px; background: var(--card); }
 .mini-seg span + span { border-inline-start: 1px solid var(--border); }
 .mini-seg .on { color: var(--card); background: var(--text); }
 .mini-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .mini-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; font-size: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 4px; }
 .mini-chip svg { color: var(--muted); }
-.mini-paths { display: grid; gap: 6px; width: 200px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+.mini-paths { display: grid; gap: 6px; width: min(100%, 200px); margin: 0; padding: 0; list-style: none; font-size: 13px; }
 .mini-paths li { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; color: var(--muted); text-decoration: line-through; background: var(--card); border: 1px solid var(--border); border-radius: 6px; }
 .mini-paths li.kept { color: var(--text); text-decoration: none; }
 .mini-paths li.kept svg { color: var(--accent); }
-.mini-auth { width: 210px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-menu); }
+.mini-auth { width: min(100%, 210px); padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-menu); }
 .mini-auth-host { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
 .mini-field { display: block; height: 30px; margin-top: 8px; padding: 6px 10px; font-size: 13px; border: 1px solid var(--border-control); border-radius: 6px; }
 
@@ -1809,6 +1903,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 .est-stats strong { display: block; margin-top: 4px; font-size: 23px; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .est-track { position: relative; height: 6px; background: var(--folder-bar); border-radius: 999px; }
 .est-fill { position: absolute; inset-block: 0; inset-inline-start: 0; width: 38%; background: var(--text); border-radius: 999px; transform-origin: left center; }
+[dir="rtl"] .est-fill { transform-origin: right center; }
 .est-mark { position: absolute; inset-inline-start: 38%; top: -5px; width: 2px; height: 16px; background: var(--accent); }
 .est-note { margin-top: 8px; font-size: 12px; color: var(--muted); }
 .est-google { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 8px 16px; font-size: 13px; font-weight: 500; background: var(--card); border: 1px solid var(--border-control); border-radius: 999px; }
@@ -1846,8 +1941,10 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  height: 44px;
-  padding: 0 16px 0 14px;
+  min-height: 44px;
+  /* The logo sits at the start. */
+  padding-block: 0;
+  padding-inline: 14px 16px;
   font-size: 15px;
   font-weight: 500;
   color: var(--text);
@@ -1896,7 +1993,7 @@ a.lang-option.is-current .lang-option-code { color: var(--brand); }
 .tc-where a { color: var(--muted); }
 .tc-chips { white-space: normal; min-width: 90px; }
 .tc-chip {
-  display: inline-block; margin: 0 4px 4px 0; padding: 1px 6px;
+  display: inline-block; margin-block: 0 4px; margin-inline: 0 4px; padding: 1px 6px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
   color: var(--brand); background: var(--brand-tint); border-radius: 4px;
 }
@@ -1987,7 +2084,7 @@ td.tc-missing, span.tc-missing, .tc-tab.tc-missing { background: var(--surface-s
   flex: 1 1 auto; min-width: 0; height: 42px; padding: 0 12px; font-size: 14px;
   border: 1px solid var(--border-control); border-radius: 6px; background: var(--bg-input); color: var(--text);
 }
-.projects-create button { height: 42px; }
+.projects-create button { min-height: 42px; }
 .project-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 28px; }
 .project-card {
   display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; color: var(--text); text-decoration: none;
@@ -2010,7 +2107,7 @@ td.tc-missing, span.tc-missing, .tc-tab.tc-missing { background: var(--surface-s
 .loose-run-url { font-family: var(--font-mono); color: var(--brand); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .loose-run .run-words { text-align: end; font-weight: 600; }
 .loose-run .run-date { text-align: end; color: var(--muted); }
-.loose-run-add { height: 30px; padding: 0 10px; font-size: 12px; }
+.loose-run-add { min-height: 30px; padding: 0 10px; font-size: 12px; }
 
 .project-empty { padding: 40px 0; }
 .project-notice { margin: 18px 0 0; padding: 12px 16px; max-width: 760px; font-size: 13px; line-height: 1.5; color: var(--warn-text); background: var(--warn-bg); border-radius: 10px; }
@@ -2047,7 +2144,7 @@ table.project-crawls td:first-child { min-width: 200px; }
 .project-crawls tfoot td { font-weight: 700; border-top: 2px solid var(--border); }
 .overlap-tabs { display: flex; gap: 4px; margin: 8px 0 18px; border-bottom: 1px solid var(--border); }
 .overlap-tabs button[role=tab] {
-  height: auto; padding: 10px 14px; margin-bottom: -1px; background: none; color: var(--muted);
+  height: auto; min-height: 0; padding: 10px 14px; margin-bottom: -1px; background: none; color: var(--muted);
   border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-weight: 600;
 }
 .overlap-tabs button[role=tab]:hover { background: none; color: var(--text); }
@@ -2104,13 +2201,14 @@ table.project-sites td { vertical-align: top; }
 .client-note { margin: 0; font-size: 14px; color: var(--muted); max-width: 70ch; }
 .client-section h2 { margin: 0 0 12px; font-size: 20px; font-weight: 600; }
 .client-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.client-table th { position: static; background: none; border-bottom: 1px solid var(--text); padding: 10px 8px 10px 0; }
-.client-table td { padding: 12px 8px 12px 0; border-bottom: 1px solid var(--border); }
+.client-table th { position: static; background: none; border-bottom: 1px solid var(--text); padding-block: 10px; padding-inline: 0 8px; }
+.client-table td { padding-block: 12px; padding-inline: 0 8px; border-bottom: 1px solid var(--border); }
 .client-together td { font-weight: 600; }
 .client-pct { color: var(--muted); font-weight: 400 !important; }
 .client-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
 .client-out { padding-top: 24px; border-top: 1px solid var(--border); }
 .client-out p { margin: 0 0 8px; font-size: 14px; color: var(--muted); max-width: 72ch; }
+.client-out-list { margin: 0 0 8px; padding-inline-start: 1.2em; font-size: 14px; color: var(--muted); max-width: 72ch; }
 .client-credit { font-size: 13px !important; color: var(--faint) !important; }
 @media (max-width: 640px) {
   /* A site per card: the table would hide "Adds" off to the side. */
@@ -2187,6 +2285,9 @@ table.project-sites td { vertical-align: top; }
 .rep-table td.muted { font-size: 14px; }
 .rep-table td.strong { font-weight: 600; }
 .col-num, th.col-num { text-align: end; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* The numbers don't wrap; their headers do. "Repeated words" in a 136px
+   column is one line in English and three words of German. */
+thead th.col-num { white-space: normal; }
 .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* ---------- Report: summary band ---------- */
@@ -2216,7 +2317,7 @@ table.project-sites td { vertical-align: top; }
   color: var(--muted);
 }
 .live-strip .why-slow { order: 2; margin: 0; }
-.live-strip #cancel-btn { order: 3; height: 34px; margin-inline-start: auto; padding: 0 14px; }
+.live-strip #cancel-btn { order: 3; min-height: 34px; margin-inline-start: auto; padding: 0 14px; }
 /* Opened, the explanation takes a line of its own under the strip. */
 .live-strip .why-slow[open] { order: 4; flex-basis: 100%; }
 .section-aside { font-size: 13px; color: var(--muted); }
@@ -2251,6 +2352,7 @@ table.project-sites td { vertical-align: top; }
   gap: 6px;
   width: auto;
   height: auto;
+  min-height: 0;
   padding: 0;
   font: inherit;
   font-weight: 600;
@@ -2399,7 +2501,7 @@ table.project-sites td { vertical-align: top; }
 .doc-steps p { margin: 0 0 8px; color: var(--muted); font-size: 15px !important; }
 .doc-tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 .doc-tabs button[role=tab] {
-  height: auto; padding: 10px 14px; margin-bottom: -1px; background: none; color: var(--muted);
+  height: auto; min-height: 0; padding: 10px 14px; margin-bottom: -1px; background: none; color: var(--muted);
   border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-weight: 600;
 }
 .doc-tabs button[role=tab]:hover { background: none; color: var(--text); }
@@ -2409,18 +2511,23 @@ table.project-sites td { vertical-align: top; }
 .doc-panel + .doc-panel { margin-top: 28px; }
 .doc-panel h3 { font-size: 20px; margin-bottom: 10px; }
 .doc-list { padding-inline-start: 22px; margin: 0 0 12px; }
-.doc-code { position: relative; margin: 12px 0 16px; }
+/* Commands, URLs and JSON read left to right in every language, and the copy
+   button sits at their end — so the block is LTR as a whole, button too. */
+.doc-code { position: relative; margin: 12px 0 16px; direction: ltr; unicode-bidi: isolate; }
 .doc-code pre {
   margin: 0; padding: 16px 18px; padding-inline-end: 100px; overflow-x: auto; background: #181B1F; color: #E8ECF0;
   border-radius: 10px; font-family: var(--font-code); font-size: 13.5px; line-height: 1.6; white-space: pre;
 }
 .doc-code code { font-family: inherit; }
-button.doc-copy { position: absolute; inset-block-start: 10px; inset-inline-end: 10px; height: 30px; padding: 0 12px; font-size: 12px; background: #2A2F36; color: #fff; border: 1px solid #3A4048; }
+button.doc-copy { position: absolute; inset-block-start: 10px; inset-inline-end: 10px; min-height: 30px; padding: 0 12px; font-size: 12px; background: #2A2F36; color: #fff; border: 1px solid #3A4048; }
 button.doc-copy:hover { background: #343A42; color: #fff; }
 .doc-prompts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .doc-prompts li { padding: 14px 18px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-subtle); }
-.doc-prompts li::before { content: "“"; color: var(--faint); margin-inline-end: 2px; }
-.doc-prompts li::after { content: "”"; color: var(--faint); }
+/* The language's own quotation marks — „…“ in German, « … » in French,
+   「…」 in Japanese — rather than English ones written into the stylesheet. */
+.doc-prompts li { quotes: auto; }
+.doc-prompts li::before { content: open-quote; color: var(--faint); margin-inline-end: 2px; }
+.doc-prompts li::after { content: close-quote; color: var(--faint); }
 .doc-tools code, .doc-page p code { font-family: var(--font-code); font-size: 13.5px; }
 .doc-tools td { vertical-align: top; font-size: 15px; line-height: 1.5; }
 .doc-tools td:first-child { white-space: nowrap; }
@@ -2605,7 +2712,7 @@ button.doc-copy:hover { background: #343A42; color: #fff; }
 .article-compare tbody th[scope="row"] { font-weight: 600; }
 .article-compare .compare-group th { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--bg); padding: 26px 14px 8px; border-bottom: 1px solid var(--border-control); }
 .article-compare tbody:first-of-type .compare-group th { padding-top: 16px; }
-.compare-state { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; padding: 2px 9px 2px 6px; border-radius: 999px; font-size: 12.5px; font-weight: 700; line-height: 1.5; }
+.compare-state { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; padding-block: 2px; padding-inline: 6px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 700; line-height: 1.5; }
 .compare-state.is-yes { background: var(--success-bg); color: var(--success-text); }
 .compare-state.is-partly { background: var(--warn-bg); color: var(--warn-text); }
 .compare-state.is-no { background: var(--danger-bg); color: var(--danger-text); }
@@ -2643,4 +2750,154 @@ button.doc-copy:hover { background: #343A42; color: #fff; }
   .article-card { grid-template-columns: minmax(0, 1fr); }
   .article-bar { grid-template-columns: minmax(0, 1fr) auto; }
   .article-bar-track { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ==========================================================================
+   Every language (see the localize-design skill and LOCALIZATION.md)
+   ========================================================================== */
+
+/* ---------- Run lists: columns sized by the widest row ----------
+   The fixed tracks above (132/84/100/172px) fit English; "12.345 Seiten" or
+   "Abgeschlossen" ran out of theirs into the next. With subgrid every row
+   shares one set of tracks sized to the widest cell in any row, so the
+   numbers still line up down the list and the columns grow with the words. */
+@supports (grid-template-columns: subgrid) {
+  @media (min-width: 721px) {
+    ul.recent-runs {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) repeat(4, max-content);
+      column-gap: 20px;
+    }
+    ul.recent-runs li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+    ul.recent-runs a.run-row { grid-column: 1 / -1; grid-template-columns: subgrid; }
+  }
+}
+
+/* ---------- Headings and labels that meet a long word ----------
+   German and Swedish compounds are longer than any English word, and a
+   heading or a label in a narrow card has nowhere to put one. */
+h1, h2, h3 { overflow-wrap: break-word; }
+.stat-label, .stat-card .muted, .estimate-stat .muted, .section-label, th { overflow-wrap: break-word; }
+:is(h1, h2, h3, th, .stat-label, .stat-card .muted, .estimate-stat .muted, .section-label, .user-menu-label):is(:lang(de), :lang(sv)) {
+  hyphens: auto;
+}
+
+/* ---------- Right to left ---------- */
+/* Addresses, paths and emails read left to right inside Arabic too. Without
+   this, a path's leading slash jumps to the far end ("careers/"). Aligned to
+   the end, which in an LTR box is the right — where an Arabic column starts. */
+[dir="rtl"] :is(#report-url, td.url-cell, ol#top-pages-list .path, ul.issues-list .issue-url, .loose-run-url,
+                .example-host, .share-link span, .mock-host, .mock-bar-name, .user-menu-email, .person-email) {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: end;
+}
+[dir="rtl"] :is(input[type="url"], input[type="email"], #edit-url-input, #share-link-input) {
+  direction: ltr;
+  text-align: end;
+}
+/* ...but an empty field shows an Arabic placeholder, which reads right to left. */
+[dir="rtl"] :is(input[type="url"], input[type="email"], #edit-url-input):placeholder-shown {
+  direction: rtl;
+  text-align: start;
+}
+/* Inline code (a path, a cookie, a command) is LTR in any sentence. */
+[dir="rtl"] :is(code, kbd, samp) { direction: ltr; unicode-bidi: isolate; }
+
+/* The hero's glow follows its subject, which sits at the inline end on
+   desktop: the left in Arabic. */
+@media (min-width: 901px) {
+  [dir="rtl"] .home-webgl::before { background: radial-gradient(ellipse at 27% 49%, #C9CED750, transparent 47%); }
+}
+
+/* Arrows that point along the reading direction ("Older →", "← Back") when
+   they sit outside a translated message. Inside a message the translator
+   writes the arrow their language needs; this is for the ones the template
+   adds. Logos, clocks and ↗ (a link leaving the site) don't mirror. */
+[dir="rtl"] .dir-arrow { display: inline-block; transform: scaleX(-1); }
+/* Icons that point along the reading direction (app/icons.py adds icon-<name>).
+   A printer, a lock or the download arrow mean the same either way round. */
+[dir="rtl"] .icon-arrow-right { transform: scaleX(-1); }
+
+/* ---------- Scripts other than Latin ----------
+   Set on the root of each language — the page, or the banner when it is in
+   another language than the page — and inherited, so every component that
+   sets its own value keeps it. */
+
+/* Arabic marks sit above and below the letters, and CJK characters are dense:
+   both need more air between lines than Urbanist's Latin text does. */
+:is(html, .lang-suggest):is(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { line-height: 1.6; }
+:is(p, li, dd, blockquote, figcaption):is(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { line-height: 1.75; }
+/* The display headings are set at 1.04–1.12 for Latin; at that, a wrapped
+   Arabic line's marks touch the next, and CJK lines read as one block. */
+:is(h1, h2, h3):is(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { line-height: 1.35; }
+
+/* Tracking breaks the joins between Arabic letters, and crowds or spreads CJK
+   characters that are already evenly spaced. Every letter-spacing in this
+   file was tuned for Urbanist. */
+:is(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { letter-spacing: normal !important; }
+
+/* No italics in these scripts (browsers fake them by slanting) and no capitals
+   for the uppercase labels to lean on: emphasis is weight. */
+:is(em, cite, dfn, i):where(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { font-style: normal; }
+:is(em, cite, dfn):where(:lang(ar), :lang(ja), :lang(ko), :lang(zh)) { font-weight: 600; }
+
+/* The 10.5–11px uppercase labels lose their capitals and tracking in CJK, and
+   a dense character at 11px is hard to read: one step up. */
+:is(.stat-label, .stat-card .muted, .estimate-stat .muted, th, .user-menu-label, .promo-preview,
+    .plan-pill, .sample-tag, .project-chip, .tag em):is(:lang(ja), :lang(ko), :lang(zh)) {
+  font-size: 12px;
+}
+
+/* Korean wraps between words, not inside them; Japanese and Chinese keep
+   closing punctuation off the start of a line. */
+:is(html, [lang]):lang(ko) { word-break: keep-all; overflow-wrap: break-word; }
+:is(html, [lang]):is(:lang(ja), :lang(zh)) { line-break: strict; }
+
+/* ---------- "This page is also in …" ----------
+   The first thing in <body> on an English page, written in the language it
+   offers (base.html). Its dir can differ from the page's, so everything in
+   it is logical. */
+.lang-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px;
+  padding-block: 10px;
+  padding-inline: 32px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border);
+}
+.lang-suggest-text { min-width: 0; }
+a.lang-suggest-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border-control);
+  border-radius: 6px;
+}
+a.lang-suggest-switch:hover { color: var(--text); border-color: var(--text); text-decoration: none; }
+button.lang-suggest-dismiss {
+  height: auto;
+  min-height: 0;
+  padding: 6px 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: var(--border-control);
+  text-underline-offset: 3px;
+}
+button.lang-suggest-dismiss:hover { color: var(--text); background: none; }
+@media (max-width: 480px) {
+  .lang-suggest { padding-inline: 16px; }
 }

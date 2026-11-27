@@ -18,9 +18,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY . .
 
 # .mo files are build output, so they are compiled here rather than committed.
-# A language whose catalogue is still untranslated compiles to an empty one and
-# renders English, which is what makes it safe to deploy a partial translation.
-RUN pybabel compile -d locales || true
+# Untranslated messages are left out of them (not pybabel compile, which fills
+# an untranslated plural with English and shows "1 pages" in Arabic), so a
+# language renders English until it is translated, which is what makes it safe
+# to deploy a partial translation. A catalogue problem never blocks a deploy.
+RUN python scripts/translations.py compile || true
 
 ENV PYTHONUNBUFFERED=1
 

@@ -8,7 +8,7 @@ from authlib.integrations.starlette_client import OAuth
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 
-from app import db
+from app import db, i18n
 from app.job_store import reassign_jobs
 from app.models import User
 from app.templates import templates
@@ -55,8 +55,11 @@ async def get_current_user(request: Request) -> User | None:
         user = await db.get_user(user_id)
         # Remember the language they are browsing in. Emails are sent later from
         # background tasks that have no request to read a prefix from, so this
-        # is the only moment the preference is observable.
-        lang = getattr(request.state, "lang", None)
+        # is the only moment the preference is observable. Only from a page
+        # they chose to read in it: app.js's fetches and the event stream go to
+        # unprefixed paths and would otherwise reset everyone to English the
+        # moment a crawl page opened (see i18n.chosen_language).
+        lang = i18n.chosen_language(request)
         if user is not None and lang and lang != user.lang:
             try:
                 await db.set_user_lang(user.id, lang)
@@ -105,8 +108,13 @@ async def require_user(request: Request) -> User:
     """Use for HTML pages: bounces an anonymous browser to /login."""
     user = await get_current_user(request)
     if user is None:
-        raise HTTPException(status_code=303, headers={"Location": "/login"})
+        raise HTTPException(status_code=303, headers={"Location": _login_path(request)})
     return user
+
+
+def _login_path(request: Request) -> str:
+    """The sign-in page in the language they were reading."""
+    return i18n.localized_path("/login", getattr(request.state, "lang", i18n.DEFAULT_LANG))
 
 
 async def require_user_api(request: Request) -> User:
@@ -155,10 +163,16 @@ def require_translation_viewer(user: User = Depends(require_user)) -> User:
     return user
 
 
+# What went wrong on the way back from Google, by code: the page translates
+# the code, and only these codes, so the address bar can't put words of its
+# own on the sign-in page.
+LOGIN_ERRORS = ("google", "profile")
+
+
 @router.get("/login")
 async def login_page(request: Request):
     error = request.query_params.get("error")
-    return templates.TemplateResponse(request, "login.html", {"error": error})
+    return templates.TemplateResponse(request, "login.html", {"error": error if error in LOGIN_ERRORS else None})
 
 
 @router.get("/auth/login")
@@ -166,20 +180,31 @@ async def auth_login(request: Request):
     # Where to land afterwards, for links like "Sign in to continue this crawl".
     if request.query_params.get("next"):
         request.session["after_login"] = after_login_path(request.query_params["next"])
+    # The OAuth routes are unprefixed (Google has one callback URL), so the
+    # language of the page they came from rides along in the session.
+    if i18n.is_language(request.query_params.get("lang", "")):
+        request.session["login_lang"] = request.query_params["lang"]
+    else:
+        lang = i18n.split_path(request.session.get("after_login", ""))[0]
+        request.session["login_lang"] = lang
     redirect_uri = request.url_for("auth_callback")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
 @router.get("/auth/callback", name="auth_callback")
 async def auth_callback(request: Request):
+    lang = request.session.pop("login_lang", i18n.DEFAULT_LANG)
+    if not i18n.is_language(lang):
+        lang = i18n.DEFAULT_LANG
+    login = i18n.localized_path("/login", lang)
     try:
         token = await oauth.google.authorize_access_token(request)
     except Exception:
-        return RedirectResponse(url="/login?error=Google+sign-in+failed", status_code=302)
+        return RedirectResponse(url=f"{login}?error=google", status_code=302)
 
     userinfo = token.get("userinfo")
     if userinfo is None:
-        return RedirectResponse(url="/login?error=Could+not+read+Google+profile", status_code=302)
+        return RedirectResponse(url=f"{login}?error=profile", status_code=302)
 
     user, created = await db.get_or_create_user(
         google_sub=userinfo["sub"],
@@ -194,7 +219,8 @@ async def auth_callback(request: Request):
         await claim_guest_runs(guest.id, user.id)
         request.session.pop("guest_user_id", None)
     request.session["user_id"] = user.id
-    return RedirectResponse(url=after_login_path(request.session.pop("after_login", "/")), status_code=302)
+    home = i18n.localized_path("/", lang)
+    return RedirectResponse(url=after_login_path(request.session.pop("after_login", home)), status_code=302)
 
 
 def after_login_path(path: str) -> str:
@@ -208,4 +234,4 @@ def after_login_path(path: str) -> str:
 @router.get("/logout")
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(url="/login", status_code=302)
+    return RedirectResponse(url=_login_path(request), status_code=302)

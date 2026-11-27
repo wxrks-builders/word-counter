@@ -25,14 +25,14 @@ def test_the_owner_can_show_the_home_page_instead(app_env):
     assert res.status_code == 200 and res.json()["display_url"] == "https://example-resorts.com"
 
     report = app_env.client.get("/crawl/r").text
-    assert "<h1 id=\"report-url\">https://example-resorts.com</h1>" in report
+    assert "<h1 id=\"report-url\"><bdi>https://example-resorts.com</bdi></h1>" in report
     assert "<title>https://example-resorts.com" in report
     assert "Crawled from https://www.example-resorts.com/stays/somewhere-quiet" in report, "the owner can still see it"
     assert 'sourceUrl: "https://www.example-resorts.com/stays/somewhere-quiet"' in report, "a re-crawl starts where it worked"
 
     run(app_env.db.set_run_public("r", True))
     shared = app_env.client.get("/share/r").text
-    assert "<h1 id=\"report-url\">https://example-resorts.com</h1>" in shared
+    assert "<h1 id=\"report-url\"><bdi>https://example-resorts.com</bdi></h1>" in shared
     assert "Crawled from" not in shared and "somewhere-quiet" not in shared.split("initialPages")[0]
 
     assert "example-resorts.com-word-count.csv" in app_env.client.get("/crawl/r/export.csv").headers["content-disposition"]
@@ -51,7 +51,7 @@ def test_an_empty_address_goes_back_to_where_the_crawl_started(app_env):
     _set(app_env, "https://example-resorts.com")
     assert _set(app_env, "").json()["display_url"] == INNER
     report = app_env.client.get("/crawl/r").text
-    assert f"<h1 id=\"report-url\">{INNER}</h1>" in report and "Crawled from" not in report
+    assert f"<h1 id=\"report-url\"><bdi>{INNER}</bdi></h1>" in report and "Crawled from" not in report
 
 
 def test_nobody_else_can_change_it(app_env):
