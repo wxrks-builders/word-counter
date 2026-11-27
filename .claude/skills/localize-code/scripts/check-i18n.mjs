@@ -175,6 +175,60 @@ function templateSource(file, src) {
   return s;
 }
 
+// Template expressions and tags ({{ … }}, {% … %}) are code, never text a
+// person reads as written, even when a string inside one holds HTML:
+// {{ _('No runs yet. <a href="/">Start one</a>.') }} is already translated.
+const blankExpressions = (s) => blankBlocks(blankBlocks(s, /\{\{[\s\S]*?\}\}/g), /\{%[\s\S]*?%\}/g);
+
+// translate="no" (the HTML attribute) and class="notranslate" mark names, code
+// and sample data that stay as written, and an element with its own lang="…"
+// holds text in that language on purpose (a quote, an English-only admin menu).
+// Their text and attributes are skipped. <html> and <body> are never skipped.
+const NO_TRANSLATE_OPEN = /<([A-Za-z][\w.-]*)\b[^<>]*?(?:\stranslate\s*=\s*["']?no\b|\sclass(?:Name)?\s*=\s*["'][^"']*\bnotranslate\b|\slang\s*=\s*["'][A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*["'])[^<>]*>/gi;
+const VOID_TAGS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+function blankNoTranslate(s) {
+  let m;
+  NO_TRANSLATE_OPEN.lastIndex = 0;
+  while ((m = NO_TRANSLATE_OPEN.exec(s))) {
+    if (/^(html|head|body)$/i.test(m[1])) continue;
+    const start = m.index;
+    let end = start + m[0].length;
+    if (!m[0].endsWith('/>') && !VOID_TAGS.has(m[1].toLowerCase())) {
+      const tagRe = new RegExp(`<(/?)${m[1].replace(/\./g, '\\.')}(?=[\\s/>])[^<>]*>`, 'gi');
+      tagRe.lastIndex = end;
+      let depth = 1, t;
+      while (depth && (t = tagRe.exec(s))) {
+        if (t[1]) depth--; else if (!t[0].endsWith('/>')) depth++;
+        if (!depth) end = t.index;
+      }
+      if (depth) end = s.length;
+    }
+    s = s.slice(0, start) + blank(s.slice(start, end)) + s.slice(end);
+    NO_TRANSLATE_OPEN.lastIndex = end;
+  }
+  return s;
+}
+
+// Separator glyphs that lay out two items side by side.
+const SEP = String.raw`[\s·•|–—→←⟶⟵‧・]*[·•|–—→←⟶⟵‧・][\s·•|–—→←⟶⟵‧・]*`;
+const SEP_LITERAL = `(?:"${SEP}"|'${SEP}'|\`${SEP}\`)`;
+const SEP_ONLY = new RegExp(`^${SEP}$`, 'u');
+const PIECE = /\$\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}/g;
+
+// `${count} ${t('items')}` or `${t('total')}: ${n}`: a translated piece glued
+// to other pieces or to words inside one template literal. Variable names
+// inside ${…} don't count as words; a separator between pieces is layout.
+function gluedTemplate(line, T) {
+  for (const [, body] of line.matchAll(/`([^`]*)`/g)) {
+    if (!new RegExp(String.raw`\$\{\s*${T}`).test(body)) continue;
+    const pieces = body.match(PIECE) || [];
+    const glue = body.split(PIECE);
+    if (glue.some((g) => /\p{L}{2,}/u.test(g))) return true;
+    if (pieces.length > 1 && glue.slice(1, -1).some((g) => !SEP_ONLY.test(g))) return true;
+  }
+  return false;
+}
+
 // ---------- code checks ----------
 let scannedCode = 0, skippedOnPurpose = 0;
 const detectedLocales = new Set();
@@ -198,16 +252,17 @@ for (const file of files) {
   if (TEMPLATE_EXT.has(ext) && !messageModule) {
     const tpl = templateSource(file, src);
     if (tpl) {
+      const textTpl = blankNoTranslate(blankExpressions(tpl));
       const re = />([^<>]+)</g;
       let m;
-      while ((m = re.exec(tpl))) {
+      while ((m = re.exec(textTpl))) {
         const gt = m.index;
-        const prev = tpl[gt - 1];
+        const prev = textTpl[gt - 1];
         if (prev === '=' || prev === '-') continue;
         const raw = m[1];
         if (!/\p{L}/u.test(raw)) continue;
-        const open = tpl.lastIndexOf('<', gt);
-        const opener = tpl.slice(open + 1, gt);
+        const open = textTpl.lastIndexOf('<', gt);
+        const opener = textTpl.slice(open + 1, gt);
         const tag = opener.startsWith('/') ? '' : (opener.match(/^([A-Za-z][\w.-]*)/)?.[1] ?? '').toLowerCase();
         if (SKIP_TAGS.has(tag) || tag.endsWith('.trans')) continue;
         const text = stripBraces(raw);
@@ -218,7 +273,8 @@ for (const file of files) {
         add('hardcoded-text', file, at(gt + 1 + Math.max(0, firstChar)), text);
       }
       const attr = /\s(placeholder|alt|title|aria-label|aria-placeholder|aria-description|aria-roledescription|label)\s*=\s*(["'])([^"'{}]*?)\2/g;
-      while ((m = attr.exec(tpl))) if (meaningful(m[3])) add('hardcoded-attr', file, at(m.index), `${m[1]}="${m[3]}"`);
+      const attrTpl = blankNoTranslate(tpl);
+      while ((m = attr.exec(attrTpl))) if (meaningful(m[3])) add('hardcoded-attr', file, at(m.index), `${m[1]}="${m[3]}"`);
       // <span>${price}</span>, <span>€{price}</span>
       const cur = />\s*[$€£¥₹]\s*\{[^}]+\}/g;
       while ((m = cur.exec(tpl))) add('currency', file, at(m.index), m[0].slice(1));
@@ -258,8 +314,14 @@ for (const file of files) {
     }
 
     const T = String.raw`(?<![\w$.])(?:t|\$t|i18n\.t|translate|intl\.formatMessage|formatMessage)\(`;
-    if (new RegExp(`${T}[^()]*\\)\\s*\\+\\s*["'\`\\w]|["'\`\\w)]\\s*\\+\\s*${T}\\s*["'\`]`).test(L)) add('concatenation', file, n, L.trim());
-    if (new RegExp(`\`[^\`]*\\p{L}{2,}[^\`]*\\$\\{\\s*${T}|\`[^\`]*\\$\\{\\s*${T}[^\`]*\\}[^\`]*\\p{L}{2,}`, 'u').test(L)) add('concatenation', file, n, L.trim());
+    // A separator between two items (" · ", " | ", " — ") is layout, not a
+    // sentence, so it is taken out first. Commas, colons, spaces and words
+    // between pieces are sentence glue: "Total: " + n reads "Total : 5" in French.
+    const unglued = L
+      .replace(new RegExp(String.raw`\s*\+\s*${SEP_LITERAL}\s*\+\s*`, 'gu'), ', ')
+      .replace(new RegExp(String.raw`${SEP_LITERAL}\s*\+\s*|\s*\+\s*${SEP_LITERAL}`, 'gu'), '');
+    if (new RegExp(`${T}[^()]*\\)\\s*\\+\\s*["'\`\\w]|["'\`\\w)]\\s*\\+\\s*${T}\\s*["'\`]`).test(unglued)) add('concatenation', file, n, L.trim());
+    else if (gluedTemplate(L, T)) add('concatenation', file, n, L.trim());
 
     if (/\?\s*(["'`])s\1\s*:\s*(["'`])\2|\?\s*(["'`])\3\s*:\s*(["'`])s\4|===?\s*1\s*\?\s*["'`][^"'`]*["'`]\s*:\s*["'`][^"'`]*s["'`]|!==?\s*1\s*\?\s*["'`][^"'`]*s["'`]\s*:|>\s*1\s*\?\s*["'`][^"'`]*s["'`]\s*:|\bpluralize\(/.test(L)) add('english-plural', file, n, L.trim());
 

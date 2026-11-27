@@ -197,7 +197,9 @@ root with the path to this skill.
   broken placeholders and missing plural forms across locale files (JSON,
   ARB and gettext `.po`, with coverage per language). It understands Jinja
   and Django `{% trans %}` blocks, and skips anything listed under "Not
-  translated" in `LOCALIZATION.md` (admin pages, internal tools). It is a
+  translated" in `LOCALIZATION.md` (admin pages, internal tools). It also
+  skips text inside `translate="no"` or an element with its own `lang`, so
+  mark file names, sample data and deliberate English that way. It is a
   heuristic: read each finding before changing code.
 - `node <skill>/scripts/pseudo-locale.mjs messages/en.json` writes a fake
   language (`en-XA`) with accented, longer text in brackets, keeping every

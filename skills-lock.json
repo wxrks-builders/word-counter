@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "skills": {
+    "localize-code": {
+      "source": "wxrks-builders/localization-skills",
+      "commit": "bd96de839272faf3f876222dcd4b54e9446952ee",
+      "sourceType": "github",
+      "skillPath": "skills/localize-code/SKILL.md",
+      "computedHash": "a88bf9f6ccc038b42274c17acc743dcdd0b40a105ac491f971fc11815d6ceb41",
+      "installMode": "copy"
+    },
+    "localize-design": {
+      "source": "wxrks-builders/localization-skills",
+      "commit": "bd96de839272faf3f876222dcd4b54e9446952ee",
+      "sourceType": "github",
+      "skillPath": "skills/localize-design/SKILL.md",
+      "computedHash": "4a4e7bc699ff1ae7c68e08b5fe000a1cdc588f018a36795b5dda59b21a438c81",
+      "installMode": "copy"
+    }
+  }
+}
