@@ -22,42 +22,42 @@ msgstr ""
 #. typed, %(kind)s is "folder" or "subdomain".
 #, python-format
 msgid "%(entry)s (%(kind)s)"
-msgstr ""
+msgstr "%(entry)s（%(kind)s）"
 
 #. Translators: a duration in hours, abbreviated ("3h").
 #, python-format
 msgid "%(h)sh"
-msgstr ""
+msgstr "%(h)sh"
 
 #. Translators: a duration, abbreviated: h is hours, m is minutes ("1h 8m").
 #, python-format
 msgid "%(h)sh %(m)sm"
-msgstr ""
+msgstr "%(h)sh %(m)sm"
 
 #. Translators: one line of the plain-text email: a label and its value
 #. ("Total words: 1,234"). Keep both placeholders.
 #, python-format
 msgid "%(label)s: %(value)s"
-msgstr ""
+msgstr "%(label)s：%(value)s"
 
 #. Translators: beside "Show more": %(loaded)s of %(total)s pages shown.
 #, python-format
 msgid "%(loaded)s of %(total)s"
-msgstr ""
+msgstr "%(loaded)s / %(total)s"
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages
 #. that asked for a sign-in. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s behind a login"
 msgid_plural "%(n)s behind a login"
-msgstr[0] ""
+msgstr[0] "登录后 %(n)s 个"
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages the
 #. site's bot protection refused. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s blocked"
 msgid_plural "%(n)s blocked"
-msgstr[0] ""
+msgstr[0] "%(n)s 个已屏蔽"
 
 #. how many crawls a project holds, in a project's one-line summary.
 #. how many crawls the project holds, then how many of them are still running.
@@ -65,67 +65,67 @@ msgstr[0] ""
 #, python-format
 msgid "%(n)s crawl"
 msgid_plural "%(n)s crawls"
-msgstr[0] ""
+msgstr[0] "%(n)s 次抓取"
 
 #. Translators: the next four are parts of a short line under "Not
 #. counted": "3 duplicates · 2 blocked". Keep them short.
 #, python-format
 msgid "%(n)s duplicate"
 msgid_plural "%(n)s duplicates"
-msgstr[0] ""
+msgstr[0] "%(n)s 个重复项"
 
 #, python-format
 msgid "%(n)s duplicate page isn’t in the total at all."
 msgid_plural "%(n)s duplicate pages aren’t in the total at all."
-msgstr[0] ""
+msgstr[0] "%(n)s 个重复页面完全不计入总数。"
 
 #, python-format
 msgid "%(n)s duplicate page within the sites."
 msgid_plural "%(n)s duplicate pages within the sites."
-msgstr[0] ""
+msgstr[0] "这些网站中有 %(n)s 个重复页面。"
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages that
 #. didn't load. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s failed"
 msgid_plural "%(n)s failed"
-msgstr[0] ""
+msgstr[0] "%(n)s 次失败"
 
 #. how many Markdown files are in the ZIP download.
 #, python-format
 msgid "%(n)s file"
 msgid_plural "%(n)s files"
-msgstr[0] ""
+msgstr[0] "%(n)s 个文件"
 
 #. after the label "Subdomains": %(n)s subdomains were found,        and
 #. %(words)s is "N more words", translated on its own.
 #, python-format
 msgid "%(n)s found, with %(words)s, each on its own line."
 msgid_plural "%(n)s found, with %(words)s, each on its own line."
-msgstr[0] ""
+msgstr[0] "找到 %(n)s 个，包含 %(words)s，每个单独占一行。"
 
 #. Translators: a duration in minutes, abbreviated ("25 min").
 #. how long a count took, in minutes, abbreviated.
 #, python-format
 msgid "%(n)s min"
 msgid_plural "%(n)s min"
-msgstr[0] ""
+msgstr[0] "%(n)s 分钟"
 
 #. Translators: more pages in that language that weren't fetched at all.
 #, python-format
 msgid "%(n)s more not fetched"
 msgid_plural "%(n)s more not fetched"
-msgstr[0] ""
+msgstr[0] "还有 %(n)s 个未抓取"
 
 #, python-format
 msgid "%(n)s more word"
 msgid_plural "%(n)s more words"
-msgstr[0] ""
+msgstr[0] "还有 %(n)s 个词"
 
 #, python-format
 msgid "%(n)s new word"
 msgid_plural "%(n)s new words"
-msgstr[0] ""
+msgstr[0] "%(n)s 个新词"
 
 #. Translators: a page count, as part of a longer sentence.
 #. how much two sites share: a number of pages, then a number of words in
@@ -133,42 +133,42 @@ msgstr[0] ""
 #, python-format
 msgid "%(n)s page"
 msgid_plural "%(n)s pages"
-msgstr[0] ""
+msgstr[0] "%(n)s 个页面"
 
 #. how many pages a plan fetches at the same time.
 #, python-format
 msgid "%(n)s page at a time"
 msgid_plural "%(n)s pages at a time"
-msgstr[0] ""
+msgstr[0] "每次处理 %(n)s 个页面"
 
 #, python-format
 msgid "%(n)s page behind a sign-in."
 msgid_plural "%(n)s pages behind a sign-in."
-msgstr[0] ""
+msgstr[0] "%(n)s 个需要登录才能访问的页面。"
 
 #, python-format
 msgid "%(n)s page failed to load."
 msgid_plural "%(n)s pages failed to load."
-msgstr[0] ""
+msgstr[0] "%(n)s 个页面加载失败。"
 
 #, python-format
 msgid "%(n)s page was blocked by this site's own bot detection."
 msgid_plural "%(n)s pages were blocked by this site's own bot detection."
-msgstr[0] ""
+msgstr[0] "此网站自身的机器人检测机制拦截了 %(n)s 个页面。"
 
 #. Translators: pages in another language that were fetched, then left
 #. out of the count.
 #, python-format
 msgid "%(n)s read and set aside"
 msgid_plural "%(n)s read and set aside"
-msgstr[0] ""
+msgstr[0] "%(n)s 已读并搁置"
 
 #. pages matched only by their address, because their text wasn't kept to
 #. compare; %(n)s is a number of pages.
 #, python-format
 msgid "%(n)s same address"
 msgid_plural "%(n)s same address"
-msgstr[0] ""
+msgstr[0] "%(n)s 个相同地址"
 
 #. under a pair of sites, how many of their shared pages have
 #. the same text, changed text, or only the same address. Each %(n)s is a
@@ -176,26 +176,26 @@ msgstr[0] ""
 #, python-format
 msgid "%(n)s same text"
 msgid_plural "%(n)s same text"
-msgstr[0] ""
+msgstr[0] "%(n)s 相同文本"
 
 #. after the number of crawls in a project: how many of them are still running.
 #, python-format
 msgid "%(n)s still crawling"
 msgid_plural "%(n)s still crawling"
-msgstr[0] ""
+msgstr[0] "仍在抓取 %(n)s 个网站"
 
 #. shared pages whose text differs between the two sites; %(n)s is a number of
 #. pages.
 #, python-format
 msgid "%(n)s text changed"
 msgid_plural "%(n)s text changed"
-msgstr[0] ""
+msgstr[0] "%(n)s 处文本已更改"
 
 #. %(n)s is a number of translated pages the crawl skipped.
 #, python-format
 msgid "%(n)s translated page set aside, never fetched."
 msgid_plural "%(n)s translated pages set aside, never fetched."
-msgstr[0] ""
+msgstr[0] "已搁置 %(n)s 个已翻译页面，未抓取。"
 
 #. Translators: a word count, as part of a longer sentence.
 #. a site's word count, in a small chip beside its address.
@@ -203,29 +203,29 @@ msgstr[0] ""
 #, python-format
 msgid "%(n)s word"
 msgid_plural "%(n)s words"
-msgstr[0] ""
+msgstr[0] "%(n)s 个词"
 
 #, python-format
 msgid "%(n)s word added up, each page once"
 msgid_plural "%(n)s words added up, each page once"
-msgstr[0] ""
+msgstr[0] "共添加了 %(n)s 个词，每个页面仅计一次"
 
 #, python-format
 msgid "%(n)s word checked by page only."
 msgid_plural "%(n)s words checked by page only."
-msgstr[0] ""
+msgstr[0] "仅按页面检查了 %(n)s 个词。"
 
 #. under a sketch of a web page, how many of its words were counted.
 #. %(n)s is the number, in bold.
 #, python-format
 msgid "%(n)s word counted"
 msgid_plural "%(n)s words counted"
-msgstr[0] ""
+msgstr[0] "已统计 %(n)s 个词"
 
 #, python-format
 msgid "%(n)s word in sentences"
 msgid_plural "%(n)s words in sentences"
-msgstr[0] ""
+msgstr[0] "句子中的 %(n)s 个单词"
 
 #. a promotion on the report; %(n)s is the report's word count, in bold.
 #. the headline of the wxrks offer, in the crawl email
@@ -233,89 +233,89 @@ msgstr[0] ""
 #, python-format
 msgid "%(n)s word to translate."
 msgid_plural "%(n)s words to translate."
-msgstr[0] ""
+msgstr[0] "%(n)s 个待翻译单词。"
 
 #, python-format
 msgid "%(name)s (you)"
-msgstr ""
+msgstr "%(name)s（您）"
 
 #. Translators: %(pct)s is a percentage (64%%), %(folder)s a folder such
 #. as /blog, %(words)s a number of words; the plural follows the pages.
 #, python-format
 msgid "%(pct)s of the words are in %(folder)s: %(words)s on %(n)s page."
 msgid_plural "%(pct)s of the words are in %(folder)s: %(words)s on %(n)s pages."
-msgstr[0] ""
+msgstr[0] "%(pct)s 的词语位于 %(folder)s 中：%(n)s 个页面上共有 %(words)s 个词语。"
 
 #. a percentage in a table cell ("12%"); add the space or sign your language
 #. uses.
 #, python-format
 msgctxt "percent"
 msgid "%(pct)s%%"
-msgstr ""
+msgstr "%(pct)s%%"
 
 #, python-format
 msgid "%(pct)s%% measured on every count, by sentence."
-msgstr ""
+msgstr "每次计数均按句子测量 %(pct)s%%。"
 
 #. %(pct)s is a percentage of the words; %(new)s is a number of words.
 #, python-format
 msgid "%(pct)s%% of it repeats text from other pages; %(new)s word is new."
 msgid_plural "%(pct)s%% of it repeats text from other pages; %(new)s words are new."
-msgstr[0] ""
+msgstr[0] "其中 %(pct)s%% 的内容与其他页面的文本重复；新增了 %(new)s 个词。"
 
 #, python-format
 msgid "%(pct)s%% repeated in its own report"
-msgstr ""
+msgstr "在其自身报告中重复 %(pct)s%% 次"
 
 #, python-format
 msgid "%(person)s shared a report with you"
-msgstr ""
+msgstr "%(person)s 与您分享了一份报告"
 
 #. Translators: the subject of the email inviting someone to a report.
 #. %(person)s is the sender's name, or their email address.
 #, python-format
 msgid "%(person)s shared a word-count report with you"
-msgstr ""
+msgstr "%(person)s 与您分享了一份字数统计报告"
 
 #. Translators: the first line of the README inside a Markdown download.
 #. %(product)s is the product's name; %(site)s is the address crawled.
 #, python-format
 msgid "%(product)s — saved Markdown for %(site)s"
-msgstr ""
+msgstr "%(product)s — %(site)s 的已保存 Markdown"
 
 #. Translators: the crawl email's subject line. %(status)s is "Crawl
 #. finished", "Crawl failed" or "Crawl stopped"; %(site)s is the address
 #. that was crawled.
 #, python-format
 msgid "%(status)s: %(site)s"
-msgstr ""
+msgstr "%(status)s：%(site)s"
 
 #. under the product name on the sign-in page. %(tagline)s is          the
 #. product's tagline, such as "Count every word on a website".
 #, python-format
 msgid "%(tagline)s. Sign in to point it at your own site."
-msgstr ""
+msgstr "%(tagline)s。 登录后即可将其指向您自己的网站。"
 
 #. Translators: the inbox preview of the crawl-finished email.
 #. %(words)s is "1,234 words" and %(pages)s is "56 pages", each
 #. already in the plural form its number needs.
 #, python-format
 msgid "%(words)s across %(pages)s"
-msgstr ""
+msgstr "%(pages)s 个页面共 %(words)s 个词"
 
 #. an assistant's answer: "2,696,246 words on 2,494 pages".        %(words)s is
 #. "N words" and %(pages)s is "N pages", each translated on its own.
 #, python-format
 msgid "%(words)s on %(pages)s"
-msgstr ""
+msgstr "%(pages)s 个页面上有 %(words)s 个词"
 
 #. Translators: crawl speed, abbreviated; %(words)s and %(pages)s are numbers.
 #, python-format
 msgid "%(words)s words/min · %(pages)s pages/min"
-msgstr ""
+msgstr "每分钟 %(words)s 个单词 · 每分钟 %(pages)s 页"
 
 msgid "(root)"
-msgstr ""
+msgstr "（根）"
 
 #. what goes between the items of a list ("A, B"). Use your        language's
 #. list punctuation, such as "、" or "، ".
@@ -323,35 +323,35 @@ msgstr ""
 #. your language's list punctuation, such as "、" or "، ".
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr "、"
 
 msgid "A chat transcript."
-msgstr ""
+msgstr "聊天记录。"
 
 msgid "A count you can check, not just a number"
-msgstr ""
+msgstr "可供核验的字数，而不只是一个数字"
 
 msgid "A page or a sentence on more than one site is counted once."
-msgstr ""
+msgstr "同一页面或句子即使出现在多个网站上，也只计数一次。"
 
 msgid "A report link, a CSV of every page, the text as Markdown."
-msgstr ""
+msgstr "报告链接、包含每个页面的 CSV 文件，以及 Markdown 格式的文本。"
 
 msgid "A report you can send"
-msgstr ""
+msgstr "可供您发送的报告"
 
 msgid ""
 "A run can be in more than one project. In each, a page found in several "
 "crawls counts once."
-msgstr ""
+msgstr "一次运行可以属于多个项目。 在每次抓取中，同一页面即使被发现多次也只计一次。"
 
 msgid "A website has 200 pages. But how much work is that?"
-msgstr ""
+msgstr "一个网站有 200 个页面。 但这需要多少工作量？"
 
 #. Translators: the inbox preview of that email. %(site)s is a web address.
 #, python-format
 msgid "A word count for %(site)s"
-msgstr ""
+msgstr "%(site)s 的字数统计"
 
 #. an assistant's advice on what to put in a translation quote.
 #, python-format
@@ -361,7 +361,7 @@ msgid ""
 msgid_plural ""
 "About %(words)s words, without the machine-generated API docs and the "
 "user forum."
-msgstr[0] ""
+msgstr[0] "约 %(words)s 个词，不包括机器生成的 API 文档和用户论坛。"
 
 #. %(n)s and %(raw)s are whole-number multiples ("3", "4").
 #, python-format
@@ -371,84 +371,88 @@ msgid ""
 " is also rendered and its text extracted, and that competes for CPU. The "
 "honest number is the smaller one."
 msgstr ""
+"关于“%(n)s× 更快”：这是实测结果，并非算术计算。 Pro 每次可抓取的页面数量是 "
+"%(raw)s×，但抓取只是工作的一部分——每个页面还需要渲染并提取文本，这些操作都会占用 CPU。 真实的数字是较小的那个。"
 
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
 msgid ""
 "Add --scope user to have it in every project. Then type /mcp in Claude "
 "Code to check that word-counter is connected, and ask away."
 msgstr ""
+"添加 --scope user，使其在每个项目中都可用。 然后在 Claude Code 中输入 /mcp，检查 word-counter "
+"是否已连接，然后就可以开始提问了。"
 
 #. Translators: placeholder in the exclusions box once it holds an entry.
 msgid "Add another…"
-msgstr ""
+msgstr "再添加一个…"
 
 #, python-format
 msgid "Add existing runs to %(name)s"
-msgstr ""
+msgstr "将现有运行添加到 %(name)s"
 
 #. opens a dialog for adding earlier crawls to this project.
 msgid "Add existing runs…"
-msgstr ""
+msgstr "添加现有运行…"
 
 msgid "Add it to your app"
-msgstr ""
+msgstr "将其添加到您的应用中"
 
 msgid "Add people by email"
-msgstr ""
+msgstr "通过电子邮件添加人员"
 
 msgid "Add the crawls you already have, or crawl a site straight into it."
-msgstr ""
+msgstr "添加您已有的抓取记录，或直接抓取网站并将结果添加到其中。"
 
 #. a button that opens a dialog for choosing projects.
 msgid "Add to a project…"
-msgstr ""
+msgstr "添加到项目…"
 
 msgid "Add to project"
-msgstr ""
+msgstr "添加到项目"
 
 msgid "Add to project…"
-msgstr ""
+msgstr "添加到项目…"
 
 msgid "Added since the last consolidation — in the next one."
-msgstr ""
+msgstr "自上次整合后新增 — 将在下次整合时处理。"
 
 msgid "Added up: every page of every crawl"
-msgstr ""
+msgstr "合计：每次抓取的每个页面"
 
 msgid "Added up: every page of every site"
-msgstr ""
+msgstr "总计：每个网站的每个页面"
 
 msgid "Address shown on this report"
-msgstr ""
+msgstr "此报告中显示的地址"
 
 msgid "Adjust settings"
-msgstr ""
+msgstr "调整设置"
 
 msgid "Advanced"
-msgstr ""
+msgstr "高级"
 
 #. a link to a comparison table; %(n)s is how many rows it has.
 #, python-format
 msgid "All %(n)s differences, side by side"
 msgid_plural "All %(n)s differences, side by side"
-msgstr[0] ""
+msgstr[0] "全部 %(n)s 处差异，并排显示"
 
 msgid "All crawls"
-msgstr ""
+msgstr "所有抓取任务"
 
 msgid "All your crawls"
-msgstr ""
+msgstr "您的所有抓取任务"
 
 #. a heading with the number of crawls in brackets: "All your crawls (25)".
 #, python-format
 msgid "All your crawls (%(n)s)"
 msgid_plural "All your crawls (%(n)s)"
-msgstr[0] ""
+msgstr[0] "您的所有抓取（%(n)s）"
 
 msgid "All your runs are in this project already."
-msgstr ""
+msgstr "您的所有运行都已在此项目中。"
 
 msgid ""
 "Already working in an AI assistant? Connect it to Word Counter and ask "
@@ -456,23 +460,27 @@ msgid ""
 "servers, and your assistant answers with the total, the repetition and "
 "the split by language, with a link to the full report."
 msgstr ""
+"已经在使用 AI 助手了吗？将其连接到 Word Counter，然后用通俗的语言询问任何网站相关的问题。 抓取任务在 Word Counter "
+"的服务器上运行，您的助手会提供总字数、重复内容和按语言划分的字数，并附上完整报告的链接。"
 
 msgid "An AI assistant on its own"
-msgstr ""
+msgstr "独立运行的 AI 助手"
 
 msgid "An assistant answering with Word Counter"
-msgstr ""
+msgstr "使用 Word Counter 回答的助手"
 
 msgid ""
 "An assistant writes a new crawler every time, and its steps change from "
 "one run to the next. Word Counter counts every site the same way, so next"
 " month’s count compares with this one."
 msgstr ""
+"助手每次都会编写一个新的爬虫，其步骤也会随着每次运行而变化。 Word Counter "
+"对所有网站采用相同的计数方式，因此下个月的计数可以与本月进行比较。"
 
 msgid ""
 "An estimate of the sentences repeated across pages, and the split by "
 "language, section and subdomain — the numbers a quote is built on."
-msgstr ""
+msgstr "对跨页面重复句子的估算，以及按语言、版块和子域名划分的明细——报价据此计算。"
 
 msgid ""
 "An estimate: each page is split into sentences, matched exactly across "
@@ -480,39 +488,43 @@ msgid ""
 "will differ with its own segmentation, tags, numbers and translation "
 "memory."
 msgstr ""
+"估算值：每个页面都会拆分成句子，并在统计的各个页面之间进行精确匹配，就像 CAT 工具最基本的工作方式一样。 您的 TMS "
+"分析会因其自身的分段、标签、数字和翻译记忆而有所不同。"
 
 msgid ""
 "Any other app: use Streamable HTTP with the server URL and the key as a "
 "Bearer token — or, if it only takes a URL, your personal URL."
 msgstr ""
+"其他应用：使用 Streamable HTTP，并填写服务器 URL 和作为 Bearer 令牌的密钥；如果应用只接受 URL，则使用您的个人 "
+"URL。"
 
 msgid "Anyone with the link can view this project"
-msgstr ""
+msgstr "任何拥有此链接的人都可以查看此项目"
 
 msgid "Anyone with the link can view this report"
-msgstr ""
+msgstr "任何拥有此链接的人都可以查看此报告"
 
 msgid "Articles"
-msgstr ""
+msgstr "文章"
 
 msgid "Ask Claude or ChatGPT how many words a website has"
-msgstr ""
+msgstr "询问 Claude 或 ChatGPT 网站有多少个单词"
 
 msgid "Ask Claude or ChatGPT. Get the real count."
-msgstr ""
+msgstr "询问 Claude 或 ChatGPT。 获取准确字数。"
 
 msgid "Ask about any website"
-msgstr ""
+msgstr "咨询任何网站的信息"
 
 msgid "Ask your assistant the question it couldn’t answer before."
-msgstr ""
+msgstr "向您的助手提出它之前无法回答的问题。"
 
 #, python-format
 msgid ""
 "At %(n)s words, the crawl pauses and shows the projected word count, page"
 " count and time remaining. When a sitemap is available, it helps check "
 "the estimate."
-msgstr ""
+msgstr "达到 %(n)s 个词后，抓取会暂停，并显示预计词数、页面数和剩余时间。 如果有站点地图，就能帮助核对估算结果。"
 
 #. %(n)s is a number of words (where a count pauses to estimate).
 #, python-format
@@ -522,91 +534,91 @@ msgid ""
 msgid_plural ""
 "At about %(n)s words a count pauses with an estimate of the whole site. "
 "Ask your assistant to continue and it counts every page."
-msgstr[0] ""
+msgstr[0] "大约统计到 %(n)s 个词时，计数会暂停，并显示整个网站的预估词数。 请让您的助手继续，它会统计每个页面。"
 
 msgid ""
 "Available in English, Arabic, Chinese, French, German, Italian, Japanese,"
 " Korean, Portuguese, Spanish and Swedish."
-msgstr ""
+msgstr "支持英语、阿拉伯语、中文、法语、德语、意大利语、日语、韩语、葡萄牙语、西班牙语和瑞典语。"
 
 msgid "Available when the crawl finishes"
-msgstr ""
+msgstr "抓取完成后即可使用"
 
 msgid "Avg words / page"
-msgstr ""
+msgstr "平均每页字数"
 
 msgid "Before you count"
-msgstr ""
+msgstr "开始统计之前"
 
 msgid "Behind a login"
-msgstr ""
+msgstr "登录后可见"
 
 msgid "Between"
-msgstr ""
+msgstr "介于"
 
 msgid "Big site? See the estimate before you keep going."
-msgstr ""
+msgstr "网站很大？继续操作前，先查看预估费用。"
 
 msgid "Blocked by the host"
-msgstr ""
+msgstr "被主机屏蔽了"
 
 #. Translators: a page row's tooltip: the site refused the crawler.
 msgid "Blocked by the host's bot detection"
-msgstr ""
+msgstr "被主机的机器人检测机制拦截"
 
 msgid "Blocked or failed pages"
-msgstr ""
+msgstr "已屏蔽或加载失败的页面"
 
 #. Translators: %(reason)s is the technical reason a page was blocked, often in
 #. English.
 #, python-format
 msgid "Blocked: %(reason)s"
-msgstr ""
+msgstr "已阻止：%(reason)s"
 
 msgid "Broken down where it's useful"
-msgstr ""
+msgstr "在有用的地方进行细分"
 
 msgid "Built for translation quotes"
-msgstr ""
+msgstr "专为翻译报价打造"
 
 msgid "Built with AI"
-msgstr ""
+msgstr "由 AI 构建"
 
 msgid "Busy server load"
-msgstr ""
+msgstr "服务器负载较高"
 
 msgid "By folder"
-msgstr ""
+msgstr "按文件夹分组"
 
 msgid "By language"
-msgstr ""
+msgstr "按语言分组"
 
 msgid "By subdomain"
-msgstr ""
+msgstr "按子域名分组"
 
 msgid "CMS and site builders"
-msgstr ""
+msgstr "CMS 和网站构建工具"
 
 msgid "CSV export, Markdown ZIP, shareable reports"
-msgstr ""
+msgstr "CSV 导出、Markdown ZIP、可分享的报告"
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 msgid "Cancel anytime, from your billing page"
-msgstr ""
+msgstr "可随时在账单页面取消"
 
 msgid "Cancel crawl"
-msgstr ""
+msgstr "取消抓取"
 
 msgid "Cancel every active crawl on the server? This cannot be undone."
-msgstr ""
+msgstr "取消服务器上所有正在进行的抓取任务？此操作无法撤销。"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "已取消"
 
 msgid "Cancelling…"
-msgstr ""
+msgstr "正在取消…"
 
 #. Translators: %(reason)s says why, such as "the server was running out
 #. of disk space".
@@ -615,19 +627,19 @@ msgid ""
 "Capture stopped before the end of the crawl because %(reason)s, so this "
 "archive covers only the pages listed above. The word count itself is "
 "complete."
-msgstr ""
+msgstr "由于 %(reason)s，抓取在结束前已停止，因此此存档仅涵盖上方列出的页面。 字数统计本身已完成。"
 
 msgid "Carries a large site past its estimate to the very last page."
-msgstr ""
+msgstr "让大型网站的抓取超出预估，直至最后一页。"
 
 msgid "Change language"
-msgstr ""
+msgstr "更改语言"
 
 msgid "Change the address this report shows"
-msgstr ""
+msgstr "更改此报告显示的地址"
 
 msgid "Check staging content before launch"
-msgstr ""
+msgstr "上线前检查预发布内容"
 
 #. %(sites)s is a list of site names.
 #, python-format
@@ -636,43 +648,45 @@ msgid ""
 " no Markdown, so their pages count in full unless the same page is in "
 "another crawl. A new crawl checks them sentence by sentence."
 msgstr ""
+"仅按页面检查：%(sites)s。 这些次抓取未保留任何句子，也未保存任何 "
+"Markdown，因此除非同一页面也出现在其他抓取中，否则这些页面将按完整页面计数。 新一轮抓取会逐句检查这些内容。"
 
 #. Translators: the name used for text in Chinese or Japanese characters,
 #. which the language check can't tell apart.
 msgid "Chinese or Japanese characters"
-msgstr ""
+msgstr "中文或日文字符"
 
 msgid "Choose Add custom connector."
-msgstr ""
+msgstr "选择“添加自定义连接器”。"
 
 msgid "Claude (claude.ai and Claude Desktop)"
-msgstr ""
+msgstr "Claude（claude.ai 和 Claude Desktop）"
 
 msgid "Claude (web and desktop)"
-msgstr ""
+msgstr "Claude（网页版和桌面版）"
 
 msgid "Claude Code — paste in a terminal"
-msgstr ""
+msgstr "Claude Code — 粘贴到终端中"
 
 msgid "Claude Code, writing its own crawler"
-msgstr ""
+msgstr "Claude Code，正在编写自己的爬虫"
 
 msgid "Claude alone vs. with Word Counter"
-msgstr ""
+msgstr "Claude 单独使用 vs. 搭配 Word Counter 使用"
 
 msgid "Claude with and without it →"
-msgstr ""
+msgstr "使用和不使用它的 Claude →"
 
 msgid "Client view"
-msgstr ""
+msgstr "客户视图"
 
 msgid "Close"
-msgstr ""
+msgstr "关闭"
 
 msgid ""
 "Comma-separated subdomains and folders to leave out. A leading / excludes"
 " a folder, anything else a subdomain."
-msgstr ""
+msgstr "要排除的子域名和文件夹，以逗号分隔。 前导 / 表示排除一个文件夹，其他内容则表示子域名。"
 
 msgid ""
 "Comma-separated. A leading / excludes a folder, anything else a subdomain"
@@ -680,123 +694,129 @@ msgid ""
 "domain”, which otherwise includes every subdomain, staging mirrors "
 "included."
 msgstr ""
+"以逗号分隔。 前导 / 表示排除一个文件夹，其他任何内容都表示子域名——staging 也会匹配 web-staging.example.com。"
+" 适用于“整个域名”，否则会包含所有子域名，包括暂存环境的镜像站点。"
 
 #. a button that opens the pricing page.
 msgid "Compare plans"
-msgstr ""
+msgstr "比较套餐"
 
 msgid "Compare the word counts of our live site and our staging site."
-msgstr ""
+msgstr "比较我们线上网站和预发布网站的字数。"
 
 msgid "Comparing sentences…"
-msgstr ""
+msgstr "正在比较句子…"
 
 msgid "Completed"
-msgstr ""
+msgstr "已完成"
 
 msgid "Connect Claude or ChatGPT"
-msgstr ""
+msgstr "连接 Claude 或 ChatGPT"
 
 msgid "Connect Claude, ChatGPT or another assistant"
-msgstr ""
+msgstr "连接 Claude、ChatGPT 或其他助手"
 
 msgid ""
 "Connect Word Counter to Claude, ChatGPT, Cursor or any MCP client and ask"
 " how many words a website has. It crawls every page and answers with the "
 "real total, the repetition and the split by language."
 msgstr ""
+"将 Word Counter 连接到 Claude、ChatGPT、Cursor 或任何 MCP 客户端，然后询问网站有多少个单词。 "
+"它会抓取每个页面，并提供实际总数、重复内容数量以及按语言划分的统计结果。"
 
 msgid ""
 "Connect Word Counter to your AI assistant. When you ask about a website, "
 "it crawls every page and comes back with the real total — the same count "
 "as our reports, not a guess from the homepage."
 msgstr ""
+"将 Word Counter 连接到您的 AI 助手。 "
+"当您查询网站时，它会抓取每个页面，并返回实际总数——与我们的报告统计结果一致，而不是根据首页估算的数字。"
 
 msgid "Connect an assistant"
-msgstr ""
+msgstr "连接助手"
 
 msgid "Connect in three steps"
-msgstr ""
+msgstr "三步完成连接"
 
 msgid "Connect your assistant"
-msgstr ""
+msgstr "连接您的助手"
 
 msgid "Consolidate"
-msgstr ""
+msgstr "合并"
 
 msgid "Consolidate again"
-msgstr ""
+msgstr "再次合并"
 
 #. %(date)s is when the project's totals were last worked out, filled in by the
 #. browser.
 #, python-format
 msgid "Consolidated %(date)s"
-msgstr ""
+msgstr "已合并 %(date)s"
 
 msgid "Consolidating"
-msgstr ""
+msgstr "正在整合"
 
 msgid "Consolidating…"
-msgstr ""
+msgstr "正在整合…"
 
 msgid "Copied"
-msgstr ""
+msgstr "已复制"
 
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 msgid "Copy it now: this is the only time it’s shown. It works like a password."
-msgstr ""
+msgstr "现在复制：它只会显示这一次。 它的作用类似密码。"
 
 msgid "Copy link"
-msgstr ""
+msgstr "复制链接"
 
 msgid "Could not reach billing"
-msgstr ""
+msgstr "无法访问账单页面"
 
 msgid ""
 "Couldn't find a sign-in form there. Enter the address of the site's sign-"
 "in page."
-msgstr ""
+msgstr "未能在该处找到登录表单。 请输入网站登录页面的网址。"
 
 msgid "Couldn't load more pages."
-msgstr ""
+msgstr "无法加载更多页面。"
 
 msgid "Couldn't send — try again."
-msgstr ""
+msgstr "无法发送 — 请重试。"
 
 msgid "Couldn’t delete this crawl. Try again."
-msgstr ""
+msgstr "无法删除此爬取任务。 重试。"
 
 msgid "Count a website"
-msgstr ""
+msgstr "统计网站词数"
 
 #. Translators: shown after the product name in page titles
 #. ("Word Counter — Count every word on a website") and on the sign-in page.
 msgid "Count every word on a website"
-msgstr ""
+msgstr "统计网站上的所有字词"
 
 msgid "Count my website’s words"
-msgstr ""
+msgstr "统计我的网站字数"
 
 msgid "Count only www.example.com — leave out its subdomains."
-msgstr ""
+msgstr "仅统计 www.example.com — 不包括其子域名。"
 
 msgid "Count the content that belongs in your project"
-msgstr ""
+msgstr "统计属于您项目的内容数量"
 
 msgid "Count the words on example.com and tell me how much of it repeats."
-msgstr ""
+msgstr "统计 example.com 上的字数，并告诉我其中有多少内容是重复的。"
 
 #. %(product)s is the product's name.
 #, python-format
 msgid "Counted with %(product)s by wxrks"
-msgstr ""
+msgstr "由 wxrks 的 %(product)s 统计得出"
 
 msgid ""
 "Counting relies on spaces between words, so totals for Chinese, Japanese "
 "and Thai will be much too low."
-msgstr ""
+msgstr "计数依据单词之间的空格，因此中文、日文和泰文的计数结果会低很多。"
 
 msgid ""
 "Counts a website: the total, pages, repetition, and the split by "
@@ -804,187 +824,191 @@ msgid ""
 "whole domain by default, or one host only. Reuses an earlier count of the"
 " same site unless asked to count again."
 msgstr ""
+"统计网站内容：总数、页面数、重复内容，以及按语言、版块和子域名划分的统计，并附上完整报告链接。 默认覆盖整个域名，或仅限一个主机。 "
+"除非您要求重新计数，否则会重复使用该网站之前的计数。"
 
 msgid "Counts each page once"
-msgstr ""
+msgstr "每个页面仅计数一次"
 
 #. Translators: %(checked)s and %(total)s are word counts; the sentence
 #. says how much of the total the repetition estimate covers.
 #, python-format
 msgid "Covers %(checked)s of %(total)s word"
 msgid_plural "Covers %(checked)s of %(total)s words"
-msgstr[0] ""
+msgstr[0] "涵盖 %(total)s 个词中的 %(checked)s 个"
 
 #. Translators: the button that starts a crawl of the address typed in (a
 #. verb).
 #. the button that starts counting a website (a verb).
 msgctxt "button"
 msgid "Crawl"
-msgstr ""
+msgstr "抓取"
 
 #. a table column of crawls (a noun).
 msgctxt "noun"
 msgid "Crawl"
-msgstr ""
+msgstr "抓取"
 
 msgid "Crawl a site"
-msgstr ""
+msgstr "抓取网站"
 
 msgid ""
 "Crawl a website and count every word it contains — total, per page, per "
 "folder."
-msgstr ""
+msgstr "抓取网站并统计其中的所有词数——包括总词数、每页词数和每个文件夹的词数。"
 
 msgid "Crawl another site"
-msgstr ""
+msgstr "再抓取一个网站"
 
 msgid ""
 "Crawl any website and count every word — per page, per folder, in total. "
 "Built for sizing translation projects, with CSV export and a shareable "
 "report."
-msgstr ""
+msgstr "抓取任意网站并统计所有字数——按页面、按文件夹及总计。 专为评估翻译项目规模而打造，支持导出 CSV 和分享报告。"
 
 msgid ""
 "Crawl any website and export every page as clean Markdown in a single "
 "ZIP. Main content only — ready to feed a language model, a RAG pipeline "
 "or a CMS migration."
 msgstr ""
+"抓取任意网站，并将所有页面导出为整洁的 Markdown 文件，打包成一个 ZIP。 仅包含主要内容 — 可直接输入语言模型、RAG 流程或 "
+"CMS 迁移工具。"
 
 msgid "Crawl didn’t finish: counted only for what the other sites don’t have"
-msgstr ""
+msgstr "抓取未完成：仅统计其他网站没有的内容"
 
 msgid "Crawl failed"
-msgstr ""
+msgstr "抓取失败"
 
 #. Translators: the heading of the email sent when a crawl ends, and the
 #. start of its subject line.
 msgid "Crawl finished"
-msgstr ""
+msgstr "抓取已完成"
 
 msgid "Crawl stopped"
-msgstr ""
+msgstr "爬取已停止"
 
 msgid "Crawled"
-msgstr ""
+msgstr "已抓取"
 
 #. %(url)s is the address the crawl started from.
 #, python-format
 msgid "Crawled from %(url)s — only you see this."
-msgstr ""
+msgstr "抓取自 %(url)s — 只有您能看到此内容。"
 
 msgid "Crawled signed in on the site’s sign-in page"
-msgstr ""
+msgstr "在网站的登录页面抓取了已登录状态的信息"
 
 #. Translators: %(date)s is the date and time of the crawl.
 #, python-format
 msgid "Crawled: %(date)s"
-msgstr ""
+msgstr "抓取时间：%(date)s"
 
 #. Translators: status badge: the crawl is reading pages right now.
 msgid "Crawling"
-msgstr ""
+msgstr "正在抓取"
 
 msgid "Crawls"
-msgstr ""
+msgstr "抓取次数"
 
 msgid "Crawls run at full speed"
-msgstr ""
+msgstr "爬取任务以全速运行"
 
 msgid "Create"
-msgstr ""
+msgstr "创建"
 
 msgid "Cursor — in ~/.cursor/mcp.json:"
-msgstr ""
+msgstr "Cursor — 位于 ~/.cursor/mcp.json："
 
 msgid "Cursor, VS Code and others"
-msgstr ""
+msgstr "Cursor、VS Code 等工具"
 
 msgid ""
 "Custom MCP servers depend on your ChatGPT plan and, in a workspace, on "
 "what your admin allows."
-msgstr ""
+msgstr "自定义 MCP 服务器取决于您的 ChatGPT 套餐；如果您在工作区中使用，还取决于管理员允许的内容。"
 
 #. Translators: the language row for pages with no language in their address.
 msgid "Default"
-msgstr ""
+msgstr "默认值"
 
 msgid "Delete project"
-msgstr ""
+msgstr "删除项目"
 
 msgid "Delete run"
-msgstr ""
+msgstr "删除运行记录"
 
 #. Translators: %(site)s is the address of the site that was crawled.
 #, python-format
 msgid "Delete this crawl of %(site)s? This can’t be undone."
-msgstr ""
+msgstr "确定要删除对 %(site)s 的这次抓取吗？此操作无法撤销。"
 
 msgid ""
 "Delete this project? Its crawls stay, in your runs and in any other "
 "project."
-msgstr ""
+msgstr "删除此项目？它的抓取记录会保留在您的运行记录和其他任何项目中。"
 
 msgid "Delete this run and everything saved with it? This cannot be undone."
-msgstr ""
+msgstr "要删除此轮运行及其保存的所有内容吗？此操作无法撤销。"
 
 msgid "Deleting…"
-msgstr ""
+msgstr "正在删除…"
 
 msgid "Detected platform"
-msgstr ""
+msgstr "检测到的平台"
 
 #. Translators: %(cms)s is a platform's name, such as WordPress.
 #, python-format
 msgid "Detected platform: %(cms)s"
-msgstr ""
+msgstr "检测到的平台：%(cms)s"
 
 msgid "Detected platform: Contentful (headless — sitemap conventions vary)"
-msgstr ""
+msgstr "检测到的平台： Contentful（无头式——站点地图规范各不相同）"
 
 msgid ""
 "Didn’t finish: adds only the pages and sentences the crawls above don’t "
 "have."
-msgstr ""
+msgstr "未完成：仅添加上述抓取中尚未包含的页面和句子。"
 
 msgid "Didn’t load when the crawler asked for them."
-msgstr ""
+msgstr "爬虫请求这些内容时，它们未能加载。"
 
 msgid ""
 "Different pages, but at least half of their words are sentences another "
 "crawl has."
-msgstr ""
+msgstr "页面各不相同，但至少一半的文字是另一次抓取中已有的句子。"
 
 msgid "Differs only by numbers"
-msgstr ""
+msgstr "仅数字不同"
 
 msgid "Download Markdown"
-msgstr ""
+msgstr "下载 Markdown"
 
 #. Translators: a button; %(size)s is a file size such as "12 MB".
 #, python-format
 msgid "Download Markdown · %(size)s"
-msgstr ""
+msgstr "下载 Markdown · %(size)s"
 
 msgid "Download every page, with its new words (CSV)"
-msgstr ""
+msgstr "下载所有页面及其新增词汇（CSV）"
 
 msgid "Download the pages in more than one crawl (CSV)"
-msgstr ""
+msgstr "在多个抓取任务中下载页面（CSV）"
 
 msgid "Download the repeated sentences (CSV)"
-msgstr ""
+msgstr "下载重复句子（CSV）"
 
 msgid "Duplicate of a page already counted"
-msgstr ""
+msgstr "与已计数页面重复"
 
 msgid "Duplicate pages"
-msgstr ""
+msgstr "重复页面"
 
 msgid "Duplicate pages within a crawl"
-msgstr ""
+msgstr "一次抓取中的重复页面"
 
 msgid "Duplicate · listed separately"
-msgstr ""
+msgstr "重复项 · 单独列出"
 
 msgid ""
 "Each page is opened in a real browser and counted only once it has "
@@ -992,6 +1016,8 @@ msgid ""
 " a page the moment it appears finish sooner, but miss text that loads "
 "afterwards; on some sites that’s whole sections."
 msgstr ""
+"每个页面都会在真实浏览器中打开，并且只有在加载完成后才会计数——通常每页还需要一两秒。 "
+"页面一出现就读取的工具完成得更快，但会漏掉之后加载的文本；在某些网站上，甚至会漏掉整个版块。"
 
 msgid ""
 "Each page is opened in a real browser and counted only once it has "
@@ -1000,26 +1026,29 @@ msgid ""
 "afterwards; on some sites that’s whole sections. You don’t have to wait: "
 "if you’re signed in, you’ll get an email when the crawl finishes."
 msgstr ""
+"每个页面都会在真实浏览器中打开，并且只有在加载完成后才会计数——通常每页还需多等一两秒。 "
+"页面一出现就读取的工具完成得更快，但会漏掉之后加载的文本；在某些网站上，甚至会漏掉整个版块。 "
+"您无需等待：登录后，网站抓取完成时，您会收到一封电子邮件。"
 
 msgid ""
 "Each page runs through a content filter that drops navigation and "
 "repeated chrome. That's the difference between a corpus you can search "
 "and one where every document matches the phrase “Book Now”."
-msgstr ""
+msgstr "每个页面都会经过内容筛选器，移除导航内容和重复的界面元素。 这就是可搜索的语料库与每份文档都包含“Book Now”这一短语的语料库之间的区别。"
 
 msgid ""
 "Each site’s own report has its pages, its repetition estimate and what it"
 " left out."
-msgstr ""
+msgstr "每个网站的报告都包含该网站的页面、重复内容估算值以及遗漏内容。"
 
 msgid "Easy server load"
-msgstr ""
+msgstr "服务器负载低"
 
 msgid "Email"
-msgstr ""
+msgstr "电子邮件"
 
 msgid "Email or username"
-msgstr ""
+msgstr "电子邮件或用户名"
 
 #. Translators: write the numbers the way your language does
 #. (662.000 in German, 662 000 in French). "Tokens" are the units a
@@ -1029,27 +1058,29 @@ msgid ""
 "880,000 tokens of clean text — as raw HTML it would be several times "
 "that, nearly all of it markup."
 msgstr ""
+"英语平均每个单词约含 1.3 个词元。 一个包含 662,000 个单词的网站，纯文本约为 880,000 个词元；如果是原始 "
+"HTML，体积会达到数倍，其中几乎全是标记。"
 
 msgid "Enter a web address, such as https://www.example.com."
-msgstr ""
+msgstr "请输入网址，例如 https://www.example.com。"
 
 msgid "Enter an email address to send the report to."
-msgstr ""
+msgstr "输入电子邮件地址以发送报告。"
 
 msgid "Enter both the email (or username) and the password."
-msgstr ""
+msgstr "请输入电子邮件（或用户名）和密码。"
 
 msgid "Enter the sign-in page as a web address, like https://example.com/login."
-msgstr ""
+msgstr "请输入登录页面的网址，例如 https://example.com/login。"
 
 msgid "Enter your website URL"
-msgstr ""
+msgstr "输入您的网站网址"
 
 msgid "Estimate confidence"
-msgstr ""
+msgstr "估算置信度"
 
 msgid "Estimate — before you crawl"
-msgstr ""
+msgstr "估算 — 抓取前"
 
 #. %(sites)s is a list of site names.
 #, python-format
@@ -1059,113 +1090,115 @@ msgid ""
 "they saved — main content only — and each page’s words are split in the "
 "same proportions. A new crawl gives exact figures."
 msgstr ""
+"根据已保存的 Markdown 估算：%(sites)s。 这些次抓取发生在抓取结果开始保留句子之前，因此其中的句子来自保存的 "
+"Markdown——仅包含主要内容——且每个页面的词数按相同比例拆分。 新一轮网站抓取可提供精确数据。"
 
 msgid "Estimated total"
-msgstr ""
+msgstr "预计总计"
 
 msgid "Estimated total pages"
-msgstr ""
+msgstr "预计总页数"
 
 msgid "Estimated total time"
-msgstr ""
+msgstr "预计总耗时"
 
 msgid ""
 "Every file opens with the URL it came from, so nothing loses its source "
 "on the way into a retrieval pipeline."
-msgstr ""
+msgstr "每个文件开头都会标明其来源网址，确保文件进入检索流程后仍能追溯来源。"
 
 #. %(n)s is a number of pages fetched, in a card comparing two ways of
 #. counting.
 #, python-format
 msgid "Every language crawled: %(n)s page."
 msgid_plural "Every language crawled: %(n)s pages."
-msgstr[0] ""
+msgstr[0] "已抓取的每种语言： %(n)s 个页面。"
 
 msgid ""
 "Every page is rendered in a real browser, so content built by JavaScript "
 "is counted. Tools that only fetch HTML report a fraction of the truth."
-msgstr ""
+msgstr "每个页面都会在真实浏览器中渲染，因此通过 JavaScript 生成的内容也会计入统计。 仅抓取 HTML 的工具只能呈现部分真实情况。"
 
 msgid "Everything else"
-msgstr ""
+msgstr "其他所有内容"
 
 msgid "Everything in Free"
-msgstr ""
+msgstr "免费版包含所有功能"
 
 msgid "Example"
-msgstr ""
+msgstr "示例"
 
 msgid "Exclude subdomains or folders"
-msgstr ""
+msgstr "排除子域名或文件夹"
 
 msgid "Exclude subdomains or folders before continuing"
-msgstr ""
+msgstr "继续前排除子域名或文件夹"
 
 #. placeholder of a field of subdomains and folders to leave out; the examples
 #. may be adapted.
 msgid "Exclude: staging, /careers"
-msgstr ""
+msgstr "排除：staging、/careers"
 
 #. Translators: a pill; %(entries)s is a list such as "staging (subdomain),
 #. /careers (folder)".
 #, python-format
 msgid "Excluded: %(entries)s"
-msgstr ""
+msgstr "已排除：%(entries)s"
 
 msgid "Excluded: none"
-msgstr ""
+msgstr "已排除：无"
 
 msgid "Export"
-msgstr ""
+msgstr "导出"
 
 msgid "Export CSV"
-msgstr ""
+msgstr "导出 CSV"
 
 msgid "Failed"
-msgstr ""
+msgstr "失败"
 
 msgid "Failed to fetch page"
-msgstr ""
+msgstr "获取页面失败"
 
 msgid "Failed to load"
-msgstr ""
+msgstr "加载失败"
 
 #. Translators: %(reason)s is the technical reason a page failed, often in
 #. English.
 #, python-format
 msgid "Failed: %(reason)s"
-msgstr ""
+msgstr "失败：%(reason)s"
 
 msgid "Find out how much work is on your website."
-msgstr ""
+msgstr "了解您的网站有多少工作量。"
 
 msgid ""
 "Find your longest pages and most content-heavy folders. Export a CSV with"
 " each page’s URL, title and word count to help build your scope."
-msgstr ""
+msgstr "找出篇幅最长的页面和内容最多的文件夹。 导出包含每个页面的网址、标题和字数的 CSV 文件，帮助您制定项目范围。"
 
 msgid "Folder"
-msgstr ""
+msgstr "文件夹"
 
 msgid "Folders"
-msgstr ""
+msgstr "文件夹"
 
 msgid ""
 "Follows a count that’s still running, and returns the result when it’s "
 "done."
-msgstr ""
+msgstr "跟踪仍在进行的计数，并在完成后返回结果。"
 
 msgid "Footer · not counted"
-msgstr ""
+msgstr "页脚 · 不计入统计"
 
 msgid "For Claude and ChatGPT"
-msgstr ""
+msgstr "适用于 Claude 和 ChatGPT"
 
 msgid ""
 "For a site that asks for a username and password in a browser pop-up, "
 "like most staging sites. Sent only to that site, used only for this "
 "crawl, never stored."
-msgstr ""
+msgstr "适用于大多数预发布网站等会在浏览器弹出窗口中要求输入用户名和密码的网站。 仅发送至该网站，仅用于本次抓取，绝不存储。"
 
 msgid ""
 "For a site where you sign in with an email and password. The crawler "
@@ -1173,18 +1206,20 @@ msgid ""
 " only read; it never opens a log-out, delete or cancel link. Sent only to"
 " that site, used only for this crawl, never stored."
 msgstr ""
+"适用于使用电子邮件和密码登录的网站。 爬虫会先登录，然后以该账户身份抓取网站，因此请使用仅有读取权限的账户；它绝不会打开退出登录、删除或取消链接。"
+" 仅发送至该网站，仅用于本次抓取，绝不存储。"
 
 msgid "For developers"
-msgstr ""
+msgstr "面向开发者"
 
 msgid ""
 "For staging sites protected by a browser username-and-password pop-up, "
 "enter the credentials to run the crawl. They’re sent only to that site, "
 "used only for that crawl and never stored."
-msgstr ""
+msgstr "对于受浏览器用户名和密码弹窗保护的预发布网站，请输入凭据以运行抓取。 它们仅发送至该网站，仅用于该次抓取，且绝不会被存储。"
 
 msgid "For your client"
-msgstr ""
+msgstr "供您的客户使用"
 
 #, python-format
 msgid ""
@@ -1193,16 +1228,16 @@ msgid ""
 msgid_plural ""
 "Found a sitemap — this site has approximately %(n)s pages. Crawling all "
 "of them may take a while."
-msgstr[0] ""
+msgstr[0] "已找到站点地图 — 此网站约有 %(n)s 个页面。 抓取所有网站可能需要一些时间。"
 
 msgid "Found while crawling, but not in the total."
-msgstr ""
+msgstr "爬取时发现，但未计入总数。"
 
 msgid "Frameworks and hand-written code"
-msgstr ""
+msgstr "框架和手写代码"
 
 msgid "Free"
-msgstr ""
+msgstr "免费"
 
 #. %(n)s is a number of words (the size at which a guest crawl pauses).
 #, python-format
@@ -1212,12 +1247,14 @@ msgid ""
 msgid_plural ""
 "Free to use. No sign-up to start. Sites over %(n)s words require Google "
 "sign-in to finish."
-msgstr[0] ""
+msgstr[0] "免费使用。 无需注册即可开始。 超过 %(n)s 个词的网站需要登录 Google 才能完成。"
 
 msgid ""
 "Free with a Word Counter account. Works with Claude Code, Claude, "
 "ChatGPT, Cursor, VS Code and any app that speaks MCP."
 msgstr ""
+"拥有 Word Counter 账户即可免费使用。 兼容 Claude Code、Claude、ChatGPT、Cursor、VS Code "
+"以及任何支持 MCP 的应用。"
 
 #. %(n)s is a number of words (the size at which a guest crawl pauses).
 #, python-format
@@ -1227,85 +1264,87 @@ msgid ""
 msgid_plural ""
 "Free. No sign-up for sites under %(n)s words. Sign in with Google to "
 "finish larger sites."
-msgstr[0] ""
+msgstr[0] "免费。 少于 %(n)s 个词的网站无需注册。 使用 Google 登录以完成较大的网站抓取。"
 
 msgid "Full report, every page →"
-msgstr ""
+msgstr "完整报告，所有页面 →"
 
 msgid "Get the Markdown"
-msgstr ""
+msgstr "获取 Markdown"
 
 msgid "Get the text without the copy-paste"
-msgstr ""
+msgstr "无需复制粘贴即可获取文本"
 
 msgid "Get your connection URL"
-msgstr ""
+msgstr "获取您的连接 URL"
 
 msgid "Give the project a name."
-msgstr ""
+msgstr "为项目命名。"
 
 msgid "Going through the crawls for the first time…"
-msgstr ""
+msgstr "正在首次检查这些网站抓取结果…"
 
 msgid "Good to know"
-msgstr ""
+msgstr "须知"
 
 msgid ""
 "Google didn’t send your profile. Try again, and allow access to your name"
 " and email."
-msgstr ""
+msgstr "Google 未发送您的个人资料。 请重试，并允许访问您的姓名和电子邮件。"
 
 msgid "Google sign-in didn’t finish. Try again."
-msgstr ""
+msgstr "Google 登录未完成。 重试。"
 
 msgid ""
 "Ground a support assistant in your own answers, audit content at a scale "
 "nobody can read, brief translators with real terminology, or move "
 "platforms without losing the writing."
-msgstr ""
+msgstr "基于您自己的答案构建支持助手，大规模审核无人能读完的内容，用真实术语为译员提供简报，或迁移平台而不丢失文案。"
 
 msgid ""
 "Groups this crawl with others of the same client: combined totals, each "
 "page counted once, and the overlap between crawls. Optional — a run can "
 "join a project later, from its report."
 msgstr ""
+"将此次抓取与同一客户的其他抓取归为一组：汇总总数，每个页面仅计一次，并显示各次抓取之间的重叠部分。 可选 — "
+"您可以稍后从报告中将一次爬取添加到项目中。"
 
 msgid ""
 "Hand it to a translator, prepare a CMS migration or use it with an AI "
 "tool or search index."
-msgstr ""
+msgstr "将其交给译员、用于准备 CMS 迁移，或与 AI 工具或搜索索引搭配使用。"
 
 msgid "Header and menu · not counted"
-msgstr ""
+msgstr "页眉和菜单 · 不计入统计"
 
 #. Translators: how sure the word-count estimate is, shown in the email as
 #. "Estimate confidence: High".
 msgid "High"
-msgstr ""
+msgstr "高"
 
 msgid "High confidence"
-msgstr ""
+msgstr "高置信度"
 
 msgid "Host"
-msgstr ""
+msgstr "主机"
 
 msgid "How long does a count take?"
-msgstr ""
+msgstr "统计需要多长时间？"
 
 msgid "How many words are in the German part of example.com?"
-msgstr ""
+msgstr "example.com 的德语部分有多少个单词？"
 
 msgid "How many words does wxrks.com have?"
-msgstr ""
+msgstr "wxrks.com 有多少个单词？"
 
 msgid "How the added-up words split"
-msgstr ""
+msgstr "汇总后的词数如何拆分"
 
 msgid "How the crawls come down to the new words"
-msgstr ""
+msgstr "爬取结果如何归结为新增词数"
 
 msgid "I counted every page with Word Counter:"
-msgstr ""
+msgstr "我使用 Word Counter 统计了每个页面："
 
 msgid ""
 "If it opens in a browser, Word Counter can count it — whatever it was "
@@ -1314,6 +1353,9 @@ msgid ""
 "Squarespace, Wix, Ghost and Contentful, and names the platform in the "
 "report."
 msgstr ""
+"只要能在浏览器中打开，Word Counter 就能统计其中的词数——无论网站是用 CMS、建站工具、框架、手写代码还是 AI 工具构建的。 "
+"它还可以识别 WordPress、Webflow、Drupal、Shopify、Squarespace、Wix、Ghost 和 "
+"Contentful，并在报告中注明平台名称。"
 
 #, python-format
 msgid ""
@@ -1322,183 +1364,185 @@ msgid ""
 msgid_plural ""
 "If your vendor prices by translation memory, the %(new)s new words are "
 "the number that matters."
-msgstr[0] ""
+msgstr[0] "如果您的供应商按翻译记忆收费，那么这 %(new)s 个新词才是关键。"
 
 msgid "In a chat, add Word Counter from the + menu and ask your question."
-msgstr ""
+msgstr "在聊天中，从 + 菜单添加 Word Counter，然后提出您的问题。"
 
 msgid "In a terminal, add the server with your key in a header:"
-msgstr ""
+msgstr "在终端中，在标头中添加服务器和您的密钥："
 
 msgid ""
 "Include the whole domain, a single subdomain or just the main site. Leave"
 " out folders and subdomains you don’t need, such as /careers, old "
 "archives or a staging copy."
-msgstr ""
+msgstr "包含整个域名、单个子域名或仅主站。 排除您不需要的文件夹和子域名，例如 /careers、旧档案或暂存副本。"
 
 msgid "Includes content loaded by JavaScript"
-msgstr ""
+msgstr "包括由 JavaScript 加载的内容"
 
 msgid ""
 "Includes waiting for each page to finish loading, so text that loads late"
 " isn’t missed."
-msgstr ""
+msgstr "包括等待每个页面加载完成，以免遗漏延迟加载的文本。"
 
 #, python-format
 msgid "Interactive report: %(url)s"
-msgstr ""
+msgstr "交互式报告：%(url)s"
 
 msgid ""
 "Into Your runs, like any count you start here — each with its report, "
 "every page and a CSV."
-msgstr ""
+msgstr "在“您的运行记录”中查看您在此处启动的所有统计任务，每项任务都包含报告、所有页面和 CSV 文件。"
 
 msgid "Invited"
-msgstr ""
+msgstr "已邀请"
 
 #. Translators: under an invited person's address; %(date)s is when.
 #, python-format
 msgid "Invited %(date)s"
-msgstr ""
+msgstr "已于 %(date)s 邀请您"
 
 msgid "Is my URL safe to share?"
-msgstr ""
+msgstr "分享我的 URL 安全吗？"
 
 msgid "Is our help center bigger than our blog?"
-msgstr ""
+msgstr "我们的帮助中心比博客内容更多吗？"
 
 msgid ""
 "It also assumes this app is what's slowing you down. A site that rate-"
 "limits or blocks a heavier crawler caps every plan at the same place; the"
 " report marks those pages, so you can see when that's what happened."
 msgstr ""
+"它还假设拖慢您速度的是这个应用。 "
+"如果某个网站对负载较高的爬虫进行速率限制或拦截，就会让所有套餐都受限于同一水平；报告会标记这些页面，方便您了解是否发生了这种情况。"
 
 msgid "It counts what a translator is handed"
-msgstr ""
+msgstr "它会统计译者收到的内容。"
 
 msgid "It counts what you would translate"
-msgstr ""
+msgstr "它统计您需要翻译的内容"
 
 msgid ""
 "It follows links the way a visitor does, so it finds the help centers, "
 "docs and subdomains a sitemap leaves out."
-msgstr ""
+msgstr "它会像访客一样沿着链接浏览，因此能找到网站地图遗漏的帮助中心、文档和子域名。"
 
 msgid "It knows what repeats"
-msgstr ""
+msgstr "它知道哪些内容会重复"
 
 msgid "It reads every page"
-msgstr ""
+msgstr "它会读取每个页面"
 
 msgid "It sees pages the way a reader does"
-msgstr ""
+msgstr "它以读者的视角查看网页"
 
 msgid "Keep the scope under control"
-msgstr ""
+msgstr "控制好范围"
 
 msgid "Keep translated copies out of the total"
-msgstr ""
+msgstr "总数中不计入已翻译的副本"
 
 msgid "Key — for apps that send it as a header"
-msgstr ""
+msgstr "密钥 — 适用于将其作为标头发送的应用程序"
 
 msgid "Know how much content you’re dealing with."
-msgstr ""
+msgstr "了解您需要处理多少内容。"
 
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #. a field for language codes such as en or pt; "auto" means detected
 #. automatically.
 msgid "Language (auto)"
-msgstr ""
+msgstr "语言（自动）"
 
 #. Translators: a small pill; %(lang)s is a language's name, shown in bold.
 #, python-format
 msgid "Language: %(lang)s"
-msgstr ""
+msgstr "语言：%(lang)s"
 
 #. Translators: a small pill; %(lang)s is the language the crawler detected, in
 #. bold.
 #, python-format
 msgid "Language: %(lang)s (auto)"
-msgstr ""
+msgstr "语言：%(lang)s（自动）"
 
 msgid "Languages"
-msgstr ""
+msgstr "语言"
 
 #. Translators: a small pill; %(primary)s is the first language (bold),
 #. %(rest)s a list of the others.
 #, python-format
 msgid "Languages: %(primary)s + %(rest)s"
-msgstr ""
+msgstr "语言：%(primary)s + %(rest)s"
 
 #. Translators: a small pill on the report; keep it short.
 msgid "Languages: All"
-msgstr ""
+msgstr "语言： 全部"
 
 msgid ""
 "Leave the advanced settings empty and add it. In a chat, make sure Word "
 "Counter is switched on in the tools menu. On the Free plan Claude allows "
 "one custom connector."
-msgstr ""
+msgstr "高级设置留空，然后添加它。 在聊天中，请确保已在工具菜单中启用 Word Counter。 在免费套餐中，Claude 允许使用一个自定义连接器。"
 
 msgid "Left out"
-msgstr ""
+msgstr "已遗漏"
 
 msgid "Linked but not crawled"
-msgstr ""
+msgstr "已关联但尚未抓取"
 
 msgid ""
 "Linked from the pages crawled but not counted — outside this run’s "
 "settings, excluded, or not reached before it stopped."
-msgstr ""
+msgstr "由已抓取的页面链接到，但未计入统计 — 超出本次运行的设置范围、已排除，或在抓取停止前未能访问。"
 
 msgid "Linked subdomains not crawled"
-msgstr ""
+msgstr "未抓取关联的子域名"
 
 msgid "List the 20 longest pages under example.com/blog."
-msgstr ""
+msgstr "列出 example.com/blog 下最长的 20 个页面。"
 
 msgid "Loading…"
-msgstr ""
+msgstr "正在加载…"
 
 msgid "Log out"
-msgstr ""
+msgstr "退出登录"
 
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 msgid "Low confidence"
-msgstr ""
+msgstr "置信度低"
 
 msgid "MCP server"
-msgstr ""
+msgstr "MCP 服务器"
 
 msgid "Main content, not the whole page"
-msgstr ""
+msgstr "主要内容，而非整个页面"
 
 msgid ""
 "Main page content only — site navigation, footers and other repeated "
 "chrome are stripped. Each file starts with the URL it came from."
-msgstr ""
+msgstr "仅限主页内容——网站导航、页脚及其他重复的界面元素均已移除。 每个文件都以其来源网址开头。"
 
 msgid "Main site"
-msgstr ""
+msgstr "主站"
 
 msgid "Make a connection"
-msgstr ""
+msgstr "建立连接"
 
 msgid ""
 "Make a connection for each app you use. Each one has its own URL and key,"
 " and you can revoke it without touching the others."
-msgstr ""
+msgstr "为您使用的每个应用建立连接。 每个密钥都有自己的 URL，您可以单独撤销，不影响其他密钥。"
 
 msgid "Manage billing"
-msgstr ""
+msgstr "管理账单信息"
 
 msgid "Manage subscription"
-msgstr ""
+msgstr "管理订阅"
 
 msgid ""
 "Many sites keep adding content after a page appears. Each page is counted"
@@ -1506,9 +1550,11 @@ msgid ""
 " late are included. It takes a little longer, and the count is more "
 "complete."
 msgstr ""
+"许多网站会在页面显示后继续添加内容。 每个页面只有在加载完成后才会计数，因此延迟加载的列表、标签页和版块也会包含在内。 "
+"这需要多花一点时间，但统计结果会更完整。"
 
 msgid "Markdown saved"
-msgstr ""
+msgstr "Markdown 已保存"
 
 #, python-format
 msgid ""
@@ -1517,7 +1563,7 @@ msgid ""
 msgid_plural ""
 "Markdown was saved for the first %(n)s pages, then stopped because of an "
 "error while saving. The word count below is complete either way."
-msgstr[0] ""
+msgstr[0] "前 %(n)s 个页面的 Markdown 已保存，随后因保存时出错而停止。 无论选择哪种方式，以下字数统计均完整。"
 
 #, python-format
 msgid ""
@@ -1528,7 +1574,7 @@ msgid_plural ""
 "Markdown was saved for the first %(n)s pages, then stopped because the "
 "per-crawl size limit was reached. The word count below is complete either"
 " way."
-msgstr[0] ""
+msgstr[0] "已保存前 %(n)s 个页面的 Markdown，随后因达到单次抓取大小限制而停止。 无论选择哪种方式，以下字数统计均完整。"
 
 #, python-format
 msgid ""
@@ -1539,7 +1585,7 @@ msgid_plural ""
 "Markdown was saved for the first %(n)s pages, then stopped because the "
 "server was running low on disk space. The word count below is complete "
 "either way."
-msgstr[0] ""
+msgstr[0] "前 %(n)s 个页面的 Markdown 已保存，随后因服务器磁盘空间不足而停止。 无论选择哪种方式，以下字数统计均完整。"
 
 #, python-format
 msgid ""
@@ -1550,137 +1596,139 @@ msgid_plural ""
 "Markdown was saved for the first %(n)s pages, then stopped because the "
 "server's total Markdown limit was reached. The word count below is "
 "complete either way."
-msgstr[0] ""
+msgstr[0] "已保存前 %(n)s 个页面的 Markdown，随后因达到服务器 Markdown 总量限制而停止。 无论选择哪种方式，以下字数统计均完整。"
 
 msgid "Matching pages…"
-msgstr ""
+msgstr "正在匹配页面…"
 
 msgid "Measured only when asked."
-msgstr ""
+msgstr "仅在您提出要求时测量。"
 
 msgid "Medium"
-msgstr ""
+msgstr "中等"
 
 msgid "Medium confidence"
-msgstr ""
+msgstr "中等置信度"
 
 msgid "Member logins aren’t supported."
-msgstr ""
+msgstr "不支持会员登录。"
 
 msgid "Member-only content stays out."
-msgstr ""
+msgstr "仅限会员的内容不会被纳入。"
 
 #. %(n)s is a percentage.
 #, python-format
 msgid ""
 "Menu and footer counted on every page: %(n)s%% more than the text people "
 "read"
-msgstr ""
+msgstr "每个页面的菜单和页脚都会计入：比人们阅读的文本多 %(n)s%%"
 
 msgid "Menus, footers and forms, which repeat on every page."
-msgstr ""
+msgstr "在每个页面上重复出现的菜单、页脚和表单。"
 
 msgid "Moderate server load"
-msgstr ""
+msgstr "中等服务器负载"
 
 msgid "More"
-msgstr ""
+msgstr "更多"
 
 msgid "More actions"
-msgstr ""
+msgstr "更多操作"
 
 msgid ""
 "More pages fetched at once, and it starts ahead of the queue. Everything "
 "else about the crawl is identical."
-msgstr ""
+msgstr "一次抓取更多页面，并提前开始处理队列。 爬取的其他所有方面都相同。"
 
 msgid "Most repeated text"
-msgstr ""
+msgstr "重复次数最多的文本"
 
 msgid "Name it Word Counter and paste your personal URL:"
-msgstr ""
+msgstr "将其命名为 Word Counter，然后粘贴您的个人网址："
 
 #. Translators: write the numbers the way your language does.
 msgid ""
 "Navigation, footers, sidebars and forms are stripped before counting, so "
 "a 500-page site doesn't inflate by the same menu repeated 500 times."
-msgstr ""
+msgstr "计数前会移除导航栏、页脚、侧边栏和表单，因此不会因为同一个菜单重复出现 500 次，就让一个 500 页的网站虚增字数。"
 
 msgid ""
 "Need the content as well as the count? Select Save Markdown to download "
 "each page’s main text as a separate file, with its source URL included, "
 "all in one ZIP."
 msgstr ""
+"您需要内容和字数统计吗？选择“保存 Markdown”，即可将每个页面的正文分别下载为单独文件，并在文件中包含其源 URL，所有文件打包在一个 "
+"ZIP 中。"
 
 msgid "New"
-msgstr ""
+msgstr "新建"
 
 msgid "New crawl"
-msgstr ""
+msgstr "新建抓取任务"
 
 msgid "New project name"
-msgstr ""
+msgstr "新项目名称"
 
 msgid "New project, e.g. the client’s name"
-msgstr ""
+msgstr "新建项目，例如客户名称"
 
 msgid "New project…"
-msgstr ""
+msgstr "新建项目…"
 
 msgid "New words"
-msgstr ""
+msgstr "新词数"
 
 msgid "New words and repeated words"
-msgstr ""
+msgstr "新词和重复词"
 
 msgid "Newest first"
-msgstr ""
+msgstr "最新的排在前面"
 
 msgid ""
 "No crawler on your laptop and no AI usage spent fetching pages. Close the"
 " tab: if you’re signed in, you’ll get an email when it’s done."
-msgstr ""
+msgstr "无需在您的笔记本电脑上运行爬虫，也不会消耗 AI 用量来抓取网页。 关闭此标签页：如果您已登录，完成后会收到一封电子邮件。"
 
 msgid "No crawls in this project yet"
-msgstr ""
+msgstr "此项目中尚无爬取记录"
 
 #. keep the <a href="%(href)s"> and </a> tags around the words that link to a
 #. new crawl.
 #, python-format
 msgid "No crawls yet — <a href=\"%(href)s\">start one</a>."
-msgstr ""
+msgstr "尚未运行过抓取任务 — <a href=\"%(href)s\">开始一次</a>。"
 
 msgid "No crawls yet — add some from the project."
-msgstr ""
+msgstr "尚无抓取记录 — 请从项目中添加一些。"
 
 msgid "No crawls yet — try one above."
-msgstr ""
+msgstr "尚无抓取记录 — 请先在上方试用一次。"
 
 msgid "No finished crawls in this project yet."
-msgstr ""
+msgstr "此项目中尚无已完成的抓取任务。"
 
 msgid "No further detail was recorded."
-msgstr ""
+msgstr "未记录更多详细信息。"
 
 msgid "No other subdomains were linked from the pages crawled."
-msgstr ""
+msgstr "从已抓取的页面中未发现链接到其他子域名的内容。"
 
 msgid "No page or sentence is in more than one crawl."
-msgstr ""
+msgstr "每次抓取中，每个页面或句子都只会出现一次。"
 
 msgid "No pages counted yet."
-msgstr ""
+msgstr "尚未统计任何页面。"
 
 msgid "No project"
-msgstr ""
+msgstr "没有项目"
 
 msgid ""
 "No projects yet. Make one above, then add crawls to it — from the project"
 " page, or from any report’s ⋯ menu."
-msgstr ""
+msgstr "尚无项目。 先在上方创建一个项目，然后从项目页面或任意报告的 ⋯ 菜单中向其中添加抓取任务。"
 
 msgid "No sentence is in more than one crawl."
-msgstr ""
+msgstr "每次抓取中，每个句子只出现一次。"
 
 #, python-format
 msgid ""
@@ -1691,61 +1739,61 @@ msgid_plural ""
 "No sitemap found — this estimate is based only on pages discovered so far"
 " (approximately %(n)s), so it may be less accurate. Crawling all of them "
 "may take a while."
-msgstr[0] ""
+msgstr[0] "未找到站点地图 — 此估算仅基于目前发现的页面（约 %(n)s 个），因此准确性可能较低。 抓取所有网站可能需要一些时间。"
 
 msgid "No sitemap needed"
-msgstr ""
+msgstr "无需站点地图"
 
 msgid ""
 "No — treat it like a password: anyone with it can count as you. You can "
 "revoke it at any time and make a new one."
-msgstr ""
+msgstr "不——请像对待密码一样保管它：任何拥有它的人都能冒充您进行计数。 您可以随时撤销它并创建一个新的。"
 
 msgid "Nobody knows how many words are on their website."
-msgstr ""
+msgstr "没人知道自己的网站上有多少个词。"
 
 msgid "None found. It trusted the sitemap."
-msgstr ""
+msgstr "未找到。 它信任站点地图。"
 
 msgid "None yet."
-msgstr ""
+msgstr "暂无内容。"
 
 msgid "Not checked"
-msgstr ""
+msgstr "未检查"
 
 msgid "Not counted"
-msgstr ""
+msgstr "未计数"
 
 msgid "Not found"
-msgstr ""
+msgstr "未找到"
 
 msgid "Not in the total"
-msgstr ""
+msgstr "不计入总数"
 
 msgid "Not in this count"
-msgstr ""
+msgstr "不计入此字数统计"
 
 msgid ""
 "Not the marketing lead, not the person who built it, and not the agency "
 "about to quote you for translating it. Point this at a URL and find out —"
 " page by page, folder by folder."
-msgstr ""
+msgstr "不是营销负责人，不是构建网站的人，也不是即将为您提供翻译报价的代理机构。 将其指向一个 URL，即可逐页、逐文件夹查看结果。"
 
 msgid ""
 "Nothing could be counted because the starting page itself couldn't be "
 "accessed. If you know another page on this site that might be more "
 "accessible (e.g. a blog post or inner page rather than the homepage), try"
 " starting the crawl from that URL instead."
-msgstr ""
+msgstr "无法访问起始页面，因此无法统计任何内容。 如果您知道此网站上有其他可能更易于访问的页面（例如博客文章或内页，而不是首页），请尝试改用该网址开始抓取。"
 
 msgid "Nothing extra: the same as counting on the website. Pro counts run faster."
-msgstr ""
+msgstr "没有额外内容：与在网站上计数相同。 Pro 统计速度更快。"
 
 msgid "Nothing left out"
-msgstr ""
+msgstr "没有遗漏任何内容"
 
 msgid "Older →"
-msgstr ""
+msgstr "更早 →"
 
 msgid ""
 "On its own, an assistant estimates from the pages it opens — or, in "
@@ -1753,236 +1801,246 @@ msgid ""
 " Word Counter follows every link and the sitemap until there is nothing "
 "left to read."
 msgstr ""
+"单靠助手，它只能根据打开的页面进行估算；而在 Claude Code 中，它会编写一次性爬虫，统计每个页面上的菜单。 Word Counter "
+"会沿着每个链接和站点地图抓取网站，直到没有剩余内容可读取。"
 
 msgid ""
 "One client, every crawl that belongs to it, and the number that counts "
 "each page once."
-msgstr ""
+msgstr "一个客户、属于该客户的每次抓取，以及每个页面仅计数一次的数字。"
 
 msgid "One file per page, provenance intact"
-msgstr ""
+msgstr "每页一个文件，来源信息完整保留"
 
 msgid "One subdomain"
-msgstr ""
+msgstr "一个子域名"
 
 msgid ""
 "Only crawl this language’s pages, for sites with a /en/, /fr/, ... path "
 "per language. Leave blank to auto-detect the starting page’s language."
-msgstr ""
+msgstr "仅抓取此语言的页面，适用于每种语言的路径为 /en/、/fr/ 等的网站。 留空即可自动检测起始页面的语言。"
 
 msgid ""
 "Only crawl this language’s pages, for sites with a /en/, /fr/, ... path "
 "per language. Leave blank to auto-detect the starting page’s language. "
 "Comma-separate multiple codes to keep more than one (e.g. en, pt, es)."
 msgstr ""
+"仅抓取此语言的页面，适用于每种语言的路径为 /en/、/fr/ 等的网站。 留空即可自动检测起始页面的语言。 "
+"多个代码请用逗号分隔，以保留多个代码（例如 en、pt、es）。"
 
 msgid ""
 "Open Plugins and choose + → Add custom MCP server. (Some accounts have it"
 " under Settings → Apps & Connectors → Advanced → Developer mode → "
 "Create.)"
 msgstr ""
+"打开“插件”，然后选择“+” → “添加自定义 MCP 服务器”。 "
+"（部分账户可在“设置”→“应用和连接器”→“高级”→“开发者模式”→“创建”中找到。）"
 
 msgid "Open Settings → Connectors (on some versions, Customize → Connectors)."
-msgstr ""
+msgstr "打开“设置”→“连接器”（某些版本中为“自定义”→“连接器”）。"
 
 #. Translators: a link that opens the crawled page in a new tab.
 msgid "Open ↗"
-msgstr ""
+msgstr "打开 ↗"
 
 msgid "Opening checkout…"
-msgstr ""
+msgstr "正在打开结账页面…"
 
 #. above the report's address, for mail apps that hide the button.
 msgid "Or paste this into your browser:"
-msgstr ""
+msgstr "或将此内容粘贴到浏览器中："
 
 msgid "Overview"
-msgstr ""
+msgstr "概览"
 
 msgid "Owner"
-msgstr ""
+msgstr "所有者"
 
 msgid "PDFs, Word and Excel files, images and videos aren’t counted."
-msgstr ""
+msgstr "PDF、Word 和 Excel 文件、图片及视频不计入统计。"
 
 msgid "Page"
-msgstr ""
+msgstr "页面"
 
 #, python-format
 msgid "Page %(page)s of %(total)s"
-msgstr ""
+msgstr "第 %(page)s 页，共 %(total)s 页"
 
 msgid ""
 "Page counts only tell you so much. Some pages have a paragraph. Others "
 "have thousands of words. Opening them one by one takes time you could "
 "spend doing the work."
-msgstr ""
+msgstr "页面数量只能说明部分情况。 有些页面包含一个段落。 其他网站有数千个单词。 逐个打开它们会耗费时间，而这些时间本可以用来完成工作。"
 
 msgid "Pages"
-msgstr ""
+msgstr "页面"
 
 msgid "Pages appear below as they’re read."
-msgstr ""
+msgstr "页面会在读取时显示在下方。"
 
 msgid ""
 "Pages behind a login or blocked by the site are listed separately, so you"
 " can see what the total leaves out."
-msgstr ""
+msgstr "需要登录或被网站屏蔽的页面会单独列出，方便您了解总数未包含哪些页面。"
 
 msgid "Pages behind a sign-in"
-msgstr ""
+msgstr "登录后才能访问的页面"
 
 msgid "Pages counted"
-msgstr ""
+msgstr "已统计的页面数"
 
 msgid "Pages fetched so far"
-msgstr ""
+msgstr "已抓取的页面数"
 
 msgid "Pages in more than one crawl"
-msgstr ""
+msgstr "多个抓取任务中的页面"
 
 #. Translators: %(saved)s is how many pages are in the download and
 #. %(total)s how many the crawl counted.
 #, python-format
 msgid "Pages in this archive: %(saved)s of %(total)s crawled"
 msgid_plural "Pages in this archive: %(saved)s of %(total)s crawled"
-msgstr[0] ""
+msgstr[0] "此存档中的页面：已抓取 %(saved)s/%(total)s 个"
 
 msgid "Pages mostly repeated from another crawl"
-msgstr ""
+msgstr "大部分页面与另一次抓取重复"
 
 msgid "Pages need a link to be found."
-msgstr ""
+msgstr "页面需要包含链接才能被找到。"
 
 msgid ""
 "Pages open in Chrome, so text that appears after JavaScript runs can be "
 "counted too."
-msgstr ""
+msgstr "页面会在 Chrome 中打开，因此 JavaScript 运行后显示的文本也可以计入。"
 
 msgid "Pages requiring a member login are listed but can’t be read."
-msgstr ""
+msgstr "需要会员登录的页面会列出，但无法读取。"
 
 msgid "Pages so far"
-msgstr ""
+msgstr "目前已处理的页面数"
 
 msgid "Pages with no links pointing to them may be missed."
-msgstr ""
+msgstr "没有链接指向的页面可能会被遗漏。"
 
 msgid ""
 "Part of this is estimated: some sites were crawled before their sentences"
 " were kept, so their repetition is worked out from their main content."
-msgstr ""
+msgstr "其中一部分是估算值：有些网站在保留句子之前就已完成抓取，因此其重复内容是根据主要内容计算得出的。"
 
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 msgid "Password-protected"
-msgstr ""
+msgstr "受密码保护的"
 
 msgid "Password-protected site"
-msgstr ""
+msgstr "受密码保护的网站"
 
 msgid "Paused"
-msgstr ""
+msgstr "已暂停"
 
 #. a crawl stops here to show its estimate. %(n)s is a number of words.
 #, python-format
 msgid "Paused at %(n)s word"
 msgid_plural "Paused at %(n)s words"
-msgstr[0] ""
+msgstr[0] "已在 %(n)s 个词处暂停"
 
 msgid "People with access"
-msgstr ""
+msgstr "有权访问的人员"
 
 msgid "Personal URL — for Claude, ChatGPT and apps that only take a URL"
-msgstr ""
+msgstr "个人 URL — 适用于 Claude、ChatGPT 和仅接受 URL 的应用程序"
 
 msgid "Pick your app below and paste it in. It takes a minute."
-msgstr ""
+msgstr "在下方选择您的应用并粘贴进去。 只需一分钟。"
 
 msgid "Plans for teams of every size, billed monthly or yearly."
-msgstr ""
+msgstr "适合各种规模团队的套餐，按月或按年计费。"
 
 msgid "Please enter a valid http(s) URL"
-msgstr ""
+msgstr "请输入有效的 http(s) URL"
 
 msgid ""
 "Point this at a URL and get every page back as Markdown, in one ZIP — "
 "main content only, no navigation, no cookie banners, no markup burning "
 "tokens without carrying meaning."
 msgstr ""
+"输入网址，即可将所有页面的主要内容导出为 Markdown，并打包成一个 ZIP 文件——不含导航栏、Cookie "
+"横幅或占用令牌却没有实际意义的标记。"
 
 msgid "Preparing…"
-msgstr ""
+msgstr "正在准备…"
 
 msgid ""
 "Press Enter or comma to add one. A leading / excludes a folder, anything "
 "else a subdomain — each entry is labelled with how it will be treated. "
 "Applies to the rest of this crawl; pages already counted stay counted."
 msgstr ""
+"按 Enter 或逗号添加一项。 以 / 开头表示排除文件夹，其他内容则表示子域名——每个条目都标注了其处理方式。 "
+"适用于本次抓取的其余页面；已计数的页面仍保留计数。"
 
 msgid "Preview"
-msgstr ""
+msgstr "预览"
 
 msgid "Pricing"
-msgstr ""
+msgstr "定价"
 
 #. a field for language codes such as en or pt; "auto" means detected
 #. automatically.
 msgid "Primary language (auto)"
-msgstr ""
+msgstr "主要语言（自动）"
 
 msgid "Print"
-msgstr ""
+msgstr "打印"
 
 msgid "Print report"
-msgstr ""
+msgstr "打印报告"
 
 msgid "Pro"
-msgstr ""
+msgstr "Pro"
 
 msgid "Proceed with crawl"
-msgstr ""
+msgstr "继续抓取网站"
 
 msgid "Project"
-msgstr ""
+msgstr "项目"
 
 msgid "Project name"
-msgstr ""
+msgstr "项目名称"
 
 msgid "Projects"
-msgstr ""
+msgstr "项目"
 
 msgid "Public link"
-msgstr ""
+msgstr "公开链接"
 
 msgid "Questions people ask"
-msgstr ""
+msgstr "常见问题"
 
 msgid "Queued"
-msgstr ""
+msgstr "已加入队列"
 
 msgid "Quote with a word count behind you"
-msgstr ""
+msgstr "报价时，字数统计就在您手边"
 
 msgid ""
 "Quoting a translation, planning a website rewrite or moving to a new CMS?"
 " Get a word count for your site, broken down by page and folder, so you "
 "can scope the work before you commit."
-msgstr ""
+msgstr "正在为翻译项目报价、规划网站改版，还是准备迁移到新的 CMS？获取网站的字数统计，并按页面和文件夹细分，以便在确定合作前评估工作量。"
 
 msgid "Re-crawl"
-msgstr ""
+msgstr "重新抓取"
 
 #. menu items that open a form or a dialog, hence the ellipsis.
 msgid "Re-crawl…"
-msgstr ""
+msgstr "重新抓取…"
 
 msgid "Re-run to check every word"
-msgstr ""
+msgstr "重新运行以检查每个词语"
 
 msgid "Read how Claude does with and without it →"
-msgstr ""
+msgstr "了解 Claude 使用和不使用它时的表现 →"
 
 msgid ""
 "Read in this order, each crawl adds what the ones above it don’t have: "
@@ -1990,89 +2048,91 @@ msgid ""
 "fills the gaps. Of a site crawled twice, the latest completed crawl "
 "counts."
 msgstr ""
+"请按以下顺序阅读，每次抓取都会补充上方抓取中没有的内容：先显示已完成的抓取，按时间从新到旧排列；未完成的抓取仅填补缺失内容。 "
+"对于已抓取两次的网站，以最近一次完成的抓取为准。"
 
 msgid "Reading sentences…"
-msgstr ""
+msgstr "正在读取句子…"
 
 msgid "Reading the crawls…"
-msgstr ""
+msgstr "正在读取抓取结果…"
 
 msgid "Ready for whatever comes next"
-msgstr ""
+msgstr "为接下来的任何挑战做好准备"
 
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #. Translators: the × beside an invited person; %(email)s is their address.
 #, python-format
 msgid "Remove %(email)s"
-msgstr ""
+msgstr "移除 %(email)s"
 
 #. Translators: the × on an exclusion chip; %(entry)s is what was typed, such
 #. as /careers.
 #, python-format
 msgid "Remove %(entry)s"
-msgstr ""
+msgstr "移除 %(entry)s"
 
 msgid "Removing…"
-msgstr ""
+msgstr "正在移除…"
 
 msgid "Rename project"
-msgstr ""
+msgstr "重命名项目"
 
 msgid "Repeated"
-msgstr ""
+msgstr "重复"
 
 msgid "Repeated from other crawls"
-msgstr ""
+msgstr "在其他抓取任务中重复出现的内容"
 
 msgid "Repeated within"
-msgstr ""
+msgstr "重复间隔为"
 
 msgid "Repeated words"
-msgstr ""
+msgstr "重复词语"
 
 msgid "Repeated · est."
-msgstr ""
+msgstr "重复 · 预计。"
 
 msgid "Repetition"
-msgstr ""
+msgstr "重复项"
 
 msgid "Repetition estimate"
-msgstr ""
+msgstr "重复率估算"
 
 msgid "Replaced by the newer crawl of this site — not counted."
-msgstr ""
+msgstr "已由此网站较新的抓取结果替代 — 不计入统计。"
 
 msgid "Report sections"
-msgstr ""
+msgstr "报告部分"
 
 #. Translators: why a page wasn't counted, in the report's list of pages
 #. that failed and in its tooltips.
 msgid "Requires login"
-msgstr ""
+msgstr "需要登录才能使用"
 
 msgid "Resuming…"
-msgstr ""
+msgstr "正在继续…"
 
 msgid ""
 "Review the scope, exclude anything you don’t need and sign in with Google"
 " to finish for free."
-msgstr ""
+msgstr "查看范围，排除不需要的内容，然后使用 Google 登录即可免费完成。"
 
 msgid "Revoke"
-msgstr ""
+msgstr "撤销授权"
 
 msgid ""
 "Revoke this connection? Any app using it stops counting until you give it"
 " a new one."
-msgstr ""
+msgstr "要撤销此连接吗？任何使用它的应用都会停止计数，直到您为其提供新的一个。"
 
 msgid "Runs not in a project"
-msgstr ""
+msgstr "不属于任何项目的运行记录"
 
 msgid "Runs on our servers, not your computer"
-msgstr ""
+msgstr "在我们的服务器上运行，而不是在您的电脑上"
 
 #. %(pro)s is "N pages" in bold (how many pages Pro fetches at        once) and
 #. %(free)s is the Free plan's number, in bold, with the noun left        out
@@ -2085,58 +2145,60 @@ msgid ""
 "busy. One subscription covers both %(counter)s and %(markdown)s — they’re"
 " the same account."
 msgstr ""
+"同一爬虫、同样的计数、同样的报告。 Pro 可一次获取 %(pro)s，而不是 %(free)s；队列繁忙时，还会优先于其他所有人开始处理。 "
+"一个订阅即可使用 %(counter)s 和 %(markdown)s——两者共用同一个账户。"
 
 msgid "Same page in another crawl"
-msgstr ""
+msgstr "另一次抓取中的同一页面"
 
 msgid "Same page in more than one crawl"
-msgstr ""
+msgstr "同一页面出现在多个抓取任务中"
 
 msgid "Same page on more than one site"
-msgstr ""
+msgstr "同一页面出现在多个网站上"
 
 msgid "Same pages"
-msgstr ""
+msgstr "相同页面"
 
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 msgid "Save Markdown"
-msgstr ""
+msgstr "保存 Markdown"
 
 msgid "Save each page as Markdown"
-msgstr ""
+msgstr "将每个页面保存为 Markdown"
 
 msgid ""
 "Save each page's main content as Markdown, downloadable as a ZIP when the"
 " crawl finishes."
-msgstr ""
+msgstr "将每个页面的主要内容保存为 Markdown，爬取完成后可下载为 ZIP。"
 
 msgid "Saving…"
-msgstr ""
+msgstr "正在保存…"
 
 msgid "Search your runs"
-msgstr ""
+msgstr "搜索您的运行记录"
 
 msgid ""
 "Seconds for a small site, minutes for a large one. Your assistant waits "
 "up to a minute, then checks back on the count until it’s done."
-msgstr ""
+msgstr "小型网站只需几秒，大型网站则需几分钟。 您的助手最多等待一分钟，然后会再次检查字数，直到完成。"
 
 msgid "See a real report"
-msgstr ""
+msgstr "查看真实报告"
 
 #. a link to every crawl; %(n)s is how many there are.
 #, python-format
 msgid "See all %(n)s →"
 msgid_plural "See all %(n)s →"
-msgstr[0] ""
+msgstr[0] "查看全部 %(n)s →"
 
 msgid ""
 "See how many words need translating, editing or rewriting. Repeated "
 "menus, headers and footers are left out, and duplicate pages don’t "
 "inflate the total."
-msgstr ""
+msgstr "查看需要翻译、编辑或重写的字数。 已排除重复的菜单、页眉和页脚，重复页面不会增加总数。"
 
 #. %(cms)s is a website platform such as WordPress or Webflow.            The
 #. same words as the email's button; the arrow beside it follows the reading
@@ -2144,135 +2206,135 @@ msgstr ""
 #. %(cms)s is a website platform such as WordPress or Webflow.
 #, python-format
 msgid "See the %(cms)s connector"
-msgstr ""
+msgstr "查看 %(cms)s 连接器"
 
 msgid "See what comes out"
-msgstr ""
+msgstr "查看输出结果"
 
 msgid "See what that costs →"
-msgstr ""
+msgstr "查看费用 →"
 
 #. a button. %(site)s is the crawled site's domain, such as example.com.
 #, python-format
 msgid "See what wxrks would do with %(site)s"
-msgstr ""
+msgstr "查看 wxrks 会如何处理 %(site)s"
 
 msgid "See where the work is"
-msgstr ""
+msgstr "查看工作进度的位置"
 
 msgid "Seems slow? Here’s why"
-msgstr ""
+msgstr "感觉很慢？原因如下"
 
 msgid "Seen"
-msgstr ""
+msgstr "已查看"
 
 msgid "Send"
-msgstr ""
+msgstr "发送"
 
 msgid ""
 "Send a public report link, share by email, print the results or export "
 "them. If you’re signed in, you’ll get an email when the crawl finishes."
-msgstr ""
+msgstr "发送公开报告链接、通过电子邮件分享、打印结果或导出结果。 如果您已登录，网站抓取完成后，您会收到一封电子邮件。"
 
 msgid "Sending…"
-msgstr ""
+msgstr "正在发送…"
 
 #. Translators: %(email)s is the address the report was just sent to.
 #, python-format
 msgid "Sent to %(email)s"
-msgstr ""
+msgstr "已发送至 %(email)s"
 
 msgid "Sentence"
-msgstr ""
+msgstr "句子"
 
 msgid "Sentences"
-msgstr ""
+msgstr "句子"
 
 msgid "Sentences estimated from saved Markdown."
-msgstr ""
+msgstr "根据已保存的 Markdown 估算的句子数。"
 
 msgid ""
 "Sentences found in more than one crawl. Each counts once, where it was "
 "first seen; its other copies are the words removed."
-msgstr ""
+msgstr "在多个抓取任务中发现的句子。 每个词只计一次，按首次出现的位置计算；其余重复项均为移除的词数。"
 
 msgid "Sentences in common"
-msgstr ""
+msgstr "常用句子"
 
 msgid "Sentences repeated across crawls"
-msgstr ""
+msgstr "多次抓取中重复出现的句子"
 
 msgid "Sentences repeated across sites"
-msgstr ""
+msgstr "多个网站中重复出现的句子"
 
 msgid "Sentences repeated within a crawl"
-msgstr ""
+msgstr "单次网站抓取中重复的句子"
 
 msgid "Sentences repeated within a site"
-msgstr ""
+msgstr "网站内重复的句子"
 
 msgid "Session from your browser"
-msgstr ""
+msgstr "来自您浏览器的会话"
 
 msgid ""
 "Set Authentication to None — the key is already in the URL — and create "
 "it."
-msgstr ""
+msgstr "将身份验证设为“无”——密钥已在 URL 中——然后创建它。"
 
 msgid "Set aside: other languages"
-msgstr ""
+msgstr "暂不处理：其他语言"
 
 msgid "Set exclusions before the crawl or adjust them when the estimate appears."
-msgstr ""
+msgstr "请在开始抓取前设置排除项，或在显示预估字数后进行调整。"
 
 msgid "Settings applied"
-msgstr ""
+msgstr "已应用设置"
 
 msgid "Share"
-msgstr ""
+msgstr "分享"
 
 msgid ""
 "Share a link with your client, export every page to CSV, or put a "
 "client’s sites in one project that counts each page and sentence once."
-msgstr ""
+msgstr "与客户分享链接、将所有页面导出为 CSV，或将客户的网站放入同一个项目中，每个页面和句子只计数一次。"
 
 msgid "Share results"
-msgstr ""
+msgstr "分享结果"
 
 msgid "Share the scope. Get everyone working from the same numbers."
-msgstr ""
+msgstr "分享范围。 让所有人使用同一组数据开展工作。"
 
 msgid "Share this project"
-msgstr ""
+msgstr "分享此项目"
 
 msgid "Share this report"
-msgstr ""
+msgstr "分享此报告"
 
 msgid "Shared"
-msgstr ""
+msgstr "共享"
 
 msgid "Shared between the sites"
-msgstr ""
+msgstr "在各网站之间共享"
 
 msgid "Show all"
-msgstr ""
+msgstr "显示全部"
 
 #. Translators: a link under a table that shows every row; %(n)s is how many.
 #, python-format
 msgid "Show all %(n)s"
-msgstr ""
+msgstr "显示全部 %(n)s"
 
 msgid "Show more"
-msgstr ""
+msgstr "显示更多"
 
 #. Translators: a link under the top pages, when the list is itself the top
 #. %(n)s of more.
 #, python-format
 msgid "Show top %(n)s"
-msgstr ""
+msgstr "显示前 %(n)s 项"
 
 msgid "Showed a member login instead of the page."
-msgstr ""
+msgstr "显示的是会员登录页面，而不是该页面。"
 
 #, python-format
 msgid ""
@@ -2281,27 +2343,27 @@ msgid ""
 msgid_plural ""
 "Showing the first %(loaded)s of %(n)s pages. Export the CSV for the "
 "complete list."
-msgstr[0] ""
+msgstr[0] "正在显示 %(n)s 个页面中的前 %(loaded)s 个。 导出完整列表的 CSV。"
 
 #, python-format
 msgid "Showing the first %(n)s — export the CSV for the rest."
-msgstr ""
+msgstr "正在显示前 %(n)s 项 — 导出 CSV 查看其余内容。"
 
 #, python-format
 msgid "Showing the most recent %(n)s page while this crawl runs."
 msgid_plural "Showing the most recent %(n)s pages while this crawl runs."
-msgstr[0] ""
+msgstr[0] "此爬取运行期间，显示最近的 %(n)s 个页面。"
 
 msgid ""
 "Shown on this report, its shared link and the CSV. It has to be on the "
 "site that was crawled. Leave it empty to show where the crawl started."
-msgstr ""
+msgstr "显示在此报告、其共享链接和 CSV 中。 它必须位于已抓取的网站上。 留空即可显示抓取的起始位置。"
 
 msgid "Shows what’s missing"
-msgstr ""
+msgstr "显示缺少的内容"
 
 msgid "Sign in"
-msgstr ""
+msgstr "登录"
 
 msgid ""
 "Sign in to the site in Chrome, open View → Developer → Developer Tools, "
@@ -2309,80 +2371,82 @@ msgid ""
 "“cookie” under Request Headers and copy its value here. It works until "
 "that session ends, and is never stored."
 msgstr ""
+"在 Chrome 中登录网站，打开“视图”→“开发者”→“开发者工具”，选择“网络”，然后重新加载页面。 点击第一个请求，在 Request "
+"Headers 下找到“cookie”，并将其值复制到此处。 它会一直生效，直到该会话结束，并且绝不会被存储。"
 
 msgid "Sign in to upgrade"
-msgstr ""
+msgstr "登录以升级"
 
 msgid "Sign in with Google"
-msgstr ""
+msgstr "使用 Google 登录"
 
 msgid ""
 "Sign in with Google and make a connection. You get a personal URL — and a"
 " key for apps that take one — shown once."
-msgstr ""
+msgstr "使用 Google 登录并建立连接。 您会获得一个个人网址，以及供需要密钥的应用使用的密钥——这些信息只显示一次。"
 
 msgid "Sign in with Google to continue"
-msgstr ""
+msgstr "使用 Google 登录以继续"
 
 msgid "Sign in with Google to count the rest of this site."
-msgstr ""
+msgstr "使用 Google 登录，即可统计此网站的其余内容。"
 
 msgid ""
 "Sign in with Google to count the rest. It’s free, and the crawl carries "
 "on from here."
-msgstr ""
+msgstr "使用 Google 登录以统计其余内容。 免费使用，网站抓取将从这里继续。"
 
 msgid "Sign in with Google to keep it"
-msgstr ""
+msgstr "使用 Google 登录以保留此内容"
 
 msgid "Sign-in email"
-msgstr ""
+msgstr "登录邮箱"
 
 msgid "Sign-in page"
-msgstr ""
+msgstr "登录页面"
 
 msgid "Sign-in page — optional, if the crawl starts on it"
-msgstr ""
+msgstr "登录页面 — 可选，若抓取从此页面开始"
 
 msgid "Sign-in password"
-msgstr ""
+msgstr "登录密码"
 
 msgid "Signed in"
-msgstr ""
+msgstr "已登录"
 
 msgid ""
 "Signing in isn't available right now. Try again in a minute, or paste a "
 "session."
-msgstr ""
+msgstr "目前无法登录。 请稍后再试，或粘贴会话。"
 
 msgid "Signs in with a code, or with Google or Microsoft? Paste a session instead"
-msgstr ""
+msgstr "使用验证码、Google 或 Microsoft 登录？改为粘贴会话"
 
 msgid "Site"
-msgstr ""
+msgstr "网站"
 
 msgid "Site password"
-msgstr ""
+msgstr "网站密码"
 
 #. Translators: the name of the companion product. Markdown is a file
 #. format and stays as written.
 msgid "Site to Markdown"
-msgstr ""
+msgstr "Site to Markdown"
 
 msgid "Site username"
-msgstr ""
+msgstr "网站用户名"
 
 msgid "Site with a sign-in page"
-msgstr ""
+msgstr "带有登录页面的网站"
 
 msgid "Skipped as translations"
-msgstr ""
+msgstr "已跳过，视为翻译内容。"
 
 msgid "Skips the queue when crawls are waiting"
-msgstr ""
+msgstr "有待处理的抓取任务时跳过队列"
 
 msgid "Some languages are undercounted."
-msgstr ""
+msgstr "部分语言的字数统计偏少。"
 
 msgid ""
 "Some sites use bot protection such as Cloudflare or Akamai. Pages it "
@@ -2390,96 +2454,100 @@ msgid ""
 "total is incomplete. If it’s your site, a staging copy often works best —"
 " including one behind a browser username-and-password pop-up."
 msgstr ""
+"有些网站会使用 Cloudflare 或 Akamai 等机器人防护服务。 被屏蔽的页面会单独列出，不会计为空页面，因此您可以看到总数并不完整。 "
+"如果这是您的网站，通常使用暂存副本效果最好——包括需要通过浏览器弹出的用户名和密码窗口才能访问的副本。"
 
 msgid "Something went wrong"
-msgstr ""
+msgstr "出了点问题"
 
 msgid "Source code (AGPL-3.0)"
-msgstr ""
+msgstr "源代码（AGPL-3.0）"
 
 msgid "Start re-crawl"
-msgstr ""
+msgstr "开始重新抓取"
 
 #. Translators: %(date)s is a date and time, such as "27 November 2026, 15:08".
 #, python-format
 msgid "Started: %(date)s"
-msgstr ""
+msgstr "开始时间：%(date)s\n"
 
 #. Translators: the label of a crawl's status badge, and of the form's
 #. button while a crawl starts.
 msgid "Starting…"
-msgstr ""
+msgstr "正在启动…"
 
 #. Translators: the banner's button that keeps the English page and hides the
 #. banner.
 msgid "Stay in English"
-msgstr ""
+msgstr "保持英文原文"
 
 msgid "Still crawling — joins when it finishes."
-msgstr ""
+msgstr "仍在抓取——完成后将加入。"
 
 msgid "Stop this crawl before deleting it."
-msgstr ""
+msgstr "删除前请先停止此次抓取。"
 
 msgid "Stopped: the server restarted while it ran, several times in a row."
-msgstr ""
+msgstr "已停止：运行期间服务器连续多次重启。"
 
 msgid ""
 "Streamable HTTP at the URL below, plain JSON responses, no sessions. "
 "Protocol versions 2025-03-26 to 2026-07-28. Authentication: a Bearer key,"
 " or the key in the URL path."
 msgstr ""
+"下方 URL 提供可流式传输的 HTTP 服务，返回纯 JSON 响应，不使用会话。 协议版本：2025-03-26 至 2026-07-28。 "
+"身份验证：Bearer 密钥，或 URL 路径中的密钥。"
 
 msgid "Subdomain"
-msgstr ""
+msgstr "子域名"
 
 msgid "Subdomains"
-msgstr ""
+msgstr "子域名"
 
 msgid "Summary"
-msgstr ""
+msgstr "摘要"
 
 #. Translators: %(email)s is the account's email address, shown in bold.
 #, python-format
 msgid "Summary emailed to %(email)s"
-msgstr ""
+msgstr "摘要已发送至 %(email)s 的邮箱"
 
 #. Translators: %(email)s is the account's email address, shown in bold.
 #, python-format
 msgid "Summary will be emailed to %(email)s"
-msgstr ""
+msgstr "摘要将发送至 %(email)s 的邮箱。"
 
 msgid "Support in your language"
-msgstr ""
+msgstr "提供您所用语言的支持"
 
 #. Translators: the banner's button that opens this page in your language.
 #, python-format
 msgid "Switch to %(language)s"
-msgstr ""
+msgstr "切换为%(language)s"
 
 msgid "Text"
-msgstr ""
+msgstr "文本"
 
 #. %(url)s is the address of the page, as a link.
 #, python-format
 msgid "Text not kept — first seen on %(url)s"
-msgstr ""
+msgstr "未保留文本 — 首次出现在 %(url)s"
 
 msgid ""
 "That doesn't look like a session. Copy the value of the “cookie” line "
 "from the browser's developer tools."
-msgstr ""
+msgstr "这看起来不像一个会话。 从浏览器开发者工具中复制“cookie”行的值。"
 
 msgid "That project isn't yours, or it no longer exists."
-msgstr ""
+msgstr "该项目不属于您，或已不存在。"
 
 msgid ""
 "That session didn't get past the sign-in page; it may have ended. Sign in"
 " again in your browser and copy a fresh one."
-msgstr ""
+msgstr "该会话未能通过登录页面，可能已结束。 请在浏览器中重新登录并复制一个新的。"
 
 msgid "The configured page limit was reached — the crawl may be incomplete."
-msgstr ""
+msgstr "已达到配置的页面上限 — 抓取可能不完整。"
 
 msgid ""
 "The crawl counts the starting page’s language only. Every page is checked"
@@ -2487,15 +2555,17 @@ msgid ""
 "pages in another language are set aside, whatever their address says. "
 "Folders such as /de/ are skipped without being fetched."
 msgstr ""
+"本次抓取仅统计起始页面所用的语言。 每个页面都会根据其声明的语言和所使用的文字进行检查；其他语言的页面会被排除，无论其网址如何显示。 不会抓取 "
+"/de/ 等文件夹中的内容。"
 
 msgid "The crawl failed."
-msgstr ""
+msgstr "网站抓取失败。"
 
 msgid ""
 "The crawl, project or page may have been deleted, or the link may be "
 "missing a part. A report that’s private only opens for the account that "
 "made it."
-msgstr ""
+msgstr "网站抓取任务、项目或页面可能已被删除，或者链接可能缺少一部分。 只有创建报告的账户才能打开私人报告。"
 
 #. at the end of the printed report. %(n)s is the number of pages.
 #, python-format
@@ -2505,54 +2575,56 @@ msgid ""
 msgid_plural ""
 "The full list of %(n)s pages, with each page’s title and word count, is "
 "in the CSV export."
-msgstr[0] ""
+msgstr[0] "包含全部 %(n)s 个页面及每个页面标题和字数的完整列表位于 CSV 导出文件中。"
 
 #. Translators: %(error)s is a technical reason, often in English.
 #, python-format
 msgid "The last consolidation didn’t finish: %(error)s"
-msgstr ""
+msgstr "上次整合未完成：%(error)s"
 
 msgid ""
 "The link opens the client view: the combined total, the sites and where "
 "the words are. Each crawl’s own report stays private unless you share it "
 "too."
-msgstr ""
+msgstr "此链接会打开客户视图：总字数、网站，以及字数所在的位置。 每次抓取的报告都会保持私密，除非您也将其分享出去。"
 
 #. %(hosts)s is a list of subdomains, such as "help.example.com,
 #. docs.example.com".
 #, python-format
 msgid "The linked subdomains that weren’t crawled: %(hosts)s."
-msgstr ""
+msgstr "未抓取的关联子域名：%(hosts)s。"
 
 msgid ""
 "The main text a visitor reads — without menus, footers and forms, and "
 "with each duplicate page counted once."
-msgstr ""
+msgstr "访客阅读的主要文本——不包括菜单、页脚和表单，且每个重复页面只计一次。"
 
 msgid "The only thing that changes is how long you wait."
-msgstr ""
+msgstr "唯一变化的是您需要等待的时间。"
 
 msgid ""
 "The pages of a count with their words, largest first, optionally only one"
 " section."
-msgstr ""
+msgstr "按字数统计的页面，按字数从多到少排列，可选择仅显示一个版块。"
 
 msgid ""
 "The same page in more than one crawl — the same address on one site, or "
 "the same text anywhere — counts once, from the crawl listed first above. "
 "Crawls can also share sentences without sharing a page."
 msgstr ""
+"同一页面在多次抓取中出现时——无论是同一网站上的同一地址，还是任何位置的相同文本——都只计一次，以以上最先列出的抓取为准。 "
+"多次抓取也可以共享句子，而不共享页面。"
 
 msgid "The same rules on every site"
-msgstr ""
+msgstr "每个网站都遵循相同的规则"
 
 msgid "The same site, the same day"
-msgstr ""
+msgstr "同一网站，同一天"
 
 msgid ""
 "The same text as a page already counted, under another address. Counted "
 "once, not twice."
-msgstr ""
+msgstr "与已统计页面相同的文本，但地址不同。 只计一次，不重复计数。"
 
 #, python-format
 msgid ""
@@ -2561,68 +2633,70 @@ msgid ""
 msgid_plural ""
 "The server restarted during this crawl, so the estimate covers %(n)s of "
 "its words."
-msgstr[0] ""
+msgstr[0] "服务器在此次抓取过程中重启，因此估算仅涵盖其中 %(n)s 个词。"
 
 msgid ""
 "The server restarted while this crawl was paused, and the site's password"
 " is never kept. Start a re-crawl and enter it again."
-msgstr ""
+msgstr "此抓取任务暂停期间服务器重启了，且网站密码不会被保存。 重新爬取一次，然后重新输入。"
 
 msgid ""
 "The server restarted while this crawl was paused, and the site's sign-in "
 "is never kept. Start a re-crawl and sign in again."
-msgstr ""
+msgstr "此抓取任务暂停期间服务器重启了，而且网站的登录状态不会保留。 重新抓取并再次登录。"
 
 msgid "The sign-in page didn't load. Check its address and try again."
-msgstr ""
+msgstr "登录页面未能加载。 请检查其地址并重试。"
 
 msgid "The site didn't accept that username and password."
-msgstr ""
+msgstr "该网站不接受此用户名和密码。"
 
 msgid ""
 "The site didn't let the crawler in with that email and password, or it "
 "asked for more, like a code. For a code or a Google or Microsoft sign-in,"
 " paste a session instead."
 msgstr ""
+"该网站不允许爬虫使用该邮箱和密码登录，或者还要求提供其他信息，例如验证码。 如果您使用代码或 Google、Microsoft "
+"登录，请改为粘贴会话。"
 
 msgid "The sites"
-msgstr ""
+msgstr "这些网站"
 
 msgid "The sites you’ve counted, with their totals."
-msgstr ""
+msgstr "您已统计的网站及其总字数。"
 
 msgid "The text people read, each page once"
-msgstr ""
+msgstr "人们阅读的文本，每页仅计一次"
 
 msgid "The token arithmetic is the argument"
-msgstr ""
+msgstr "Token 算术就是论据"
 
 msgid "The tools"
-msgstr ""
+msgstr "这些工具"
 
 msgid "Their words"
-msgstr ""
+msgstr "他们的字数"
 
 msgid ""
 "Then keep asking. Your assistant reads the numbers with you: which "
 "sections are biggest, what to leave out of a quote, how many words are "
 "new."
-msgstr ""
+msgstr "然后继续提问。 您的助手会与您一起解读这些数字：哪些部分篇幅最大、报价中应排除哪些内容，以及新增了多少词。"
 
 msgid "There’s nothing at this address"
-msgstr ""
+msgstr "此地址没有任何内容"
 
 msgid "They ran a word count on this site and gave you access to the full report."
-msgstr ""
+msgstr "他们统计了此网站的字数，并向您开放了完整报告。"
 
 msgid "This crawl couldn't be completed."
-msgstr ""
+msgstr "无法完成此次网站抓取。"
 
 #, python-format
 msgid ""
 "This crawl stalled — no page was fetched for over %(minutes)s minutes — "
 "and was stopped automatically."
-msgstr ""
+msgstr "此次抓取已停滞——超过 %(minutes)s 分钟未获取任何页面——已自动停止。"
 
 #. %(took)s and %(pro)s are approximate durations such as "~25 min";
 #. %(pro)s is shown in bold.
@@ -2631,68 +2705,68 @@ msgstr ""
 #. took, and how long it would have taken on the Pro plan.
 #, python-format
 msgid "This crawl took %(took)s. On Pro: %(pro)s."
-msgstr ""
+msgstr "本次网站抓取耗时 %(took)s。 关于 Pro：%(pro)s。"
 
 msgid "This crawl was cancelled — showing partial results."
-msgstr ""
+msgstr "此次抓取已取消 — 正在显示部分结果。"
 
 msgid ""
 "This crawl was paused for an estimate and never resumed — showing partial"
 " results from before the pause."
-msgstr ""
+msgstr "此次网站抓取因等待报价而暂停，之后未恢复——显示的是暂停前的部分结果。"
 
 msgid ""
 "This crawl was stopped automatically — it was using too much memory to "
 "continue safely on this server."
-msgstr ""
+msgstr "此网站抓取已自动停止——继续运行会占用过多内存，无法确保此服务器安全运行。"
 
 msgid ""
 "This crawl was stopped before it finished, so the report shows partial "
 "results."
-msgstr ""
+msgstr "此次网站抓取尚未完成便已停止，因此报告显示的是部分结果。"
 
 msgid "This link points to a downloadable file, not a webpage"
-msgstr ""
+msgstr "此链接指向可下载的文件，而非网页"
 
 #. Translators: a banner on the English page. %(language)s is your language's
 #. own name (Deutsch, 日本語); the sentence is shown in your language.
 #, python-format
 msgid "This page is also in %(language)s."
-msgstr ""
+msgstr "此页面也提供%(language)s版本。"
 
 msgid "This project is being prepared. The page updates by itself."
-msgstr ""
+msgstr "正在准备此项目。 页面会自动更新。"
 
 #. Translators: %(scope)s is one of "Whole domain (incl. subdomains)",
 #. "This subdomain only" or "Top-level domain only".
 #, python-format
 msgid "This run was set to “%(scope)s”, so other subdomains weren’t crawled."
-msgstr ""
+msgstr "此次抓取的范围设为“%(scope)s”，因此未抓取其他子域名。"
 
 #, python-format
 msgid "This site has more than %(n)s word."
 msgid_plural "This site has more than %(n)s words."
-msgstr[0] ""
+msgstr[0] "此网站的字数超过 %(n)s 个。"
 
 msgid ""
 "This site is password-protected. Enter the username and password its "
 "owner gave you."
-msgstr ""
+msgstr "此网站受密码保护。 输入所有者提供给您的用户名和密码。"
 
 msgid "This subdomain only"
-msgstr ""
+msgstr "仅限此子域名"
 
 msgid "This will start automatically, and we'll email you when it's done."
-msgstr ""
+msgstr "此操作将自动开始，完成后我们会通过电子邮件通知您。"
 
 msgid "Times"
-msgstr ""
+msgstr "次数"
 
 msgid "Title"
-msgstr ""
+msgstr "标题"
 
 msgid "Together"
-msgstr ""
+msgstr "一起"
 
 #. Translators: why a project couldn't be consolidated. %(limit)s is the
 #. server's page limit; the plural follows the pages.
@@ -2703,96 +2777,96 @@ msgid ""
 msgid_plural ""
 "Too large to consolidate here: %(n)s pages across its crawls (this "
 "server's limit is %(limit)s)."
-msgstr[0] ""
+msgstr[0] "此处内容过多，无法合并： 在其各次抓取中共 %(n)s 个页面（此服务器的上限为 %(limit)s）。"
 
 #, python-format
 msgid "Took %(time)s"
-msgstr ""
+msgstr "耗时 %(time)s"
 
 msgid "Tool"
-msgstr ""
+msgstr "工具"
 
 msgid "Top pages by word count"
-msgstr ""
+msgstr "按字数统计的热门页面"
 
 msgid "Top-level domain only"
-msgstr ""
+msgstr "仅限顶级域名"
 
 msgid "Total words"
-msgstr ""
+msgstr "总字数"
 
 msgid ""
 "Totals per folder and per page, your longest pages ranked, and a CSV of "
 "every URL — so a quote turns into a plan you can phase."
-msgstr ""
+msgstr "按文件夹和页面统计的总字数、按长度排序的最长页面，以及包含所有 URL 的 CSV 文件——让报价转化为可分阶段实施的计划。"
 
 msgid ""
 "Translation is priced per word, so the first question is one most site "
 "owners can only guess at. Guessing wrong by a factor of three is a budget"
 " that runs out halfway through."
-msgstr ""
+msgstr "翻译按字数计费，因此网站所有者首先会问的问题，往往只能靠猜。 估算偏差达到三倍，预算就会在项目进行到一半时耗尽。"
 
 msgid "Translations"
-msgstr ""
+msgstr "翻译"
 
 msgid "Turn any website into clean Markdown"
-msgstr ""
+msgstr "将任意网站转换为整洁的 Markdown"
 
 msgid "Turned away by the site’s bot protection."
-msgstr ""
+msgstr "被网站的机器人防护机制拒绝访问。"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Unknown reason"
-msgstr ""
+msgstr "原因未知"
 
 msgid "Unlimited crawls, unlimited pages"
-msgstr ""
+msgstr "无限次抓取，无限页面"
 
 msgid "Unlimited projects"
-msgstr ""
+msgstr "无限项目"
 
 #, python-format
 msgid "Up to %(n)s crawl in a project."
 msgid_plural "Up to %(n)s crawls in a project."
-msgstr[0] ""
+msgstr[0] "每个项目最多可爬取 %(n)s 次。"
 
 msgid "Upgrade to Pro"
-msgstr ""
+msgstr "升级到 Pro"
 
 msgid "Use an address on the site that was crawled."
-msgstr ""
+msgstr "使用已抓取网站上的地址。"
 
 msgid "Username"
-msgstr ""
+msgstr "用户名"
 
 msgid "VS Code — in .vscode/mcp.json:"
-msgstr ""
+msgstr "VS Code — 位于 .vscode/mcp.json 中："
 
 msgid "View blocked/failed pages"
-msgstr ""
+msgstr "查看被屏蔽/失败的页面"
 
 msgid "View full report"
-msgstr ""
+msgstr "查看完整报告"
 
 msgid "View report"
-msgstr ""
+msgstr "查看报告"
 
 msgid "View the list"
-msgstr ""
+msgstr "查看列表"
 
 msgid "Waiting for a free slot. It starts on its own."
-msgstr ""
+msgstr "正在等待空闲名额。 它会自动启动。"
 
 msgid "Waiting to start…"
-msgstr ""
+msgstr "等待开始…"
 
 msgid "Waits for each page to finish loading"
-msgstr ""
+msgstr "等待每个页面加载完成"
 
 msgid "Waits its turn when the server is busy"
-msgstr ""
+msgstr "服务器繁忙时等待轮到自己"
 
 msgid ""
 "We tried it on our own site. Asked how many words wxrks.com has, Claude "
@@ -2800,128 +2874,130 @@ msgid ""
 "every word in their HTML. Word Counter counted the same site, the same "
 "day."
 msgstr ""
+"我们在自己的网站上试用了它。 当被问到 wxrks.com 有多少个单词时，Claude Code "
+"编写了一个爬虫，抓取了网站地图中列出的页面，并统计了这些页面 HTML 中的所有单词。 Word Counter 在同一天统计了同一个网站。"
 
 msgid "Web pages only."
-msgstr ""
+msgstr "仅限网页。"
 
 msgid "What about very large sites?"
-msgstr ""
+msgstr "超大型网站呢？"
 
 msgid "What does it cost?"
-msgstr ""
+msgstr "费用是多少？"
 
 msgid "What every plan includes"
-msgstr ""
+msgstr "每个套餐均包含的内容"
 
 msgid "What if the site blocks bots?"
-msgstr ""
+msgstr "如果网站屏蔽机器人怎么办？"
 
 msgid "What is it for?"
-msgstr ""
+msgstr "它有什么用途？"
 
 msgid "What it does"
-msgstr ""
+msgstr "功能介绍"
 
 msgid "What overlapped"
-msgstr ""
+msgstr "重叠内容"
 
 msgid "What should I quote on?"
-msgstr ""
+msgstr "我应该为哪项内容报价？"
 
 msgid "What that costs"
-msgstr ""
+msgstr "费用是多少"
 
 msgid "What to ask"
-msgstr ""
+msgstr "询问内容"
 
 msgid "Where do my counts go?"
-msgstr ""
+msgstr "我的统计结果会保存在哪里？"
 
 msgid "Where the new words are"
-msgstr ""
+msgstr "新增词汇的位置"
 
 msgid "Where to paste it, app by app →"
-msgstr ""
+msgstr "各应用中的粘贴位置 →"
 
 msgid "Which pages count as part of this site?"
-msgstr ""
+msgstr "哪些页面算作此网站的一部分？"
 
 msgid "Which sections of example.com have the most text?"
-msgstr ""
+msgstr "example.com 的哪些版块文本最多？"
 
 msgid "Whole domain"
-msgstr ""
+msgstr "整个域名"
 
 msgid "Whole domain (incl. subdomains)"
-msgstr ""
+msgstr "整个域名（包括子域名）"
 
 msgid "Why does a crawl take a while?"
-msgstr ""
+msgstr "为什么抓取需要一些时间？"
 
 msgid "Why it took this long"
-msgstr ""
+msgstr "为什么花了这么长时间"
 
 msgid "Why not just ask ChatGPT or Claude?"
-msgstr ""
+msgstr "为什么不直接问 ChatGPT 或 Claude？"
 
 msgid "Why your assistant needs it"
-msgstr ""
+msgstr "为什么您的助手需要它"
 
 #. Translators: the product's name, in titles and running text (the logo
 #. keeps it as written). Translate it only where your market knows the
 #. product by a translated name.
 msgid "Word Counter"
-msgstr ""
+msgstr "Word Counter"
 
 msgid ""
 "Word Counter checks for identical text, pages that identify another URL "
 "as their original, and URLs that differ only by tracking or sign-in "
 "parameters. Duplicates are listed separately."
-msgstr ""
+msgstr "Word Counter 会检查重复文本、将其他 URL 标记为原始来源的页面，以及仅跟踪参数或登录参数不同的 URL。 重复项会单独列出。"
 
 msgid ""
 "Word Counter detects the starting page’s language and skips translated "
 "versions under folders such as /fr/ and /de/, helping you scope one "
 "language at a time."
-msgstr ""
+msgstr "Word Counter 会检测起始页面的语言，并跳过 /fr/ 和 /de/ 等文件夹下的翻译版本，帮助您一次只统计一种语言。"
 
 msgid "Word Counter for Claude and ChatGPT (MCP server)"
-msgstr ""
+msgstr "Claude 和 ChatGPT 的 Word Counter（MCP 服务器）"
 
 msgid ""
 "Word Counter opens your site’s linked pages in a real browser and adds up"
 " the main content. You get a total, a breakdown and a clearer picture of "
 "what’s ahead."
-msgstr ""
+msgstr "Word Counter 会在真实浏览器中打开您网站上的链接页面，并统计主要内容的字数。 您将获得总字数、详细分类，以及对后续工作更清晰的了解。"
 
 msgid ""
 "Word Counter’s MCP server crawls every page and gives your assistant the "
 "real total — not a guess from the homepage."
-msgstr ""
+msgstr "Word Counter 的 MCP 服务器会抓取每个页面，并向您的助手提供实际总数，而不是根据首页估算的数字。"
 
 msgid "Word count · project"
-msgstr ""
+msgstr "字数 · 项目"
 
 msgid "Words"
-msgstr ""
+msgstr "字数"
 
 msgid "Words each"
-msgstr ""
+msgstr "每个词数"
 
 msgid "Words on the main site"
-msgstr ""
+msgstr "主网站上的字数"
 
 msgid "Words removed"
-msgstr ""
+msgstr "已移除的字词"
 
 msgid "Words so far"
-msgstr ""
+msgstr "目前字数"
 
 msgid "Works with"
-msgstr ""
+msgstr "适用于"
 
 msgid "Works with any website"
-msgstr ""
+msgstr "适用于任何网站"
 
 #, python-format
 msgid ""
@@ -2930,177 +3006,177 @@ msgid ""
 msgid_plural ""
 "You have %(n)s connections, the most there can be. Revoke one to make "
 "another."
-msgstr[0] ""
+msgstr[0] "您已达到连接数上限：%(n)s 个。 撤销一个以便创建另一个。"
 
 msgid "You have as many connections as there can be. Revoke one to make another."
-msgstr ""
+msgstr "您的连接数已达到上限。 撤销一个以便创建另一个。"
 
 #. Translators: %(n)s is a position in the queue (1, 2, 3…).
 #, python-format
 msgid ""
 "You're #%(n)s in line — this server is busy right now. This will start "
 "automatically, and we'll email you when it's done."
-msgstr ""
+msgstr "您排在第 #%(n)s 位——服务器当前繁忙。 此操作将自动开始，完成后我们会通过电子邮件通知您。"
 
 #. Translators: %(product)s is the product's name, such as "Word Counter".
 #, python-format
 msgid "You're getting this because someone shared a %(product)s report with you."
-msgstr ""
+msgstr "您收到此消息，是因为有人与您分享了 %(product)s 报告。"
 
 #. Translators: %(product)s is the product's name, such as "Word Counter".
 #, python-format
 msgid "You're getting this because you started this crawl on %(product)s."
-msgstr ""
+msgstr "您收到此消息是因为您在 %(product)s 上启动了此次抓取。"
 
 msgid "Your app"
-msgstr ""
+msgstr "您的应用程序"
 
 msgid "Your assistant picks these itself; you just ask in your own words."
-msgstr ""
+msgstr "这些内容由您的助手自行选择；您只需用自己的话提出需求。"
 
 msgid "Your connection is ready"
-msgstr ""
+msgstr "您的连接已就绪"
 
 msgid "Your connections"
-msgstr ""
+msgstr "您的连接"
 
 msgid "Your crawl finished. Here's what it counted."
-msgstr ""
+msgstr "您的网站抓取已完成。 以下是统计结果。"
 
 msgid "Your current plan"
-msgstr ""
+msgstr "您当前的套餐"
 
 #. %(date)s is the date the subscription renews, filled in by the browser.
 #, python-format
 msgid "Your current plan · renews %(date)s"
-msgstr ""
+msgstr "您当前的套餐 · 将于 %(date)s 续订"
 
 #. %(domain)s is a website's address; %(words)s is a number of words, in bold.
 #, python-format
 msgid "Your last crawl of %(domain)s found %(words)s word."
 msgid_plural "Your last crawl of %(domain)s found %(words)s words."
-msgstr[0] ""
+msgstr[0] "您上次抓取 %(domain)s 时发现了 %(words)s 个单词。"
 
 msgid "Your recent runs"
-msgstr ""
+msgstr "您最近的运行记录"
 
 msgid "Your runs"
-msgstr ""
+msgstr "您的运行记录"
 
 msgid "Your runs →"
-msgstr ""
+msgstr "您的运行 →"
 
 msgid "Your website, as clean text a language model can actually read."
-msgstr ""
+msgstr "您的网站，以语言模型真正能够读取的纯文本形式。"
 
 #. %(days)s is a number of days a guest's report is kept.
 #, python-format
 msgid "You’re not signed in, so this report is kept for %(days)s day."
 msgid_plural "You’re not signed in, so this report is kept for %(days)s days."
-msgstr[0] ""
+msgstr[0] "您尚未登录，因此此报告将保留 %(days)s 天。"
 
 msgid "a tool by wxrks"
-msgstr ""
+msgstr "wxrks 出品的工具"
 
 #. %(n)s is a whole number: how many times faster Pro is.
 #, python-format
 msgid "about %(n)s× faster"
-msgstr ""
+msgstr "快约 %(n)s 倍"
 
 #. Translators: %(time)s is a duration such as "25 min", shown in bold.
 #, python-format
 msgid "about %(time)s on Pro"
-msgstr ""
+msgstr "Pro 方案约需 %(time)s"
 
 #, python-format
 msgid "also in %(site)s:"
-msgstr ""
+msgstr "也在 %(site)s："
 
 msgid "and anything else built with AI"
-msgstr ""
+msgstr "以及其他任何借助 AI 构建的内容"
 
 #. Translators: in the Words column instead of a number; keep it short and
 #. lower-case if your language does.
 msgid "blocked"
-msgstr ""
+msgstr "已屏蔽"
 
 #. Translators: %(cms)s is a platform's name, such as WordPress or Webflow.
 #, python-format
 msgid "built with %(cms)s"
-msgstr ""
+msgstr "使用 %(cms)s 构建的"
 
 #, python-format
 msgid "counted from %(site)s"
-msgstr ""
+msgstr "从 %(site)s 统计得出"
 
 #. Translators: %(path)s is the address of one page, such as /fr/pricing.
 #, python-format
 msgid "e.g. %(path)s"
-msgstr ""
+msgstr "例如 %(path)s"
 
 msgid "e.g. Claude Code on my laptop"
-msgstr ""
+msgstr "例如：我笔记本电脑上的 Claude Code"
 
 #. the caption under the project's number of new words; %(n)s is how many
 #. crawls it covers.
 #, python-format
 msgid "each page and each sentence once, in %(n)s crawl"
 msgid_plural "each page and each sentence once, across %(n)s crawls"
-msgstr[0] ""
+msgstr[0] "每个页面和每个句子各一次，共进行 %(n)s 次抓取"
 
 #. Translators: in the Words column instead of a number; keep it short.
 msgid "failed"
-msgstr ""
+msgstr "失败"
 
 #. Translators: on an exclusion chip: the entry is a folder (it starts with /).
 msgid "folder"
-msgstr ""
+msgstr "文件夹"
 
 msgid "for its careful count"
-msgstr ""
+msgstr "以确保计数准确"
 
 msgid "free"
-msgstr ""
+msgstr "免费"
 
 #, python-format
 msgid "from %(sites)s"
-msgstr ""
+msgstr "来自 %(sites)s"
 
 #. %(sites)s is a list of site names.
 #, python-format
 msgid "in %(sites)s"
-msgstr ""
+msgstr "在 %(sites)s 中"
 
 #. %(date)s is when this connection was last used, filled in by the browser.
 #, python-format
 msgid "last used %(date)s"
-msgstr ""
+msgstr "上次使用时间：%(date)s"
 
 msgid "less than a minute"
-msgstr ""
+msgstr "不到一分钟"
 
 #. Translators: beside a subdomain or language that wasn't counted: how
 #. many of the crawled pages link to it.
 #, python-format
 msgid "linked from %(n)s page"
 msgid_plural "linked from %(n)s pages"
-msgstr[0] ""
+msgstr[0] "由 %(n)s 个页面链接而来"
 
 #. %(date)s is when this connection was made, filled in by the browser.
 #, python-format
 msgid "made %(date)s"
-msgstr ""
+msgstr "制作于 %(date)s"
 
 #. Translators: after a new connection's key hint ("wck_…a1b2 · made just
 #. now").
 msgid "made just now"
-msgstr ""
+msgstr "刚刚创建"
 
 msgid "moved"
-msgstr ""
+msgstr "已移动"
 
 msgid "new"
-msgstr ""
+msgstr "新建"
 
 #. the caption under the project's big number of new words.            %(n)s is
 #. how many sites the project counts (two or more).
@@ -3111,139 +3187,139 @@ msgid ""
 msgid_plural ""
 "new words to translate across the %(n)s sites: each page and each "
 "sentence counted once."
-msgstr[0] ""
+msgstr[0] "需要在这 %(n)s 个网站中翻译的新词：每个页面和每个句子均只计数一次。"
 
 #. the caption under the project's big number of new words,          when the
 #. project counts one site.
 msgid ""
 "new words to translate on this site: each page and each sentence counted "
 "once."
-msgstr ""
+msgstr "此网站上待翻译的新词数：每个页面和每个句子均只计一次。"
 
 #. the caption under a project's big number, which is a count of new words.
 msgid "new words: each page and sentence once"
-msgstr ""
+msgstr "新词：每个页面和句子各计一次"
 
 msgid "not used yet"
-msgstr ""
+msgstr "尚未使用"
 
 #, python-format
 msgid "of the %(n)s word checked"
 msgid_plural "of the %(n)s words checked"
-msgstr[0] ""
+msgstr[0] "已检查的 %(n)s 个词中"
 
 #. Translators: under the total word count: "on 1,204 pages".
 #, python-format
 msgid "on %(n)s page"
 msgid_plural "on %(n)s pages"
-msgstr[0] ""
+msgstr[0] "在 %(n)s 个页面上"
 
 #. Translators: under the total word count while the crawl still runs.
 #, python-format
 msgid "on %(n)s page so far"
 msgid_plural "on %(n)s pages so far"
-msgstr[0] ""
+msgstr[0] "目前已在 %(n)s 个页面上找到"
 
 msgid "on our servers, no AI usage"
-msgstr ""
+msgstr "在我们的服务器上运行，不使用 AI"
 
 msgid "or paste a session"
-msgstr ""
+msgstr "或粘贴会话"
 
 msgid "repeated across crawls"
-msgstr ""
+msgstr "在多次抓取中重复出现"
 
 msgid "repeated within a crawl"
-msgstr ""
+msgstr "在一次抓取中重复出现"
 
 msgid "same address"
-msgstr ""
+msgstr "相同地址"
 
 msgid "same page in another crawl"
-msgstr ""
+msgstr "另一次抓取中的同一页面"
 
 msgid "same text"
-msgstr ""
+msgstr "相同文本"
 
 msgid "staging, password-protected"
-msgstr ""
+msgstr "预发布环境，受密码保护"
 
 #. example entries for a field of subdomains and folders to leave out.
 #. Keep the leading / on folders; the names may be adapted.
 msgid "staging, web-staging, /careers"
-msgstr ""
+msgstr "staging, web-staging, /careers"
 
 #. Translators: on an exclusion chip: the entry is a subdomain.
 msgid "subdomain"
-msgstr ""
+msgstr "子域名"
 
 msgid "text changed — counted from the crawl listed first"
-msgstr ""
+msgstr "文本已更改 — 已根据首个列出的抓取结果计数"
 
 msgid "the server reached the most Markdown it keeps"
-msgstr ""
+msgstr "服务器已达到其保留的 Markdown 数量上限"
 
 #. Translators: in the README inside a Markdown download, after "Capture
 #. stopped before the end of the crawl": the reason it stopped.
 msgid "the server was running out of disk space"
-msgstr ""
+msgstr "服务器磁盘空间即将耗尽"
 
 msgid "this crawl reached the most Markdown one crawl may save"
-msgstr ""
+msgstr "本次抓取达到了单次抓取可保存的 Markdown 数量上限"
 
 msgid "vs."
-msgstr ""
+msgstr "对比。"
 
 #. the caption under a project's big number, which is a count of words.
 msgid "words, each page once"
-msgstr ""
+msgstr "词数，每页一次"
 
 #. Translators: a group of pages told apart by their writing system.
 #. %(script)s is a script's name in your language (Latin, Cyrillic,
 #. Arabic…), as the browser names it; phrase it so any name fits.
 #, python-format
 msgid "written in %(script)s"
-msgstr ""
+msgstr "以 %(script)s 编写的"
 
 #. %(cms)s is the platform the site is built on, such as Webflow or WordPress.
 #, python-format
 msgid ""
 "wxrks has a %(cms)s connector: it pulls your content straight from "
 "%(cms)s, translates it with the best AI models and keeps it in sync."
-msgstr ""
+msgstr "wxrks 提供 %(cms)s 连接器：它可直接从 %(cms)s 拉取您的内容，使用最优 AI 模型进行翻译，并保持内容同步。"
 
 msgid ""
 "wxrks pulls the content and translates it with the best AI models, then "
 "keeps it in sync as the site changes."
-msgstr ""
+msgstr "wxrks 抓取网站内容，并使用最优 AI 模型进行翻译；网站内容发生变化时，还会保持同步。"
 
 #. Translators: marks a duration as approximate ("~25 min"). %(duration)s is
 #. a duration such as "25 min" or "1h 8m".
 #, python-format
 msgid "~%(duration)s"
-msgstr ""
+msgstr "~%(duration)s"
 
 msgid ""
 "“How many words does example.com have?” Your assistant starts the count, "
 "follows it, and answers with the total."
-msgstr ""
+msgstr "“example.com 有多少个单词？” 您的助手会开始计数、跟踪计数，并告知您总数。"
 
 msgid "← Back to the project"
-msgstr ""
+msgstr "← 返回项目"
 
 #. a link back to the page explaining the assistant connection.
 msgid "← How it works"
-msgstr ""
+msgstr "← 工作原理"
 
 msgid "← New crawl"
-msgstr ""
+msgstr "← 新建抓取"
 
 msgid "← Newer"
-msgstr ""
+msgstr "← 较新"
 
 #. a link back to the list of projects.
 msgid "← Projects"
-msgstr ""
+msgstr "← 项目"
 
 #~ msgid "Sign in with Google. Nothing to install, nothing to configure."
 #~ msgstr ""

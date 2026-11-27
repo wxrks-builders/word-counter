@@ -126,13 +126,19 @@ time a term is decided.
 
 ## Voice per language
 
-Not decided yet; agree it with wxrks before the first batch and record it
-here. The English is direct and plain, second person ("your crawl").
+The English is direct and plain, second person ("your crawl"). Each language
+addresses the reader the way wxrks.com does, so the two sites sound alike:
 
-- de: du or Sie?
-- fr, it, es, pt-BR: tu or vous / tu or Lei / tú or usted / você?
-- ja: です/ます form?
-- ko: 합니다 or 해요 style?
+- es: tú, never usted
+- pt-BR: você
+- fr: vous
+- de: Sie
+- it: tu
+- sv: du
+- ja: です/ます
+- ko: 합니다 style
+- zh: 您
+- ar: Modern Standard Arabic
 
 ## Markets
 
@@ -150,6 +156,7 @@ here. The English is direct and plain, second person ("your crawl").
 
 ## Decisions
 
+- 2026-11-27: the voice per language matches wxrks.com (see Voice per language).
 - 2026-11-27: plurals through the catalogue (`ngettext`), never `n == 1`;
   app.js gets one string per CLDR category.
 - 2026-11-27: a language is published (hreflang, sitemap, canonical, banner)

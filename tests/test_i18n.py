@@ -458,9 +458,12 @@ class TestPlurals:
         assert len(set(variants.values())) == 6, "each category its own form"
 
     def test_untranslated_plurals_are_picked_by_english_rules(self):
-        """Else a French page would read "1 pages" until wxrks delivers."""
-        variants = i18n.plural_variants("fr", *self.PAGE)
-        assert variants == {"one": "%(n)s page", "other": "%(n)s pages", "_rules": "en"}
+        """Else a French page would read "1 pages" until wxrks delivers. The
+        message is one no catalogue has, so the test holds once French is
+        translated too."""
+        untranslated = ("%(n)s gizmo no catalogue has", "%(n)s gizmos no catalogue has")
+        variants = i18n.plural_variants("fr", *untranslated)
+        assert variants == {"one": untranslated[0], "other": untranslated[1], "_rules": "en"}
 
     def test_the_compile_leaves_untranslated_messages_out(self, tmp_path):
         """pybabel compile fills an untranslated plural with the English pair,
