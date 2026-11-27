@@ -62,7 +62,7 @@ In `.env`, set at least:
 Then:
 
 ```sh
-pybabel compile -d locales   # the translated interface; English works without it
+python scripts/translations.py compile   # the translated interface; English works without it
 uvicorn app.main:app --reload --workers 1
 ```
 
@@ -92,12 +92,13 @@ Chromium install above.
 
 ## Translating the interface
 
-Strings are marked with `_()` in Python and templates and live in `locales/`.
-After changing one:
+Strings are marked with `_()` in Python and templates (`ngettext()` for anything
+with a count) and live in `locales/`. [LOCALIZATION.md](LOCALIZATION.md) has the
+rules and the decisions. After changing one:
 
 ```sh
-pybabel extract -F babel.cfg -o locales/messages.pot --no-location --sort-output .
-pybabel update -i locales/messages.pot -d locales
+pybabel extract -F babel.cfg -o locales/messages.pot --no-location --sort-output --add-comments=Translators: .
+pybabel update --no-fuzzy-matching -i locales/messages.pot -d locales
 ```
 
 An empty translation falls back to English, so a partly translated language is

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ _('Projects') }} — {{ surface.name }}{% endblock %}
+{% block title %}{{ _('Projects') }} — {{ _(surface.name) }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% block body %}
   {% include "_topbar.html" %}
@@ -30,22 +30,25 @@
         {% if p.run_count %}
         {% if p.cached_new_words is not none %}
         <span class="project-card-number">{{ num(p.cached_new_words) }}</span>
+        {# Translators: the caption under a project's big number, which is a count of new words. #}
         <span class="project-card-sub">
-          {{ _('new words: each page and sentence once') }}{% if p.cached_pages %} · {{ _('%(n)s pages', n=num(p.cached_pages)) }}{% endif %}
+          {{ _('new words: each page and sentence once') }}{% if p.cached_pages %} · {{ ngettext('%(n)s page', '%(n)s pages', p.cached_pages, n=num(p.cached_pages)) }}{% endif %}
         </span>
         {% else %}
         <span class="project-card-number">{{ num(p.cached_words or 0) }}</span>
+        {# Translators: the caption under a project's big number, which is a count of words. #}
         <span class="project-card-sub">
-          {{ _('words, each page once') }}{% if p.cached_pages %} · {{ _('%(n)s pages', n=num(p.cached_pages)) }}{% endif %}
+          {{ _('words, each page once') }}{% if p.cached_pages %} · {{ ngettext('%(n)s page', '%(n)s pages', p.cached_pages, n=num(p.cached_pages)) }}{% endif %}
         </span>
         {% endif %}
-        <span class="project-card-sites">
+        <span class="project-card-sites" translate="no">
           {% for site in (project_sites.get(p.id) or [])[:3] %}<span class="project-site">{{ site | replace('https://', '') | replace('http://', '') }}</span>{% endfor %}
-          {% if (project_sites.get(p.id) or []) | length > 3 %}<span class="project-site">+{{ (project_sites.get(p.id) | length) - 3 }}</span>{% endif %}
+          {% if (project_sites.get(p.id) or []) | length > 3 %}<span class="project-site">+{{ num((project_sites.get(p.id) | length) - 3) }}</span>{% endif %}
         </span>
+        {# Translators: a project's crawl count, then its words added up across those crawls. #}
         <span class="project-card-foot">
-          {%- if p.run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(p.run_count)) }}{% endif -%}
-          {%- if p.cached_new_words is not none and p.cached_words %} · {{ _('%(n)s words added up, each page once', n=num(p.cached_words)) }}{% endif %}
+          {{- ngettext('%(n)s crawl', '%(n)s crawls', p.run_count or 0, n=num(p.run_count)) -}}
+          {%- if p.cached_new_words is not none and p.cached_words %} · {{ ngettext('%(n)s word added up, each page once', '%(n)s words added up, each page once', p.cached_words, n=num(p.cached_words)) }}{% endif %}
         </span>
         {% else %}
         <span class="project-card-sub">{{ _('No crawls yet — add some from the project.') }}</span>
@@ -60,16 +63,17 @@
     {% if loose_runs %}
     <div class="list-head projects-loose-head">
       <div class="section-label">{{ _('Runs not in a project') }}</div>
-      <a href="{{ url('/runs') }}">{{ _('Your runs') }} →</a>
+      <a href="{{ url('/runs') }}">{{ _('Your runs →') }}</a>
     </div>
     <ul class="recent-runs loose-runs">
       {% for run in loose_runs %}
       <li class="loose-run">
         <a href="{{ url('/crawl/' ~ run.id) }}" class="loose-run-url">{{ run.shown_url | replace('https://', '') | replace('http://', '') }}</a>
-        <span class="run-words">{{ _('%(n)s words', n=num(run.total_words)) }}</span>
+        <span class="run-words">{{ ngettext('%(n)s word', '%(n)s words', run.total_words or 0, n=num(run.total_words)) }}</span>
         <span class="run-date run-date-iso" data-iso="{{ run.created_at }}"></span>
         {% if projects %}
-        <button type="button" class="secondary loose-run-add" data-project-run="{{ run.id }}" data-project-ids="[]">{{ _('Add to a project') }}…</button>
+        {# Translators: a button that opens a dialog for choosing projects. #}
+        <button type="button" class="secondary loose-run-add" data-project-run="{{ run.id }}" data-project-ids="[]">{{ _('Add to a project…') }}</button>
         {% endif %}
       </li>
       {% endfor %}

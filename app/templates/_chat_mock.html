@@ -9,15 +9,27 @@
   <div class="chat-tool" style="--i: 1;"><span class="chat-tool-dot"></span><span translate="no">word-counter · count_words</span></div>
   <div class="chat-bubble chat-assistant" style="--i: 2;">
     <p>{{ _('I counted every page with Word Counter:') }}</p>
-    <p class="chat-number">{{ _('%(words)s words on %(pages)s pages', words=num(chat_mock.words), pages=num(chat_mock.pages)) }}</p>
-    <p>{{ _('%(pct)s%% of it repeats text from other pages; %(new)s words are new.', pct=chat_mock.repeated_pct, new=num(chat_mock.new)) }}</p>
+    {# Translators: an assistant's answer: "2,696,246 words on 2,494 pages".
+       %(words)s is "N words" and %(pages)s is "N pages", each translated on its own. #}
+    <p class="chat-number">{{ _('%(words)s on %(pages)s',
+        words=ngettext('%(n)s word', '%(n)s words', chat_mock.words, n=num(chat_mock.words)),
+        pages=ngettext('%(n)s page', '%(n)s pages', chat_mock.pages, n=num(chat_mock.pages))) }}</p>
+    {# Translators: %(pct)s is a percentage of the words; %(new)s is a number of words. #}
+    <p>{{ ngettext('%(pct)s%% of it repeats text from other pages; %(new)s word is new.',
+                   '%(pct)s%% of it repeats text from other pages; %(new)s words are new.',
+                   chat_mock.new, pct=num(chat_mock.repeated_pct), new=num(chat_mock.new)) }}</p>
     <p class="chat-link">{{ _('Full report, every page →') }}</p>
   </div>
   {% if chat_follow_up %}
   <div class="chat-bubble chat-user" style="--i: 3;">{{ _('What should I quote on?') }}</div>
   <div class="chat-bubble chat-assistant" style="--i: 4;">
-    <p>{{ _('About %(words)s words, without the machine-generated API docs and the user forum.', words=num(chat_mock.quote_scope)) }}</p>
-    <p>{{ _('If your vendor prices by translation memory, the %(new)s new words are the number that matters.', new=num(chat_mock.new)) }}</p>
+    {# Translators: an assistant's advice on what to put in a translation quote. #}
+    <p>{{ ngettext('About %(words)s word, without the machine-generated API docs and the user forum.',
+                   'About %(words)s words, without the machine-generated API docs and the user forum.',
+                   chat_mock.quote_scope, words=num(chat_mock.quote_scope)) }}</p>
+    <p>{{ ngettext('If your vendor prices by translation memory, the %(new)s new word is the number that matters.',
+                   'If your vendor prices by translation memory, the %(new)s new words are the number that matters.',
+                   chat_mock.new, new=num(chat_mock.new)) }}</p>
   </div>
   {% endif %}
 </div>

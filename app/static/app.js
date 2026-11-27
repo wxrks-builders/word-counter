@@ -3,21 +3,112 @@
 // it is added to app/js_strings.py should look wrong, not break the page.
 const I18N = window.I18N || {};
 const LOCALE = window.LOCALE || "en";
+// "" in English, "/de" in German: the pages this script sends people to stay
+// in the language they are reading. See localPath().
+const LANG_PREFIX = window.LANG_PREFIX || "";
+const PLURALS = new Intl.PluralRules(LOCALE);
+const ENGLISH_PLURALS = new Intl.PluralRules("en");
+const IS_RTL = document.documentElement.dir === "rtl";
 
+// A plural entry is {one, other, few…} — one string per plural category the
+// language has (app/js_strings.py). `count` is the raw number that picks the
+// category; every other value is already formatted for display. An entry not
+// translated yet is English and says so ("_rules": "en"), so English rules
+// pick its form.
 function t(key, vars) {
-  let text = I18N[key] || key;
+  let text = I18N[key];
+  if (text && typeof text === "object") {
+    const count = vars && vars.count != null ? Number(vars.count) : NaN;
+    const rules = text._rules === "en" ? ENGLISH_PLURALS : PLURALS;
+    text = text[rules.select(count)] || text.other;
+  }
+  text = text || key;
   if (vars) {
     for (const [name, value] of Object.entries(vars)) {
+      if (name === "count") continue;
       text = text.split(`%(${name})s`).join(value);
     }
   }
   return text;
 }
 
+// A translated sentence with parts of it as elements — a <strong> number, a
+// link — put into `el` without innerHTML: the sentence stays one message for
+// the translator, and nothing in it is ever parsed as markup.
+function setMessage(el, key, vars = {}) {
+  const textVars = {};
+  const nodes = {};
+  for (const [name, value] of Object.entries(vars)) {
+    (value instanceof Node ? nodes : textVars)[name] = value;
+  }
+  const text = t(key, textVars);
+  el.textContent = "";
+  const placeholder = /%\((\w+)\)s/g;
+  let last = 0;
+  let match;
+  while ((match = placeholder.exec(text))) {
+    el.append(text.slice(last, match.index), nodes[match[1]] || match[0]);
+    last = placeholder.lastIndex;
+  }
+  el.append(text.slice(last));
+}
+
+function strong(text) {
+  const el = document.createElement("strong");
+  el.textContent = text;
+  return el;
+}
+
+// Data dropped into a sentence — a URL, a folder, an address, a platform's
+// name, a technical error — set apart from the text around it, so "/blog"
+// stays "/blog" inside an Arabic sentence instead of reading "blog/". First-
+// strong isolate characters work where an element can't: textContent, a
+// title, a confirm() dialog.
+function isolate(text) {
+  return `⁨${text}⁩`;
+}
+
+function bdi(text) {
+  const el = document.createElement("bdi");
+  el.textContent = text;
+  return el;
+}
+
 // Every number in this app is the product, so it formats for the reader:
 // 662,431 in English, 662.431 in German, 662 431 in French.
 function n(value) {
   return Number(value || 0).toLocaleString(LOCALE);
+}
+
+// The same path in the reader's language. Mirrors i18n.localized_path: English
+// has no prefix, static files never get one, and a path already carrying the
+// prefix keeps it. Pages need it to stay in the language; the API, the event
+// stream and the downloads get it too, so the server answers with text in the
+// page's language (the middleware strips it before routing either way).
+function localPath(path) {
+  if (!LANG_PREFIX || !path.startsWith("/") || path.startsWith("//") || path.startsWith("/static/")
+      || path === LANG_PREFIX || path.startsWith(LANG_PREFIX + "/")) return path;
+  return LANG_PREFIX + path;
+}
+
+// A language's name in the reader's language ("de" reads "German" in English,
+// "Deutsch" in German), or the code itself when the browser doesn't know it.
+const LANGUAGE_NAMES = typeof Intl.DisplayNames === "function"
+  ? new Intl.DisplayNames([LOCALE], { type: "language" }) : null;
+function languageName(code) {
+  try {
+    return (LANGUAGE_NAMES && LANGUAGE_NAMES.of(code)) || code;
+  } catch (e) {
+    return code;
+  }
+}
+
+// Remembers a language picked from the menu or the "also in" banner, so the
+// English root offers it back next time instead of guessing from the browser.
+function rememberLanguage(code) {
+  if (!window.LANG_COOKIE || !code) return;
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${window.LANG_COOKIE}=${encodeURIComponent(code)}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
 }
 
 // Common two-letter language codes, used only to *suggest* a value for the
@@ -113,7 +204,7 @@ function initHomeForm() {
     e.preventDefault();
     errorEl.style.display = "none";
     submitBtn.disabled = true;
-    submitBtn.textContent = "Starting…";
+    submitBtn.textContent = t("starting");
 
     const url = urlInput.value;
     const domainScope = domainScopeSelect.value;
@@ -123,7 +214,7 @@ function initHomeForm() {
     const sitePassword = document.getElementById("site-password");
 
     try {
-      const res = await fetch("/crawl", {
+      const res = await fetch(localPath("/crawl"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -147,14 +238,16 @@ function initHomeForm() {
           (siteUsername.value ? sitePassword : siteUsername).focus();
         }
         focusSignInField(data.code);
-        throw new Error(data.code ? t(data.code) : data.detail || t("something_went_wrong"));
+        // Codes are translated; the server's `detail` is English, so it is
+        // never shown in its place.
+        throw new Error(t(data.code || "something_went_wrong"));
       }
-      window.location.href = "/crawl/" + data.run_id;
+      window.location.href = localPath("/crawl/" + data.run_id);
     } catch (err) {
-      errorEl.textContent = err.message;
+      errorEl.textContent = err instanceof SyntaxError || err instanceof TypeError ? t("something_went_wrong") : err.message;
       errorEl.style.display = "block";
       submitBtn.disabled = false;
-      submitBtn.textContent = "Crawl";
+      submitBtn.textContent = t("crawl");
     }
   });
 }
@@ -208,9 +301,9 @@ function initHomeMotion() {
 // would be followed by the fetch and never by the window.
 async function goToStripe(path, errorEl) {
   try {
-    const res = await fetch(path, { method: "POST" });
+    const res = await fetch(localPath(path), { method: "POST" });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.detail || "Could not reach billing");
+    if (!res.ok) throw new Error(t(data.code || "billing_unreachable"));
     if (data.already_pro) {
       // Nothing to buy — send them to manage what they already have.
       return goToStripe("/billing/portal", errorEl);
@@ -218,7 +311,7 @@ async function goToStripe(path, errorEl) {
     window.location.href = data.url;
   } catch (err) {
     if (errorEl) {
-      errorEl.textContent = err.message;
+      errorEl.textContent = err instanceof SyntaxError || err instanceof TypeError ? t("billing_unreachable") : err.message;
       errorEl.style.display = "block";
     }
   }
@@ -258,6 +351,15 @@ function initUserMenu() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeAll();
   });
+
+  // A language picked in the menu or the banner is remembered; the banner's
+  // "Stay in English" is an answer too, so it isn't asked again.
+  for (const choice of document.querySelectorAll("[data-lang-choice]")) {
+    choice.addEventListener("click", () => rememberLanguage(choice.dataset.langChoice));
+  }
+  const suggestion = document.querySelector("[data-lang-suggest]");
+  const dismiss = suggestion && suggestion.querySelector("[data-lang-dismiss]");
+  if (dismiss) dismiss.addEventListener("click", () => { suggestion.hidden = true; });
 }
 
 function initBilling() {
@@ -266,7 +368,7 @@ function initBilling() {
   if (upgradeBtn) {
     upgradeBtn.addEventListener("click", () => {
       upgradeBtn.disabled = true;
-      upgradeBtn.textContent = "Opening checkout…";
+      upgradeBtn.textContent = t("opening_checkout");
       goToStripe("/billing/checkout", errorEl);
     });
   }
@@ -289,8 +391,9 @@ function badgeClass(status) {
   return "status-badge status-crawling";
 }
 
+// The badge's word for a status: "completed" reads Completed, Abgeschlossen…
 function statusLabel(status) {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return t(status);
 }
 
 const TERMINAL_STATUSES = ["completed", "failed", "cancelled", "paused"];
@@ -299,15 +402,15 @@ const TERMINAL_STATUSES = ["completed", "failed", "cancelled", "paused"];
 // and finish before anything is sent.
 const EMAILED_STATUSES = ["completed", "failed", "cancelled"];
 
-const DOMAIN_SCOPE_LABELS = {
-  all: "Whole domain (incl. subdomains)",
-  subdomain_only: "This subdomain only",
-  top_domain_only: "Top-level domain only",
-};
+function domainScopeLabel(scope) {
+  return ["all", "subdomain_only", "top_domain_only"].includes(scope) ? t("scope_" + scope) : scope;
+}
 
+// Comma-separated, including the ideographic and full-width commas a Chinese
+// or Japanese keyboard types — the joined value sent on uses plain commas.
 function parseLanguageList(text) {
   if (!text) return [];
-  return text.split(",").map((s) => s.trim()).filter(Boolean);
+  return text.split(/[,、，]/).map((s) => s.trim()).filter(Boolean);
 }
 
 // "folder" or "subdomain", by the same leading-"/" rule the crawler applies —
@@ -317,7 +420,16 @@ function exclusionKind(entry) {
 }
 
 function describeExclusions(text) {
-  return parseLanguageList(text).map((e) => `${e} (${exclusionKind(e)})`);
+  return parseLanguageList(text).map((e) => t("exclusion_entry", { entry: isolate(e), kind: t(exclusionKind(e)) }));
+}
+
+// "a, b and c" the way the reader's language joins a list.
+function formatList(items) {
+  try {
+    return new Intl.ListFormat(LOCALE, { style: "short", type: "conjunction" }).format(items);
+  } catch (e) {
+    return items.join(", ");
+  }
 }
 
 // A comma-separated box gives no feedback until the crawl is already running:
@@ -336,21 +448,25 @@ function initTagInput(root, initialValue) {
       const chip = document.createElement("span");
       chip.className = "tag";
       // textContent throughout: these are free text somebody typed, and a
-      // shared report shows them to whoever the link was sent to.
-      chip.appendChild(document.createTextNode(tag));
+      // shared report shows them to whoever the link was sent to. In <bdi> so
+      // "/careers" stays "/careers" inside an Arabic line.
+      const entry = document.createElement("bdi");
+      entry.textContent = tag;
+      chip.appendChild(entry);
       const kind = document.createElement("em");
-      kind.textContent = exclusionKind(tag);
+      kind.textContent = t(exclusionKind(tag));
       chip.appendChild(kind);
       const x = document.createElement("button");
       x.type = "button";
       x.className = "tag-remove";
       x.textContent = "×";
-      x.title = `Remove ${tag}`;
+      x.title = t("remove_entry", { entry: isolate(tag) });
+      x.setAttribute("aria-label", x.title);
       x.addEventListener("click", () => { tags.splice(i, 1); render(); input.focus(); });
       chip.appendChild(x);
       list.appendChild(chip);
     });
-    input.placeholder = tags.length ? "Add another…" : "staging, web-staging, /careers";
+    input.placeholder = tags.length ? t("add_another") : t("exclusions_placeholder");
   };
 
   const commit = () => {
@@ -361,7 +477,10 @@ function initTagInput(root, initialValue) {
   };
 
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === ",") {
+    // Chinese, Japanese and Korean input methods confirm a character with
+    // Enter; that Enter belongs to the input method, not to this box.
+    if (e.isComposing || e.keyCode === 229) return;
+    if (e.key === "Enter" || e.key === "," || e.key === "、" || e.key === "，") {
       // Enter must not submit the form it sits in — here it means "commit
       // this entry", which is the only thing anyone expects it to mean.
       e.preventDefault();
@@ -385,7 +504,7 @@ function renderSettingsPills(domainScope, languages, autoDetected, exclusions) {
   const domainPill = document.getElementById("domain-scope-pill");
   const languagePill = document.getElementById("language-pill");
   const exclusionsPill = document.getElementById("exclusions-pill");
-  if (domainPill) domainPill.textContent = DOMAIN_SCOPE_LABELS[domainScope] || domainScope;
+  if (domainPill) domainPill.textContent = domainScopeLabel(domainScope);
   if (exclusionsPill) {
     // parseLanguageList is just a comma splitter, reused here.
     const entries = parseLanguageList(exclusions);
@@ -398,30 +517,32 @@ function renderSettingsPills(domainScope, languages, autoDetected, exclusions) {
     // free text somebody typed, and a shared report renders whatever its owner
     // entered to everyone they shared it with.
     exclusionsPill.textContent = entries.length
-      ? `Excluded: ${describeExclusions(exclusions).join(", ")}`
-      : "Excluded: none";
+      ? t("excluded_some", { entries: formatList(describeExclusions(exclusions)) })
+      : t("excluded_none");
   }
   if (!languagePill) return;
+  // Built with setMessage rather than innerHTML: the codes come from what the
+  // crawl was started with, and the bold part sits inside one sentence.
   if (!languages.length) {
-    languagePill.textContent = "Languages: All";
+    languagePill.textContent = t("languages_all");
   } else if (languages.length === 1) {
-    languagePill.textContent = autoDetected ? `Language: ${languages[0]} (auto)` : `Language: ${languages[0]}`;
-    languagePill.innerHTML = autoDetected
-      ? `Language: <strong>${languages[0]}</strong> (auto)`
-      : `Language: <strong>${languages[0]}</strong>`;
+    setMessage(languagePill, autoDetected ? "language_auto" : "language_one", { lang: strong(languageName(languages[0])) });
   } else {
     const [primary, ...rest] = languages;
-    languagePill.innerHTML = `Languages: <strong>${primary}</strong> + ${rest.join(", ")}`;
+    setMessage(languagePill, "languages_many", {
+      primary: strong(languageName(primary)),
+      rest: formatList(rest.map(languageName)),
+    });
   }
 }
 
+// One date and time, in the reader's language and time zone: stored in UTC,
+// shown as "27 November 2026 at 15:08" or "2026年11月27日 15:08".
 function formatDate(iso) {
   if (!iso) return "";
   const d = new Date(iso);
   if (isNaN(d.getTime())) return iso;
-  const datePart = d.toLocaleDateString(LOCALE, { month: "long", day: "numeric", year: "numeric" });
-  const timePart = d.toLocaleTimeString(LOCALE, { hour: "numeric", minute: "2-digit" });
-  return `${datePart} · ${timePart}`;
+  return new Intl.DateTimeFormat(LOCALE, { dateStyle: "long", timeStyle: "short" }).format(d);
 }
 
 // Run timestamps are stored as UTC and rendered server-side as a raw ISO
@@ -432,38 +553,52 @@ function formatRunDates() {
   }
 }
 
+// "12 MB", "1,5 Mo", "12 MB": the unit and its abbreviation from the browser,
+// in the reader's language.
 function formatBytes(bytes) {
-  if (!bytes) return "0 MB";
+  const unit = (value, name, digits) => new Intl.NumberFormat(LOCALE, {
+    style: "unit", unit: name, unitDisplay: "short", maximumFractionDigits: digits,
+  }).format(value);
+  if (!bytes) return unit(0, "megabyte", 0);
   const mb = bytes / 1048576;
-  if (mb < 1) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-  if (mb < 1024) return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} MB`;
-  return `${(mb / 1024).toFixed(1)} GB`;
+  if (mb < 1) return unit(Math.max(1, Math.round(bytes / 1024)), "kilobyte", 0);
+  if (mb < 1024) return unit(mb, "megabyte", mb < 10 ? 1 : 0);
+  return unit(mb / 1024, "gigabyte", 1);
 }
 
-function formatDuration(totalSeconds) {
-  if (!totalSeconds || totalSeconds < 1) return "less than a minute";
-  const totalMinutes = Math.round(totalSeconds / 60);
-  if (totalMinutes < 1) return "less than a minute";
-  if (totalMinutes < 60) return `~${totalMinutes} min`;
+// "25 min", "1h 8m": the same messages i18n.duration_text renders with, so a
+// duration reads the same whether the page or the script wrote it.
+function durationText(totalSeconds) {
+  const totalMinutes = Math.round((totalSeconds || 0) / 60);
+  if (!totalSeconds || totalSeconds < 60 || totalMinutes < 1) return t("less_than_a_minute");
+  if (totalMinutes < 60) return t("duration_minutes", { n: n(totalMinutes), count: totalMinutes });
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return minutes ? `~${hours}h ${minutes}m` : `~${hours}h`;
+  return minutes
+    ? t("duration_hours_minutes", { h: n(hours), m: n(minutes) })
+    : t("duration_hours", { h: n(hours) });
+}
+
+// "~25 min" — durationText marked as approximate; mirrors i18n.format_duration.
+function formatDuration(totalSeconds) {
+  if (!totalSeconds || totalSeconds < 60) return durationText(totalSeconds);
+  return t("approximately", { duration: durationText(totalSeconds) });
 }
 
 function concurrencyLabel(count) {
-  if (count <= 1) return "Easy";
-  if (count === 2) return "Moderate";
-  return "Busy";
+  if (count <= 1) return t("server_load_easy");
+  if (count === 2) return t("server_load_moderate");
+  return t("server_load_busy");
 }
 
 function renderPageRow(tbody, page, append) {
   const tr = document.createElement("tr");
   if (page.blocked_by_host) {
     tr.className = "page-blocked-host";
-    tr.title = page.error || "Blocked by the host's bot detection";
+    tr.title = page.error || t("blocked_by_host");
   } else if (!page.success) {
     tr.className = "page-failed";
-    tr.title = page.error || "Failed to fetch page";
+    tr.title = page.error || t("fetch_failed");
   }
   const urlTd = document.createElement("td");
   urlTd.className = "url-cell";
@@ -473,7 +608,7 @@ function renderPageRow(tbody, page, append) {
   titleTd.textContent = page.title || "";
   const wordsTd = document.createElement("td");
   wordsTd.className = "words-cell";
-  wordsTd.textContent = page.blocked_by_host ? "blocked" : page.success ? page.word_count.toLocaleString(LOCALE) : "failed";
+  wordsTd.textContent = page.blocked_by_host ? t("word_cell_blocked") : page.success ? n(page.word_count) : t("word_cell_failed");
   const openTd = document.createElement("td");
   openTd.className = "open-cell";
   const openLink = document.createElement("a");
@@ -481,7 +616,7 @@ function renderPageRow(tbody, page, append) {
   openLink.target = "_blank";
   openLink.rel = "noopener noreferrer";
   openLink.className = "open-link";
-  openLink.textContent = "Open ↗";
+  openLink.textContent = t("open_page");
   openTd.appendChild(openLink);
   tr.append(urlTd, titleTd, wordsTd, openTd);
   // Live mode prepends so the newest page appears at the top as it streams in;
@@ -499,9 +634,9 @@ const PAGE_LIST_MAX = 5000;
 function folderForUrl(url) {
   try {
     const segments = new URL(url).pathname.split("/").filter(Boolean);
-    return segments.length ? "/" + segments[0] : "(root)";
+    return segments.length ? "/" + segments[0] : t("root_folder");
   } catch (e) {
-    return "(root)";
+    return t("root_folder");
   }
 }
 
@@ -520,7 +655,7 @@ function renderExpandableTableRows(tbody, rows, colSpan, renderRowFn) {
   td.className = "show-all-row";
   const link = document.createElement("a");
   link.href = "#";
-  link.textContent = `Show all ${rows.length.toLocaleString(LOCALE)}`;
+  link.textContent = t("show_all_n", { n: n(rows.length) });
   link.addEventListener("click", (e) => {
     e.preventDefault();
     fill(rows);
@@ -533,7 +668,11 @@ function renderExpandableTableRows(tbody, rows, colSpan, renderRowFn) {
 function renderFolderRow(group, maxWords) {
   // Live mode still groups in the browser and passes [name, {count, words}];
   // a saved report gets {name, pages, words} already grouped by the server.
-  const name = Array.isArray(group) ? group[0] : group.name;
+  // "Default" (pages with no language in their address) and "(root)" (pages
+  // at the top of the site) are the server's sentinels, shown in the reader's
+  // language. Everything else is a path or a host: data, kept left to right.
+  const rawName = Array.isArray(group) ? group[0] : group.name;
+  const name = rawName === "Default" ? t("language_default") : rawName === "(root)" ? t("root_folder") : rawName;
   const words = Array.isArray(group) ? group[1].words : group.words;
   const count = Array.isArray(group) ? group[1].count : group.pages;
   const tr = document.createElement("tr");
@@ -543,16 +682,16 @@ function renderFolderRow(group, maxWords) {
   bar.className = "folder-bar";
   bar.style.width = Math.max(1, Math.round((words / maxWords) * 100)) + "%";
   const folderSpan = document.createElement("span");
-  folderSpan.textContent = name;
+  folderSpan.append(name === rawName ? bdi(name) : name);
   folderTd.append(bar, folderSpan);
 
   const countTd = document.createElement("td");
   countTd.className = "folder-pages";
-  countTd.innerHTML = `<span>${count.toLocaleString(LOCALE)}</span>`;
+  countTd.append(Object.assign(document.createElement("span"), { textContent: n(count) }));
 
   const wordsTd = document.createElement("td");
   wordsTd.className = "folder-words";
-  wordsTd.innerHTML = `<span>${words.toLocaleString(LOCALE)}</span>`;
+  wordsTd.append(Object.assign(document.createElement("span"), { textContent: n(words) }));
 
   tr.append(folderTd, countTd, wordsTd);
   return tr;
@@ -649,7 +788,7 @@ function renderPageListItem(page, i) {
   path.textContent = page.url;
   const words = document.createElement("span");
   words.className = "words";
-  words.textContent = page.word_count.toLocaleString(LOCALE);
+  words.textContent = n(page.word_count);
   li.append(rank, path, words);
   return li;
 }
@@ -669,7 +808,7 @@ function fillExpandableList(list, rows, total, label) {
   li.className = "show-all-row";
   const link = document.createElement("a");
   link.href = "#";
-  link.textContent = label || `Show all ${total.toLocaleString(LOCALE)}`;
+  link.textContent = label || t("show_all_n", { n: n(total) });
   link.addEventListener("click", (e) => {
     e.preventDefault();
     fill(rows);
@@ -730,7 +869,7 @@ function renderHostNote(crawledCount, leftOut, censusRecorded) {
   const note = document.getElementById("host-note");
   let text = "";
   if (reportScope !== "all") {
-    text = t("hosts_scope_limited", { scope: DOMAIN_SCOPE_LABELS[reportScope] || reportScope });
+    text = t("hosts_scope_limited", { scope: domainScopeLabel(reportScope) });
   } else if (crawledCount <= 1 && !leftOut.length && censusRecorded) {
     text = t("hosts_only_one");
   }
@@ -745,12 +884,10 @@ function renderLeftOut(listId, blockId, rows, label) {
   for (const row of rows) {
     const li = document.createElement("li");
     const name = document.createElement("span");
-    name.textContent = label(row.name);
+    name.append(bdi(label(row.name)));
     const count = document.createElement("span");
     count.className = "muted";
-    count.textContent = row.linked_from === 1
-      ? t("linked_from_one")
-      : t("linked_from_many", { n: row.linked_from.toLocaleString(LOCALE) });
+    count.textContent = t("linked_from", { n: n(row.linked_from), count: row.linked_from });
     li.append(name, count);
     list.appendChild(li);
   }
@@ -775,24 +912,25 @@ function renderRepetition(rep, duplicatePages, runTotal) {
     document.getElementById(`rep-bar-${key}`).style.width = `${(words / total) * 100}%`;
     const figure = document.getElementById(`rep-${key}`);
     figure.querySelector(".rep-pct").textContent = pct.format(words / total);
-    figure.querySelector(".rep-words").textContent = t("n_words", { n: n(words) });
+    figure.querySelector(".rep-words").textContent = t("n_words", { n: n(words), count: words });
   };
   fill("new", fresh);
   fill("repeated", repeated);
   fill("near", near);
 
   const extra = [];
-  if (rep.partial) extra.push(t("rep_partial", { words: n(total) }));
-  if (duplicatePages === 1) extra.push(t("rep_duplicates_one"));
-  else if (duplicatePages > 1) extra.push(t("rep_duplicates_many", { n: n(duplicatePages) }));
-  document.getElementById("rep-extra").textContent = extra.join(" ");
+  if (rep.partial) extra.push(t("rep_partial", { n: n(total), count: total }));
+  if (duplicatePages > 0) extra.push(t("rep_duplicates", { n: n(duplicatePages), count: duplicatePages }));
+  // Two separate sentences, each translated whole; a space joins them in
+  // every language this app is in except Chinese and Japanese.
+  document.getElementById("rep-extra").textContent = extra.join(/^(ja|zh)/.test(LOCALE) ? "" : " ");
 
   const whole = Math.max(runTotal || 0, total);
   const unchecked = whole - total;
   const pill = document.getElementById("rep-coverage-pill");
   pill.hidden = !unchecked;
   document.getElementById("rep-coverage-text").textContent =
-    t("rep_covers", { checked: n(total), total: n(whole) });
+    t("rep_covers", { checked: n(total), total: n(whole), count: whole });
 
   // Words each = the segment's own length: a repeat adds it once per time seen
   // after the first.
@@ -829,8 +967,8 @@ function renderRepetition(rep, duplicatePages, runTotal) {
   document.getElementById("hero-repeated").hidden = false;
   document.getElementById("hero-repeated-pct").textContent = pct.format(repeated / total);
   document.getElementById("hero-repeated-sub").textContent = unchecked
-    ? t("hero_rep_partial", { n: n(total) })
-    : t("n_words", { n: n(repeated) });
+    ? t("hero_rep_partial", { n: n(total), count: total })
+    : t("n_words", { n: n(repeated), count: repeated });
   const share = (words) => `${(words / whole) * 100}%`;
   document.getElementById("cov-new").style.width = share(fresh);
   document.getElementById("cov-repeated").style.width = share(repeated);
@@ -857,11 +995,12 @@ function renderFoldersLead(rows) {
   }
   const top = rows[0];
   const pct = new Intl.NumberFormat(LOCALE, { style: "percent", maximumFractionDigits: 0 });
-  lead.textContent = t(top.pages === 1 ? "folders_lead_one" : "folders_lead", {
+  lead.textContent = t("folders_lead", {
     pct: pct.format(top.words / total),
-    folder: top.name,
+    folder: top.name === "(root)" ? t("root_folder") : isolate(top.name),
     words: n(top.words),
-    pages: n(top.pages),
+    n: n(top.pages),
+    count: top.pages,
   });
   lead.hidden = false;
 }
@@ -878,10 +1017,10 @@ function setLeftOut(changes) {
   totalEl.textContent = n(total);
   totalEl.classList.toggle("zero", total === 0);
   const parts = [];
-  if (c.duplicates) parts.push(t(c.duplicates === 1 ? "nc_duplicates_one" : "nc_duplicates", { n: n(c.duplicates) }));
-  if (c.login) parts.push(t("nc_login", { n: n(c.login) }));
-  if (c.blocked) parts.push(t("nc_blocked", { n: n(c.blocked) }));
-  if (c.failed) parts.push(t("nc_failed", { n: n(c.failed) }));
+  if (c.duplicates) parts.push(t("nc_duplicates", { n: n(c.duplicates), count: c.duplicates }));
+  if (c.login) parts.push(t("nc_login", { n: n(c.login), count: c.login }));
+  if (c.blocked) parts.push(t("nc_blocked", { n: n(c.blocked), count: c.blocked }));
+  if (c.failed) parts.push(t("nc_failed", { n: n(c.failed), count: c.failed }));
   document.getElementById("not-counted-sub").textContent = parts.length ? parts.join(" · ") : t("nc_none");
   for (const [key, id] of [["duplicates", "lo-duplicates"], ["login", "lo-login"], ["blocked", "lo-blocked"], ["failed", "lo-failed"]]) {
     document.getElementById(id).hidden = !c[key];
@@ -939,12 +1078,26 @@ function initReportNav() {
   update();
 }
 
-// Names for the scripts app/language_check.py tells apart.
-const SCRIPT_NAMES = {
-  latin: "Latin", greek: "Greek", cyrillic: "Cyrillic", armenian: "Armenian", hebrew: "Hebrew",
-  arabic: "Arabic", devanagari: "Devanagari", bengali: "Bengali", thai: "Thai", georgian: "Georgian",
-  hangul: "Korean", cjk: "Chinese/Japanese",
+// The scripts app/language_check.py tells apart, by their ISO 15924 codes, so
+// the browser names each in the reader's language. Hangul reads as Korean, as
+// it always has here; Chinese and Japanese characters can't be told apart, so
+// that one is a message of its own.
+const SCRIPT_CODES = {
+  latin: "Latn", greek: "Grek", cyrillic: "Cyrl", armenian: "Armn", hebrew: "Hebr", arabic: "Arab",
+  devanagari: "Deva", bengali: "Beng", thai: "Thai", georgian: "Geor",
 };
+const SCRIPT_DISPLAY = typeof Intl.DisplayNames === "function"
+  ? new Intl.DisplayNames([LOCALE], { type: "script" }) : null;
+
+function scriptName(script) {
+  if (script === "cjk") return t("script_cjk");
+  if (script === "hangul") return languageName("ko");
+  try {
+    return (SCRIPT_DISPLAY && SCRIPT_CODES[script] && SCRIPT_DISPLAY.of(SCRIPT_CODES[script])) || script;
+  } catch (e) {
+    return script;
+  }
+}
 
 function renderSetAside(rows) {
   const block = document.getElementById("language-set-aside");
@@ -954,15 +1107,16 @@ function renderSetAside(rows) {
     const li = document.createElement("li");
     const name = document.createElement("span");
     const label = row.name.startsWith("script:")
-      ? t("written_in", { script: SCRIPT_NAMES[row.name.slice(7)] || row.name.slice(7) })
-      : row.name;
+      ? t("written_in", { script: scriptName(row.name.slice(7)) })
+      : isolate(row.name);
     let path = "";
     try { path = new URL(row.example).pathname; } catch (e) { /* no example */ }
-    name.textContent = path ? `${label} · ${t("example_page", { path })}` : label;
+    // Separate items, not one sentence: the · is layout, like everywhere else.
+    name.textContent = path ? `${label} · ${t("example_page", { path: isolate(path) })}` : label;
     const counts = document.createElement("span");
     counts.className = "muted";
-    const parts = [t("set_aside_read", { n: row.pages.toLocaleString(LOCALE) })];
-    if (row.skipped) parts.push(t("set_aside_skipped", { n: row.skipped.toLocaleString(LOCALE) }));
+    const parts = [t("set_aside_read", { n: n(row.pages), count: row.pages })];
+    if (row.skipped) parts.push(t("set_aside_skipped", { n: n(row.skipped), count: row.skipped }));
     counts.textContent = parts.join(" · ");
     li.append(name, counts);
     list.appendChild(li);
@@ -999,7 +1153,7 @@ function renderServerSummary(summary, runTotal) {
   const topList = document.getElementById("top-pages-list");
   const topRows = summary.top_pages.map((p, i) => renderPageListItem(p, i));
   fillExpandableList(topList, topRows, summary.top_pages.length,
-    summary.top_pages_capped ? `Show top ${summary.top_pages.length.toLocaleString(LOCALE)}` : null);
+    summary.top_pages_capped ? t("show_top_n", { n: n(summary.top_pages.length) }) : null);
 
   const renderGroups = (rows, tbodyId) => {
     const max = rows.length ? rows[0].words : 1;
@@ -1106,12 +1260,16 @@ function initCrawlPage(opts) {
   const pageIssuesList = document.getElementById("page-issues-list");
   const tryDifferentPageNote = document.getElementById("try-different-page-note");
 
+  // The address is rendered by the page in a <strong>; the sentence around it
+  // is one message, so a language can put the address wherever it goes.
+  const noticeEmail = emailNotice && emailNotice.querySelector(":scope > strong");
+  const ownerEmail = noticeEmail ? noticeEmail.textContent : "";
+  if (noticeEmail) noticeEmail.remove();
   const setEmailNotice = (status) => {
     // Absent on a shared report — there's no owner in that view to email.
     if (!emailNotice) return;
-    emailNoticeLabel.textContent = EMAILED_STATUSES.includes(status)
-      ? "Summary emailed to"
-      : "Summary will be emailed to";
+    setMessage(emailNoticeLabel, EMAILED_STATUSES.includes(status) ? "summary_emailed" : "summary_will_email",
+      { email: strong(isolate(ownerEmail)) });
     emailNotice.style.display = "inline";
   };
 
@@ -1130,10 +1288,34 @@ function initCrawlPage(opts) {
       urlSpan.textContent = p.url;
       const reasonSpan = document.createElement("span");
       reasonSpan.className = "issue-reason";
-      reasonSpan.textContent = (p.blocked_by_host ? "Blocked: " : "Failed: ") + (p.error || "Unknown reason");
+      reasonSpan.textContent = t(p.blocked_by_host ? "issue_blocked" : "issue_failed",
+        { reason: p.error ? isolate(p.error) : t("unknown_reason") });
       li.append(urlSpan, reasonSpan);
       pageIssuesList.appendChild(li);
     }
+  };
+
+  // The chip's counts, "1 blocked · 2 failed", with the full sentences in its
+  // title for anyone who hovers. False, and the chip hidden, when both are 0.
+  const showIssueCounts = (blockedCount, failedCount) => {
+    const parts = [];
+    const spoken = [];
+    if (blockedCount) {
+      parts.push(t("nc_blocked", { n: n(blockedCount), count: blockedCount }));
+      spoken.push(t("pages_blocked", { n: n(blockedCount), count: blockedCount }));
+    }
+    if (failedCount) {
+      parts.push(t("nc_failed", { n: n(failedCount), count: failedCount }));
+      spoken.push(t("pages_failed", { n: n(failedCount), count: failedCount }));
+    }
+    if (!parts.length) {
+      pageIssuesDetails.style.display = "none";
+      return false;
+    }
+    pageIssuesNote.textContent = parts.join(" · ");
+    pageIssuesNote.title = spoken.join(" ");
+    showIssuesMenuItem(parts);
+    return true;
   };
 
   const updateBlockedHostCount = (pages) => {
@@ -1149,27 +1331,7 @@ function initCrawlPage(opts) {
     //
     // A chip has room for a count, not a sentence: "1 blocked · 2 failed", with
     // the full wording carried by the title attribute for anyone who hovers.
-    const parts = [];
-    const spoken = [];
-    if (blocked.length) {
-      parts.push(`${blocked.length.toLocaleString(LOCALE)} blocked`);
-      spoken.push(blocked.length === 1
-        ? "1 page was blocked by this site's own bot detection."
-        : `${blocked.length.toLocaleString(LOCALE)} pages were blocked by this site's own bot detection.`);
-    }
-    if (otherFailed.length) {
-      parts.push(`${otherFailed.length.toLocaleString(LOCALE)} failed`);
-      spoken.push(otherFailed.length === 1
-        ? "1 page failed to load."
-        : `${otherFailed.length.toLocaleString(LOCALE)} pages failed to load.`);
-    }
-
-    if (!parts.length) {
-      pageIssuesDetails.style.display = "none";
-      return;
-    }
-    pageIssuesNote.textContent = parts.join(" · ");
-    showIssuesMenuItem(parts);
+    if (!showIssueCounts(blocked.length, otherFailed.length)) return;
     renderIssuesList([...blocked, ...otherFailed]);
     pageIssuesDetails.style.display = "";
   };
@@ -1180,9 +1342,8 @@ function initCrawlPage(opts) {
   let pageCountNow = 0;
   const updatePageCount = (count) => {
     pageCountNow = count;
-    const key = (count === 1 ? "hero_pages_one" : "hero_pages") + (running ? "_so_far" : "");
-    const parts = [t(key, { n: n(count) })];
-    if (opts.detectedCms) parts.push(t("built_with", { cms: opts.detectedCms }));
+    const parts = [t(running ? "hero_pages_so_far" : "hero_pages", { n: n(count), count })];
+    if (opts.detectedCms) parts.push(t("built_with", { cms: isolate(opts.detectedCms) }));
     document.getElementById("hero-sub").textContent = parts.join(" · ");
     pagesHeadingCountEl.textContent = n(count);
     pagesHeadingCountEl.hidden = !count;
@@ -1194,7 +1355,7 @@ function initCrawlPage(opts) {
   const host = hostForUrl(opts.displayUrl || opts.sourceUrl);
   const setTotalWords = (count) => {
     totalWordsEl.textContent = n(count);
-    document.getElementById("nav-total").textContent = `${host} · ${t("n_words", { n: n(count) })}`;
+    document.getElementById("nav-total").textContent = `${isolate(host)} · ${t("n_words", { n: n(count), count })}`;
   };
 
   const updateSettingsPills = (domainScope, languageSetting, detectedLanguage, exclusions) => {
@@ -1211,31 +1372,30 @@ function initCrawlPage(opts) {
   // and proceeding would look like it silently dropped them.
   let estimateTags = null;
 
-  const CONFIDENCE_LABELS = { high: "High confidence", medium: "Medium confidence", low: "Low confidence" };
+  const CONFIDENCE_KEYS = { high: "high_confidence", medium: "medium_confidence", low: "low_confidence" };
 
   const showEstimatePanel = (result) => {
     if (!result) return;
-    estimatePagesFetchedEl.textContent = result.pages_fetched.toLocaleString(LOCALE);
-    estimateTotalPagesEl.textContent = result.total_pages_estimate.toLocaleString(LOCALE);
-    estimateAvgWordsEl.textContent = result.avg_words_per_page.toLocaleString(LOCALE);
-    estimateTotalWordsEl.textContent = result.estimated_total_words.toLocaleString(LOCALE);
+    estimatePagesFetchedEl.textContent = n(result.pages_fetched);
+    estimateTotalPagesEl.textContent = n(result.total_pages_estimate);
+    estimateAvgWordsEl.textContent = n(result.avg_words_per_page);
+    estimateTotalWordsEl.textContent = n(result.estimated_total_words);
 
-    estimateConfidenceBadge.textContent = CONFIDENCE_LABELS[result.confidence] || "";
+    estimateConfidenceBadge.textContent = CONFIDENCE_KEYS[result.confidence] ? t(CONFIDENCE_KEYS[result.confidence]) : "";
     estimateConfidenceBadge.className = "pill confidence-badge confidence-" + (result.confidence || "low");
 
     if (result.detected_cms) {
       estimateCmsPill.textContent = result.detected_cms === "Contentful"
-        ? "Detected platform: Contentful (headless — sitemap conventions vary)"
-        : `Detected platform: ${result.detected_cms}`;
+        ? t("detected_contentful")
+        : t("detected_platform", { cms: isolate(result.detected_cms) });
       estimateCmsPill.style.display = "";
     } else {
       estimateCmsPill.style.display = "none";
     }
 
-    const pagesText = result.total_pages_estimate.toLocaleString(LOCALE);
-    estimateMessageEl.textContent = result.sitemap_found
-      ? `Found a sitemap — this site has approximately ${pagesText} pages. Crawling all of them may take a while.`
-      : `No sitemap found — this estimate is based only on pages discovered so far (approximately ${pagesText}), so it may be less accurate. Crawling all of them may take a while.`;
+    const pages = result.total_pages_estimate;
+    estimateMessageEl.textContent = t(result.sitemap_found ? "sitemap_found" : "sitemap_missing",
+      { n: n(pages), count: pages });
 
     estimateDurationEl.textContent = formatDuration(result.estimated_duration_seconds);
     // The upsell sits on the estimate because this is the one screen where
@@ -1246,15 +1406,18 @@ function initCrawlPage(opts) {
       const show = opts.billingEnabled && !opts.isPro && proSeconds;
       proEl.style.display = show ? "" : "none";
       if (show) {
-        proEl.innerHTML =
-          `about <strong>${formatDuration(proSeconds).replace(/^~/, "")}</strong> on Pro · ` +
-          `<a href="/pricing">See what that costs →</a>`;
+        const note = document.createElement("span");
+        setMessage(note, "on_pro", { time: strong(durationText(proSeconds)) });
+        const link = document.createElement("a");
+        link.href = localPath("/pricing");
+        link.textContent = t("see_what_costs");
+        proEl.replaceChildren(note, " · ", link);
       }
     }
-    estimateSpeedEl.textContent =
-      `${result.words_per_minute.toLocaleString(LOCALE)} words/min` +
-      ` · ${result.pages_per_minute.toLocaleString(LOCALE)} pages/min`;
-    estimateConcurrencyPill.textContent = concurrencyLabel(result.concurrent_crawls) + " server load";
+    estimateSpeedEl.textContent = t("words_per_min", {
+      words: n(result.words_per_minute), pages: n(result.pages_per_minute),
+    });
+    estimateConcurrencyPill.textContent = concurrencyLabel(result.concurrent_crawls);
 
     if (!estimateTags) {
       estimateTags = initTagInput(document.getElementById("estimate-exclusions"), currentExclusions);
@@ -1274,18 +1437,19 @@ function initCrawlPage(opts) {
     // refuses anyway, since the crawler would re-save the row on finishing.
     if (opts.mode !== "live") deleteBtn.style.display = "";
     deleteBtn.addEventListener("click", async () => {
-      if (!confirm(`Delete this crawl of ${opts.displayUrl || opts.sourceUrl}? This can't be undone.`)) return;
+      if (!confirm(t("confirm_delete_crawl", { site: isolate(opts.displayUrl || opts.sourceUrl) }))) return;
       deleteBtn.disabled = true;
-      deleteBtn.textContent = "Deleting…";
-      const res = await fetch("/crawl/" + opts.runId, { method: "DELETE" });
+      deleteBtn.textContent = t("deleting");
+      const res = await fetch(localPath("/crawl/" + opts.runId), { method: "DELETE" });
       if (res.ok) {
-        window.location.href = "/";
+        window.location.href = localPath("/");
         return;
       }
-      const data = await res.json().catch(() => ({}));
       deleteBtn.disabled = false;
-      deleteBtn.textContent = "Delete run";
-      alert(data.detail || "Could not delete this crawl.");
+      deleteBtn.textContent = t("delete_run");
+      // 409: still running. The server's own detail is English, so the
+      // reason is told by status instead.
+      alert(t(res.status === 409 ? "stop_before_delete" : "delete_failed"));
     });
   }
 
@@ -1304,7 +1468,7 @@ function initCrawlPage(opts) {
     if (opts.mode === "live") {
       downloadCsv(`${host}-word-count.csv`, pagesToCsv(currentPages));
     } else {
-      window.location.href = `/crawl/${opts.runId}/export.csv`;
+      window.location.href = localPath(`/crawl/${opts.runId}/export.csv`);
     }
   });
 
@@ -1312,41 +1476,24 @@ function initCrawlPage(opts) {
   // instead of counting a pages array the saved report no longer holds.
   const applyIssueSummary = (summary) => {
     setLeftOut({ blocked: summary.blocked_count || 0, failed: summary.failed_count || 0 });
-    const parts = [];
-    const spoken = [];
-    if (summary.blocked_count) {
-      parts.push(`${summary.blocked_count.toLocaleString(LOCALE)} blocked`);
-      spoken.push(summary.blocked_count === 1
-        ? "1 page was blocked by this site's own bot detection."
-        : `${summary.blocked_count.toLocaleString(LOCALE)} pages were blocked by this site's own bot detection.`);
-    }
-    if (summary.failed_count) {
-      parts.push(`${summary.failed_count.toLocaleString(LOCALE)} failed`);
-      spoken.push(summary.failed_count === 1
-        ? "1 page failed to load."
-        : `${summary.failed_count.toLocaleString(LOCALE)} pages failed to load.`);
-    }
-    if (!parts.length) {
-      pageIssuesDetails.style.display = "none";
-      return;
-    }
-    pageIssuesNote.textContent = parts.join(" · ");
-    showIssuesMenuItem(parts);
+    if (!showIssueCounts(summary.blocked_count || 0, summary.failed_count || 0)) return;
     renderIssuesList(summary.issues);
     if (summary.issues_capped) {
       const li = document.createElement("li");
       li.className = "muted";
-      li.textContent = `Showing the first ${summary.issues.length.toLocaleString(LOCALE)} — export the CSV for the rest.`;
+      li.textContent = t("issues_capped", { n: n(summary.issues.length) });
       pageIssuesList.appendChild(li);
     }
     pageIssuesDetails.style.display = "";
   };
 
-  const MARKDOWN_STOP_REASONS = {
-    stopped_run_cap: "the per-crawl size limit was reached",
-    stopped_disk: "the server was running low on disk space",
-    stopped_global_cap: "the server's total Markdown limit was reached",
-    error: "of an error while saving",
+  // Each a whole sentence of its own (app/js_strings.py), not a reason
+  // dropped into a shared one.
+  const MARKDOWN_STOP_MESSAGES = {
+    stopped_run_cap: "markdown_stopped_run_cap",
+    stopped_disk: "markdown_stopped_disk",
+    stopped_global_cap: "markdown_stopped_global_cap",
+    error: "markdown_stopped_error",
   };
 
   // `terminal` gates the download: mid-crawl the archive would be a moving
@@ -1357,29 +1504,27 @@ function initCrawlPage(opts) {
     // "0 MB · 0 pages" says nothing; the figure appears with the first page saved.
     markdownStat.style.display = md.pages ? "" : "none";
     markdownSizeEl.textContent = formatBytes(md.bytes);
-    markdownPagesEl.textContent = t(md.pages === 1 ? "n_pages_one" : "n_pages", { n: n(md.pages) });
+    markdownPagesEl.textContent = t("n_pages", { n: n(md.pages), count: md.pages });
 
     if (markdownBtn) {
       markdownBtn.style.display = md.pages ? "" : "none";
       markdownBtn.disabled = !terminal;
       markdownBtn.textContent = terminal
-        ? `Download Markdown · ${formatBytes(md.bytes)}`
-        : "Download Markdown";
-      markdownBtn.title = terminal ? "" : "Available when the crawl finishes";
+        ? t("markdown_download", { size: formatBytes(md.bytes) })
+        : t("markdown_download_plain");
+      markdownBtn.title = terminal ? "" : t("markdown_after_finish");
     }
 
-    const reason = MARKDOWN_STOP_REASONS[md.state];
-    if (reason && terminal) {
-      markdownNote.textContent =
-        `Markdown was saved for the first ${md.pages.toLocaleString(LOCALE)} pages, then stopped because ` +
-        `${reason}. The word count below is complete either way.`;
+    const stopped = MARKDOWN_STOP_MESSAGES[md.state];
+    if (stopped && terminal) {
+      markdownNote.textContent = t(stopped, { n: n(md.pages), count: md.pages });
       markdownNote.style.display = "block";
     }
   };
 
   if (markdownBtn) {
     markdownBtn.addEventListener("click", () => {
-      window.location.href = `/crawl/${opts.runId}/markdown.zip`;
+      window.location.href = localPath(`/crawl/${opts.runId}/markdown.zip`);
     });
   }
 
@@ -1397,28 +1542,26 @@ function initCrawlPage(opts) {
       pageMore.style.display = "flex";
       if (loaded >= PAGE_LIST_MAX) {
         btn.style.display = "none";
-        note.textContent =
-          `Showing the first ${loaded.toLocaleString(LOCALE)} of ${total.toLocaleString(LOCALE)} pages.` +
-          " Export the CSV for the complete list.";
+        note.textContent = t("pages_capped", { loaded: n(loaded), n: n(total), count: total });
         return;
       }
       btn.style.display = "";
       btn.disabled = false;
-      btn.textContent = "Show more";
-      note.textContent = `${loaded.toLocaleString(LOCALE)} of ${total.toLocaleString(LOCALE)}`;
+      btn.textContent = t("show_more");
+      note.textContent = t("loaded_of_total", { loaded: n(loaded), total: n(total) });
     };
 
     btn.addEventListener("click", async () => {
       btn.disabled = true;
-      btn.textContent = "Loading…";
+      btn.textContent = t("loading");
       const limit = Math.min(500, PAGE_LIST_MAX - loaded);
       try {
-        const res = await fetch(`/crawl/${opts.runId}/pages?offset=${loaded}&limit=${limit}`);
+        const res = await fetch(localPath(`/crawl/${opts.runId}/pages?offset=${loaded}&limit=${limit}`));
         const data = await res.json();
         for (const page of data.pages) renderPageRow(tbody, page, true);
         loaded += data.pages.length;
       } catch (e) {
-        note.textContent = "Couldn't load more pages.";
+        note.textContent = t("load_more_failed");
       }
       update();
     });
@@ -1440,19 +1583,19 @@ function initCrawlPage(opts) {
   };
 
   const showLimitNote = () => {
-    limitNote.textContent = "The configured page limit was reached — the crawl may be incomplete.";
+    limitNote.textContent = t("limit_reached");
     limitNote.style.display = "block";
   };
 
   const showError = (message) => {
-    errorBox.textContent = message || "The crawl failed.";
+    errorBox.textContent = message || t("crawl_failed");
     errorBox.style.display = "block";
   };
 
   cancelBtn.addEventListener("click", async () => {
     cancelBtn.disabled = true;
-    cancelBtn.textContent = "Cancelling…";
-    await fetch("/crawl/" + opts.runId + "/cancel", { method: "POST" });
+    cancelBtn.textContent = t("cancelling");
+    await fetch(localPath("/crawl/" + opts.runId + "/cancel"), { method: "POST" });
     // The actual status change arrives via the SSE "status" event below.
   });
 
@@ -1467,7 +1610,7 @@ function initCrawlPage(opts) {
     recrawlError.hidden = true;
     recrawlBtn.disabled = true;
     recrawlBtn.textContent = t("starting");
-    const res = await fetch("/crawl", {
+    const res = await fetch(localPath("/crawl"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1495,17 +1638,19 @@ function initCrawlPage(opts) {
         document.getElementById("recrawl-login").hidden = false;
         document.getElementById(data.code.startsWith("site_session_") ? "recrawl-login-session" : "recrawl-login-email").focus();
       }
-      recrawlError.textContent = data.code ? t(data.code) : data.detail || t("something_went_wrong");
+      recrawlError.textContent = t(data.code || "something_went_wrong");
       recrawlError.hidden = false;
       recrawlBtn.disabled = false;
       recrawlBtn.textContent = t("start_recrawl");
       return;
     }
-    window.location.href = "/crawl/" + data.run_id;
+    window.location.href = localPath("/crawl/" + data.run_id);
   });
 
   if (shareBtn) {
-    const shareUrl = window.location.origin + "/share/" + opts.runId;
+    // In the sharer's language, like the share email: they chose the words
+    // the report arrives with. The recipient can switch from the page.
+    const shareUrl = window.location.origin + localPath("/share/" + opts.runId);
     let isPublic = !!opts.initialIsPublic;
 
     const renderPublicState = (pub) => {
@@ -1533,19 +1678,19 @@ function initCrawlPage(opts) {
         name.textContent = person.email;
         const sub = document.createElement("span");
         sub.className = "person-email";
-        sub.textContent = person.created_at ? "Invited " + formatDate(person.created_at) : "Invited";
+        sub.textContent = person.created_at ? t("invited_on", { date: formatDate(person.created_at) }) : t("invited");
         id.append(name, sub);
 
         const remove = document.createElement("button");
         remove.type = "button";
         remove.className = "person-remove";
         remove.textContent = "×";
-        remove.title = "Remove " + person.email;
-        remove.setAttribute("aria-label", "Remove " + person.email);
+        remove.title = t("remove_person", { email: isolate(person.email) });
+        remove.setAttribute("aria-label", remove.title);
         remove.addEventListener("click", async () => {
           remove.disabled = true;
           const res = await fetch(
-            "/crawl/" + opts.runId + "/share/recipients?email=" + encodeURIComponent(person.email),
+            localPath("/crawl/" + opts.runId + "/share/recipients?email=" + encodeURIComponent(person.email)),
             { method: "DELETE" },
           );
           if (res.ok) {
@@ -1583,7 +1728,7 @@ function initCrawlPage(opts) {
     sharePublicToggle.addEventListener("click", async () => {
       sharePublicToggle.disabled = true;
       try {
-        const res = await fetch("/crawl/" + opts.runId + "/share", {
+        const res = await fetch(localPath("/crawl/" + opts.runId + "/share"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ is_public: !isPublic }),
@@ -1598,20 +1743,21 @@ function initCrawlPage(opts) {
     shareCopyBtn.addEventListener("click", async () => {
       shareLinkInput.select();
       await navigator.clipboard.writeText(shareLinkInput.value);
-      shareCopyBtn.textContent = "Copied!";
-      setTimeout(() => { shareCopyBtn.textContent = "Copy link"; }, 1500);
+      shareCopyBtn.textContent = t("copied");
+      setTimeout(() => { shareCopyBtn.textContent = t("copy_link"); }, 1500);
     });
 
     shareEmailForm.addEventListener("submit", async (evt) => {
       evt.preventDefault();
       const sendBtn = shareEmailForm.querySelector("button");
       sendBtn.disabled = true;
-      shareEmailStatus.textContent = "Sending…";
+      shareEmailStatus.textContent = t("sending");
+      const email = shareEmailInput.value.trim();
       try {
-        const res = await fetch("/crawl/" + opts.runId + "/share/email", {
+        const res = await fetch(localPath("/crawl/" + opts.runId + "/share/email"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: shareEmailInput.value.trim() }),
+          body: JSON.stringify({ email }),
         });
         if (res.ok) {
           const data = await res.json();
@@ -1620,10 +1766,13 @@ function initCrawlPage(opts) {
           renderPublicState(data.is_public);
           renderPeople(data.recipients);
           shareEmailInput.value = "";
-          shareEmailStatus.textContent = "Sent!";
+          shareEmailStatus.textContent = t("share_sent", { email: isolate(email) });
         } else {
-          shareEmailStatus.textContent = "Couldn't send — try again.";
+          const data = await res.json().catch(() => ({}));
+          shareEmailStatus.textContent = t(data.code || "share_failed");
         }
+      } catch (e) {
+        shareEmailStatus.textContent = t("share_failed");
       } finally {
         sendBtn.disabled = false;
       }
@@ -1679,7 +1828,7 @@ function initCrawlPage(opts) {
       e.preventDefault();
       const save = editUrlForm.querySelector('button[type="submit"]');
       save.disabled = true;
-      const res = await fetch(`/crawl/${opts.runId}/display-url`, {
+      const res = await fetch(localPath(`/crawl/${opts.runId}/display-url`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: input.value.trim() || null }),
@@ -1723,7 +1872,7 @@ function initCrawlPage(opts) {
     if (opts.mode === "shared") {
       actionRow.style.display = "none";
     }
-    runDateEl.textContent = "Started: " + formatDate(opts.createdAt);
+    runDateEl.textContent = t("started_at", { date: formatDate(opts.createdAt) });
     setEmailNotice(opts.initialStatus);
     setStatus(opts.initialStatus);
     setTotalWords(opts.initialTotalWords);
@@ -1749,7 +1898,7 @@ function initCrawlPage(opts) {
   }
 
   // live mode
-  runDateEl.textContent = "Started: " + formatDate(opts.startedAt);
+  runDateEl.textContent = t("started_at", { date: formatDate(opts.startedAt) });
   setLeftOut({});
   setTotalWords(0);
   updatePageCount(0);
@@ -1769,7 +1918,7 @@ function initCrawlPage(opts) {
     if (data.limit_reached) showLimitNote();
     if (data.status === "failed") showError(data.error);
     if (data.status === "cancelled") {
-      cancelNote.textContent = data.stopped_reason || "This crawl was cancelled — showing partial results.";
+      cancelNote.textContent = data.stopped_reason || t("cancelled_partial");
       cancelNote.style.display = "block";
     }
     applyMarkdown(data.markdown, TERMINAL_STATUSES.includes(data.status));
@@ -1785,8 +1934,8 @@ function initCrawlPage(opts) {
       cancelBtn.style.display = "";
       if (data.status === "queued") {
         queuedMessageEl.textContent = data.queue_position
-          ? `You're #${data.queue_position} in line — this server is busy right now. This will start automatically, and we'll email you when it's done.`
-          : "This will start automatically, and we'll email you when it's done.";
+          ? t("queue_position", { n: n(data.queue_position) })
+          : t("queue_start_email");
         queuedPanel.style.display = "block";
       } else {
         queuedPanel.style.display = "none";
@@ -1809,8 +1958,8 @@ function initCrawlPage(opts) {
 
   proceedBtn.addEventListener("click", async () => {
     proceedBtn.disabled = true;
-    proceedBtn.textContent = "Resuming…";
-    const res = await fetch("/crawl/" + opts.runId + "/resume", {
+    proceedBtn.textContent = t("resuming");
+    const res = await fetch(localPath("/crawl/" + opts.runId + "/resume"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       // null, not "", so an untouched field means "keep what the crawl already
@@ -1832,11 +1981,11 @@ function initCrawlPage(opts) {
   });
 
   adjustBtn.addEventListener("click", () => {
-    window.location.href = "/";
+    window.location.href = localPath("/");
   });
 
   function connectEvents() {
-    const source = new EventSource("/events/" + opts.runId);
+    const source = new EventSource(localPath("/events/" + opts.runId));
 
     source.addEventListener("page", (evt) => {
       const data = JSON.parse(evt.data);
@@ -1854,7 +2003,7 @@ function initCrawlPage(opts) {
         pageMore.style.display = "flex";
         document.getElementById("page-more-btn").style.display = "none";
         document.getElementById("page-more-note").textContent =
-          `Showing the most recent ${PAGE_LIST_MAX.toLocaleString(LOCALE)} pages while this crawl runs.`;
+          t("pages_live_capped", { n: n(PAGE_LIST_MAX), count: PAGE_LIST_MAX });
       }
       setTotalWords(data.total_words);
       updatePageCount(pages.length);
@@ -1903,7 +2052,7 @@ function initCrawlPage(opts) {
 // ------------------------------------------------------------------ projects
 
 async function postJson(url, body, method = "POST") {
-  const res = await fetch(url, {
+  const res = await fetch(localPath(url), {
     method,
     headers: { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -1990,8 +2139,15 @@ function initProjectsHome() {
       error.hidden = false;
       return;
     }
-    window.location.href = data.url;
+    window.location.href = localPath(data.url);
   });
+}
+
+// Left and right arrows move along the tabs the way they are laid out, which
+// in Arabic is right to left: there, → goes to the previous tab.
+function tabStep(evt) {
+  const forward = evt.key === "ArrowRight";
+  return forward !== IS_RTL ? 1 : -1;
 }
 
 // A project: rename, share, add and remove runs, delete.
@@ -2015,7 +2171,7 @@ function initOverlapTabs() {
     tab.addEventListener("keydown", (evt) => {
       if (evt.key !== "ArrowRight" && evt.key !== "ArrowLeft") return;
       evt.preventDefault();
-      select(tabs[(i + (evt.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length], true);
+      select(tabs[(i + tabStep(evt) + tabs.length) % tabs.length], true);
     });
   });
   select(tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0]);
@@ -2047,7 +2203,7 @@ function initConsolidate(base, opts) {
     if (step) step.textContent = steps[state.status === "queued" ? "queued" : (state.step || "queued")] || "";
     if (error) {
       error.hidden = state.status !== "failed";
-      if (state.status === "failed") error.textContent = t("consolidate_failed", { error: state.error || "" });
+      if (state.status === "failed") error.textContent = t("consolidate_failed", { error: isolate(state.error || "") });
     }
     return busy;
   };
@@ -2057,7 +2213,7 @@ function initConsolidate(base, opts) {
     if (document.hidden) { schedule(); return; }
     let state;
     try {
-      const res = await fetch(base + "/consolidation", { headers: { Accept: "application/json" } });
+      const res = await fetch(localPath(base + "/consolidation"), { headers: { Accept: "application/json" } });
       if (res.status === 404) return;
       state = await res.json();
     } catch (e) { schedule(); return; }
@@ -2168,7 +2324,7 @@ function initProjectPage(opts) {
     deleteBtn.addEventListener("click", async () => {
       if (!window.confirm(t("confirm_delete_project"))) return;
       const { ok } = await postJson(base, undefined, "DELETE");
-      if (ok) window.location.href = "/projects";
+      if (ok) window.location.href = localPath("/projects");
     });
   }
 
@@ -2221,7 +2377,7 @@ function initDocTabs() {
     tab.addEventListener("keydown", (evt) => {
       if (evt.key !== "ArrowRight" && evt.key !== "ArrowLeft") return;
       evt.preventDefault();
-      select(tabs[(i + (evt.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length], true);
+      select(tabs[(i + tabStep(evt) + tabs.length) % tabs.length], true);
     });
   });
   const wanted = tabs.find((tab) => location.hash === "#" + tab.getAttribute("aria-controls"));
@@ -2304,7 +2460,11 @@ function initMcpConnect(opts) {
     label.textContent = data.name;
     const meta = document.createElement("span");
     meta.className = "connect-key-meta";
-    meta.textContent = "wck_…" + data.hint + " · " + t("just_now");
+    // The key hint is data, so it stays left to right inside an Arabic line.
+    const hint = document.createElement("bdi");
+    hint.setAttribute("translate", "no");
+    hint.textContent = "wck_…" + data.hint;
+    meta.append(hint, " · " + t("just_now"));
     const revoke = document.createElement("button");
     revoke.type = "button";
     revoke.className = "link-button connect-revoke";

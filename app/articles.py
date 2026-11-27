@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from app import surfaces
+from babel.numbers import format_currency
+
+from app import i18n, surfaces
 
 # Word Counter's count of wxrks.com, from the run behind the article: the whole
 # domain, 4 November 2026.
@@ -216,6 +218,12 @@ def _comparison() -> dict:
 COMPARISON = _comparison()
 
 
+def usd(amount: float, lang: str) -> str:
+    """A dollar amount the way the reader's language writes one. The currency
+    is what was paid (dollars), whatever the language."""
+    return format_currency(amount, "USD", locale=i18n.locale_for(lang))
+
+
 def _home_vs() -> dict:
     """The front page's "Why not just ask ChatGPT or Claude?": the same run,
     reduced to the figures its two cards quote."""
@@ -226,7 +234,12 @@ def _home_vs() -> dict:
         "more_pct": round(x["common"]["more_pct"]),
         "alone_pages_fetched": ac["pages_fetched"],
         "alone_minutes": round(ac["seconds"] / 60),
-        "alone_cost": f"${ac['cost']:.2f}",
+        # The front page is translated, so the amount is formatted for its
+        # reader when it renders — "$5.96" in English, "5,96 $" in German —
+        # with alone_cost_in(lang). alone_cost is the English form.
+        "alone_cost": usd(ac["cost"], "en"),
+        "alone_cost_usd": ac["cost"],
+        "alone_cost_in": lambda lang: usd(ac["cost"], lang),
         "main_words": wf["main_words"],
         "subdomains": wf["subdomains"],
         "subdomain_words": wf["subdomain_words"],

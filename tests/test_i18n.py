@@ -136,8 +136,10 @@ class TestTheCatalogueIsComplete:
 
         pot = (i18n.LOCALE_DIR / "messages.pot").read_text()
         for value in js_strings.catalogue("en").values():
-            first_line = value.split("\n")[0].replace('"', '\\"')
-            assert first_line[:40] in pot, f"missing from catalogue: {value[:40]}"
+            texts = [value] if isinstance(value, str) else [v for k, v in value.items() if not k.startswith("_")]
+            for text in texts:
+                first_line = text.split("\n")[0].replace('"', '\\"')
+                assert first_line[:40] in pot, f"missing from catalogue: {text[:40]}"
 
     def test_the_landing_copy_is_extracted(self):
         """It is built at import, before any request has a language, so it is
@@ -166,7 +168,7 @@ class TestTheSwitcher:
         import re
 
         return {n.strip(): h for h, _, n in re.findall(
-            r'<a[^>]*href="([^"]*)"[^>]*hreflang="([^"]+)"[^>]*>\s*<span>([^<]+)</span>', html)}
+            r'<a[^>]*href="([^"]*)"[^>]*hreflang="([^"]+)"[^>]*>\s*<span[^>]*>([^<]+)</span>', html)}
 
     def test_it_keeps_you_on_the_page_you_are_on(self, i18n_client):
         """Landing somewhere else for choosing a language loses what you were
@@ -229,7 +231,23 @@ class TestEmailsFollowTheirReader:
 
         from app import main
 
-        assert "lang=request.state.lang," in inspect.getsource(main.email_share)
+        assert "lang = _reader_lang(request, user)" in inspect.getsource(main.email_share)
+        assert "lang=lang," in inspect.getsource(main.email_share)
+
+    def test_the_reader_is_the_page_the_script_ran_on(self):
+        """app.js sends the page's prefix; an old cached copy sends none, and
+        the Referer still names the page."""
+        from types import SimpleNamespace
+
+        from app import main
+
+        def request(lang, referer=""):
+            return SimpleNamespace(state=SimpleNamespace(lang=lang), headers={"referer": referer},
+                                   url=SimpleNamespace(netloc="wordcount.wxrks.com"))
+
+        assert main._reader_lang(request("de")) == "de"
+        assert main._reader_lang(request("en", "https://wordcount.wxrks.com/ja/crawl/x")) == "ja"
+        assert main._reader_lang(request("en", "https://elsewhere.example/ja/crawl/x")) == "en"
 
     def test_email_numbers_are_grouped_for_the_reader_too(self):
         from app.notifications import _num
@@ -309,12 +327,18 @@ class TestCataloguesStaySound:
         for po in sorted(i18n.LOCALE_DIR.glob("*/LC_MESSAGES/messages.po")):
             with po.open("rb") as handle:
                 for message in read_po(handle):
-                    source = message.id if isinstance(message.id, str) else (message.id or [""])[0]
-                    target = message.string if isinstance(message.string, str) else (message.string or [""])[0]
-                    if not source or not target:
+                    if not message.id:
                         continue
-                    if sorted(ph.findall(source)) != sorted(ph.findall(target)):
-                        problems.append(f"{po.parent.parent.name}: {source[:60]!r}")
+                    if isinstance(message.id, str):
+                        if message.string and sorted(ph.findall(message.id)) != sorted(ph.findall(message.string)):
+                            problems.append(f"{po.parent.parent.name}: {message.id[:60]!r}")
+                        continue
+                    # A plural form may say its number in words and leave it
+                    # out (Arabic "one page"), never add one the source lacks.
+                    allowed = set(ph.findall(message.id[-1]))
+                    for form in message.string or ():
+                        if form and set(ph.findall(form)) - allowed:
+                            problems.append(f"{po.parent.parent.name}: {message.id[0][:60]!r}")
         assert problems == [], problems
 
     def test_the_pot_is_not_stale_against_the_code(self):
@@ -327,8 +351,8 @@ class TestCataloguesStaySound:
         import translations
 
         assert translations._pot_is_stale() is False, (
-            "run: pybabel extract -F babel.cfg -o locales/messages.pot "
-            "--no-location --sort-output . && pybabel update -i locales/messages.pot -d locales"
+            "run: pybabel extract -F babel.cfg -o locales/messages.pot --no-location --sort-output "
+            "--add-comments=Translators: . && pybabel update -i locales/messages.pot -d locales"
         )
 
 
@@ -387,3 +411,286 @@ class TestPseudoSweep:
                 # The <title> line joins name and tagline outside markers.
                 bare = [b for b in bare if "Word Counter" not in b]
                 assert bare == [], f"{path}: unextracted strings {bare}"
+
+
+def _install_catalog(monkeypatch, tmp_path, lang, messages):
+    """A compiled catalogue for `lang` holding `messages` ({msgid: str} or
+    {(singular, plural): (form, …)}), in place of whatever is on disk — so a
+    test can see a translation without wxrks having delivered one."""
+    import gettext
+
+    from babel.messages.catalog import Catalog
+    from babel.messages.mofile import write_mo
+
+    catalog = Catalog(locale=i18n.HREFLANG.get(lang, lang).replace("-", "_"))
+    for msgid, string in messages.items():
+        catalog.add(msgid, string)
+    path = tmp_path / f"{lang}.mo"
+    with path.open("wb") as handle:
+        write_mo(handle, catalog)
+    with path.open("rb") as handle:
+        monkeypatch.setitem(i18n._translations, lang, gettext.GNUTranslations(handle))
+
+
+class TestPlurals:
+    """English picks a form with n == 1; Arabic has six, French counts 0 as
+    singular, Japanese has one. Only the catalogue's own rule gets it right."""
+
+    PAGE = ("%(n)s page", "%(n)s pages")
+
+    def test_templates_use_the_catalogues_rule(self, monkeypatch, tmp_path):
+        from app import templates as t
+
+        _install_catalog(monkeypatch, tmp_path, "fr", {self.PAGE: ("%(n)s page FR", "%(n)s pages FR")})
+        try:
+            t._install_language("fr")
+            render = t.templates.env.from_string("{{ ngettext('%(n)s page', '%(n)s pages', count, n=count) }}").render
+            assert render(count=0) == "0 page FR", "French puts 0 with 1"
+            assert render(count=2) == "2 pages FR"
+        finally:
+            t._install_language(i18n.DEFAULT_LANG)
+
+    def test_the_browser_gets_one_form_per_category(self, monkeypatch, tmp_path):
+        forms = tuple(f"form{i} %(n)s" for i in range(6))
+        _install_catalog(monkeypatch, tmp_path, "ar", {self.PAGE: forms})
+        variants = i18n.plural_variants("ar", *self.PAGE)
+        assert set(variants) == {"zero", "one", "two", "few", "many", "other"}
+        assert len(set(variants.values())) == 6, "each category its own form"
+
+    def test_untranslated_plurals_are_picked_by_english_rules(self):
+        """Else a French page would read "1 pages" until wxrks delivers."""
+        variants = i18n.plural_variants("fr", *self.PAGE)
+        assert variants == {"one": "%(n)s page", "other": "%(n)s pages", "_rules": "en"}
+
+    def test_the_compile_leaves_untranslated_messages_out(self, tmp_path):
+        """pybabel compile fills an untranslated plural with the English pair,
+        so Arabic, which uses form 1 for n == 1, showed "1 pages", and every
+        plural looked translated to plural_variants. The project's compile
+        leaves it out, and gettext falls back to English by English rules."""
+        import gettext
+
+        from babel.messages.catalog import Catalog
+        from babel.messages.pofile import write_po
+
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+        import translations
+
+        po = tmp_path / "ar" / "LC_MESSAGES" / "messages.po"
+        po.parent.mkdir(parents=True)
+        catalog = Catalog(locale="ar")
+        catalog.add(self.PAGE, ("",) * 6)
+        catalog.add(("%(n)s word", "%(n)s words"), tuple(f"form{i} %(n)s" for i in range(6)))
+        catalog.add(("%(n)s site", "%(n)s sites"), ("form0 %(n)s", "", "", "", "", ""))
+        catalog.add("Save", "")
+        catalog.add("Close", "a guess", flags=["fuzzy"])
+        with po.open("wb") as handle:
+            write_po(handle, catalog)
+        mo = po.with_suffix(".mo")
+
+        assert translations.compile_catalog(po, mo) == (1, 4)
+        with mo.open("rb") as handle:
+            ar = gettext.GNUTranslations(handle)
+        assert ar.ngettext(*self.PAGE, 1) == "%(n)s page", "English by English rules, not 1 pages"
+        assert ar.ngettext(*self.PAGE, 2) == "%(n)s pages"
+        assert ar.ngettext("%(n)s word", "%(n)s words", 1) == "form1 %(n)s", "translated: Arabic rules"
+        assert ar.ngettext("%(n)s site", "%(n)s sites", 1) == "%(n)s site", "half-filled counts as untranslated"
+        assert ar.gettext("Close") == "Close", "fuzzy stays out"
+
+    def test_the_samples_agree_with_every_catalogues_plural_forms(self):
+        """The browser picks a category with CLDR (Intl.PluralRules); the server
+        fills each category from the catalogue's gettext rule at one sample. Any
+        number must land on the same form both ways, in every language."""
+        import gettext
+        import re
+
+        for code in i18n.LANGUAGES:
+            if code == i18n.DEFAULT_LANG:
+                continue
+            header = (i18n.LOCALE_DIR / code / "LC_MESSAGES" / "messages.po").read_text()
+            expression = re.search(r"plural=(.*?);?\\n", header.replace('"\n"', "")).group(1)
+            rule = gettext.c2py(expression)
+            samples = dict(i18n.plural_samples(code))
+            locale = i18n.locale_for(code)
+            for n in [*range(0, 2000), 1_000_000, 2_000_000]:
+                assert rule(n) == rule(samples[locale.plural_form(n)]), f"{code}: {n}"
+
+    def test_no_english_only_plural_logic_is_left(self):
+        """`n === 1 ? "1 crawl" : "%(n)s crawls"` is the English rule wearing a
+        disguise. (Two different sentences for one site and several are fine.)"""
+        import re
+
+        root = Path(__file__).resolve().parents[1] / "app"
+        offenders = []
+        js = (root / "static/app.js").read_text()
+        offenders += [f"app.js: {m}" for m in re.findall(r".*={2,3} ?1 \?.*_one.*", js)]
+        for template in (root / "templates").glob("*.html"):
+            if template.name.startswith("admin_"):
+                continue
+            for m in re.findall(r"\{%-? if [^%]*== ?1 -?%\}\{\{ _\(['\"]1 ", template.read_text()):
+                offenders.append(f"{template.name}: {m}")
+        assert offenders == [], offenders
+
+    def test_every_catalogue_states_the_rule_of_the_language_it_serves(self):
+        """pt serves Brazilian Portuguese (pt-BR), where 0 is singular; the
+        catalogue had Portugal's rule, so "1 páginas" would have shipped."""
+        import re
+
+        header = (i18n.LOCALE_DIR / "pt" / "LC_MESSAGES" / "messages.po").read_text()
+        assert re.search(r'"Language: pt_BR\\n"', header)
+        assert "plural=(n > 1);" in header
+
+
+class TestDurations:
+    def test_english_reads_as_it_always_has(self):
+        assert i18n.format_duration(30, "en") == "less than a minute"
+        assert i18n.format_duration(25 * 60, "en") == "~25 min"
+        assert i18n.format_duration(68 * 60, "en") == "~1h 8m"
+        assert i18n.format_duration(3 * 3600, "en") == "~3h"
+
+    def test_the_numbers_in_it_are_the_readers(self):
+        assert i18n.format_duration(1500 * 3600, "de") == "~1.500h"
+
+
+class TestTheLanguageChoice:
+    """What counts as choosing a language — the preference emails are sent in."""
+
+    def _request(self, path_lang="en", accept="text/html", cookie=None, method="GET"):
+        from types import SimpleNamespace
+
+        return SimpleNamespace(method=method, headers={"accept": accept}, state=SimpleNamespace(lang=path_lang),
+                               cookies={i18n.LANG_COOKIE: cookie} if cookie else {})
+
+    def test_a_page_in_a_language_is_a_choice(self):
+        assert i18n.chosen_language(self._request("de")) == "de"
+
+    def test_the_scripts_fetches_are_not(self):
+        """app.js calls unprefixed paths; reading those as English reset every
+        German account to English the moment a crawl page opened."""
+        assert i18n.chosen_language(self._request("en", accept="*/*")) is None
+        assert i18n.chosen_language(self._request("en", accept="text/event-stream")) is None
+        assert i18n.chosen_language(self._request("de", method="POST")) is None
+
+    def test_the_english_root_is_only_a_choice_when_picked(self):
+        assert i18n.chosen_language(self._request("en")) is None
+        assert i18n.chosen_language(self._request("en", cookie="en")) == "en"
+
+    def test_the_account_remembers_only_choices(self):
+        import inspect
+
+        from app import auth
+
+        assert "i18n.chosen_language(request)" in inspect.getsource(auth.get_current_user)
+
+    def test_accept_language_is_read_by_quality(self):
+        pick = i18n.preferred_language
+        assert pick("de-AT,de;q=0.9,en;q=0.8") == "de"
+        assert pick("en-US,en;q=0.9,de;q=0.5") == "en"
+        assert pick("fr;q=0.2,ja;q=0.8") == "ja"
+        assert pick("de;q=0, en") == "en"
+        assert pick("*") is None and pick("") is None and pick(None) is None
+        assert pick("nl, pl") is None
+
+    def test_traditional_chinese_is_not_offered_simplified(self):
+        assert i18n.preferred_language("zh-TW") is None
+        assert i18n.preferred_language("zh-Hant-HK") is None
+        assert i18n.preferred_language("zh-CN") == "zh"
+
+
+class TestSearchEngines:
+    def _canonical(self, html):
+        import re
+
+        return re.search(r'rel="canonical" href="([^"]+)"', html).group(1)
+
+    def _hreflangs(self, html):
+        import re
+
+        return dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', html))
+
+    def test_an_untranslated_language_is_not_advertised(self, i18n_client, monkeypatch):
+        """Until wxrks delivers, /de/ is English under another URL: pointing it
+        at English keeps ten duplicates out of the index."""
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en",))
+        html = i18n_client.get("/de/login").text
+        assert self._canonical(html).endswith("/login") and "/de/" not in self._canonical(html)
+        assert set(self._hreflangs(html)) == {"en", "x-default"}
+
+    def test_a_published_language_is_its_own_canonical(self, i18n_client, monkeypatch):
+        """request.url.path is the stripped path, so the canonical used to send
+        every language to English — cancelling its own hreflang."""
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en", "de"))
+        html = i18n_client.get("/de/login").text
+        assert self._canonical(html).endswith("/de/login")
+        links = self._hreflangs(html)
+        assert links["de-DE"].endswith("/de/login") and links["en"].endswith("/login")
+        assert links["x-default"] == links["en"]
+
+    def test_robots_keeps_every_languages_private_pages_out(self, i18n_client):
+        robots = i18n_client.get("/robots.txt").text
+        for path in ("/share/", "/de/share/", "/ja/crawl/", "/ar/projects"):
+            assert f"Disallow: {path}\n" in robots, path
+
+    def test_the_sitemap_lists_each_published_language(self, i18n_client, monkeypatch):
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en", "de"))
+        sitemap = i18n_client.get("/sitemap.xml").text
+        assert "/de/mcp</loc>" in sitemap and 'hreflang="x-default"' in sitemap
+        assert "/fr/" not in sitemap, "not published, not listed"
+
+
+class TestTheSuggestion:
+    """An English page offers the visitor's own language, in that language."""
+
+    PAGE = {"accept": "text/html", "accept-language": "de-DE,de;q=0.9,en;q=0.5"}
+
+    def test_it_offers_a_published_language_the_browser_prefers(self, i18n_client, monkeypatch):
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en", "de"))
+        html = i18n_client.get("/login", headers=self.PAGE).text
+        assert 'class="lang-suggest" lang="de-DE"' in html
+        assert 'href="/de/login"' in html
+
+    def test_it_never_offers_an_untranslated_one(self, i18n_client, monkeypatch):
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en",))
+        assert "lang-suggest" not in i18n_client.get("/login", headers=self.PAGE).text
+
+    def test_staying_in_english_is_remembered(self, i18n_client, monkeypatch):
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en", "de"))
+        i18n_client.cookies.set(i18n.LANG_COOKIE, "en")
+        assert "lang-suggest" not in i18n_client.get("/login", headers=self.PAGE).text
+
+    def test_it_is_not_shown_on_a_page_already_in_a_language(self, i18n_client, monkeypatch):
+        monkeypatch.setattr(i18n, "published_languages", lambda: ("en", "de"))
+        assert "lang-suggest" not in i18n_client.get("/ja/login", headers=self.PAGE).text
+
+    def test_opening_a_language_remembers_it(self, i18n_client):
+        response = i18n_client.get("/de/login", headers={"accept": "text/html"})
+        assert f"{i18n.LANG_COOKIE}=de" in response.headers.get("set-cookie", "")
+
+
+class TestRedirectsKeepTheLanguage:
+    def test_signing_in_is_asked_in_the_readers_language(self, i18n_client):
+        response = i18n_client.get("/de/runs", follow_redirects=False)
+        assert response.headers["location"] == "/de/login"
+
+    def test_signing_out_lands_in_it_too(self, i18n_client):
+        response = i18n_client.get("/ja/logout", follow_redirects=False)
+        assert response.headers["location"] == "/ja/login"
+
+    def test_the_sign_in_page_shows_only_its_own_errors(self, i18n_client):
+        """The message used to come from the address bar, in English — and
+        anyone could put words of their own on the sign-in page."""
+        assert "field-error" in i18n_client.get("/login?error=google").text
+        assert "field-error" not in i18n_client.get("/login?error=Your+account+is+locked").text
+
+    def test_the_admin_pages_say_they_are_english(self, i18n_client):
+        """They stay English by decision; a /de/ prefix must not label them German."""
+        from app import templates as t
+
+        class Request:
+            url = type("U", (), {"path": "/admin/health", "query": ""})()
+            state = type("S", (), {"lang": "de"})()
+            method = "GET"
+            headers = {}
+            cookies = {}
+
+        context = t._globals(Request())
+        assert context["hreflang"] == "en" and context["lang_dir"] == "ltr"

@@ -2,8 +2,14 @@
   Email HTML, not page HTML: tables for layout, every style inline, no web
   fonts and no flex/grid — Outlook and Gmail strip or ignore all of those.
   Colours mirror the app's tokens so the email and the report look related.
+
+  Mail clients ignore logical CSS, so the sides are passed in per direction
+  (app/notifications.py): `start` is where a line begins — left in English,
+  right in Arabic — and `end` the other side. `tracking` is false for Arabic
+  (spacing its letters apart breaks the joins) and for Chinese, Japanese and
+  Korean, which have no capitals to space out.
 #}
-<div style="margin:0; padding:0; background:#F6F4EF;">
+<div lang="{{ html_lang }}" dir="{{ dir }}" style="margin:0; padding:0; background:#F6F4EF;">
   {% if preheader %}
   {# Inbox preview line. Hidden in the body, then padded so the client doesn't
      pull the rest of the markup in after it. #}
@@ -16,7 +22,7 @@
     <tr>
       <td align="center" style="padding:32px 16px;">
 
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px; background:#FFFFFF; border:1px solid #E4E1D6; border-radius:14px; overflow:hidden;">
+        <table role="presentation" dir="{{ dir }}" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px; background:#FFFFFF; border:1px solid #E4E1D6; border-radius:14px; overflow:hidden;">
 
           <!-- Brand bar -->
           <tr>
@@ -28,12 +34,13 @@
                      a relative path has no page to resolve against. Falls back to
                      the wordmark as text when no absolute URL can be built, and
                      the alt text covers images-off inboxes. #}
-                  <td style="padding-right:12px;">
+                  <td style="padding-{{ end }}:12px;">
                     <img src="{{ logo_url }}" alt="wxrks" width="88" height="20" style="display:block; width:88px; height:20px; border:0;">
                   </td>
-                  <td style="padding-right:12px;"><div style="width:1px; height:18px; background:#3F7A63;"></div></td>
+                  <td style="padding-{{ end }}:12px;"><div style="width:1px; height:18px; background:#3F7A63;"></div></td>
                   {% endif %}
-                  <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; color:#FFFFFF; font-size:16px; font-weight:700; letter-spacing:-0.2px;">{{ (product_name or "Word Counter").replace(" ", "&nbsp;") | safe }}</td>
+                  {# The product's name as the brand lockup, like the logo beside it — as written in every language. #}
+                  <td translate="no" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; color:#FFFFFF; font-size:16px; font-weight:700; letter-spacing:-0.2px;">{{ (product_name or "Word Counter").replace(" ", "&nbsp;") | safe }}</td>
                 </tr>
               </table>
             </td>
@@ -42,12 +49,13 @@
           <!-- Heading + the site this is about -->
           <tr>
             <td style="padding:30px 32px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-              <h1 style="margin:0 0 8px; font-size:21px; line-height:1.3; font-weight:700; color:#191712; letter-spacing:-0.3px;">{{ heading }}</h1>
+              <h1 style="margin:0 0 8px; font-size:21px; line-height:1.4; font-weight:700; color:#191712;{% if tracking %} letter-spacing:-0.3px;{% endif %}">{{ heading }}</h1>
               {% if subheading %}
-              <p style="margin:0 0 16px; font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; font-size:13px; line-height:1.45; color:#175E45; word-break:break-all;">{{ subheading }}</p>
+              {# A web address: left to right even inside Arabic. #}
+              <p dir="ltr" style="margin:0 0 16px; font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; font-size:13px; line-height:1.45; color:#175E45; word-break:break-all; text-align:{{ start }};">{{ subheading }}</p>
               {% endif %}
               {% if intro_text %}
-              <p style="margin:0; font-size:14px; line-height:1.55; color:#6E6A5E;">{{ intro_text }}</p>
+              <p style="margin:0; font-size:14px; line-height:1.6; color:#6E6A5E;">{{ intro_text }}</p>
               {% endif %}
             </td>
           </tr>
@@ -59,9 +67,9 @@
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6F4EF; border:1px solid #E4E1D6; border-radius:10px;">
                 <tr>
                   {% for value, label in hero_stats %}
-                  <td width="{{ (100 / hero_stats|length) | round | int }}%" style="padding:18px 20px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; {% if not loop.first %}border-left:1px solid #E4E1D6;{% endif %}">
+                  <td width="{{ (100 / hero_stats|length) | round | int }}%" style="padding:18px 20px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; {% if not loop.first %}border-{{ start }}:1px solid #E4E1D6;{% endif %}">
                     <div style="font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; font-size:26px; font-weight:700; color:#191712; line-height:1.1; letter-spacing:-0.5px;">{{ value }}</div>
-                    <div style="margin-top:6px; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6E6A5E;">{{ label }}</div>
+                    <div style="margin-top:6px; font-size:{{ '11px' if tracking else '13px' }}; line-height:1.4; font-weight:600; {% if tracking %}letter-spacing:0.08em; text-transform:uppercase; {% endif %}color:#6E6A5E;">{{ label }}</div>
                   </td>
                   {% endfor %}
                 </tr>
@@ -78,7 +86,7 @@
                 {% for label, value in stats %}
                 <tr>
                   <td style="padding:9px 0; border-bottom:1px solid #F0EDE4; font-size:13px; color:#6E6A5E;">{{ label }}</td>
-                  <td align="right" style="padding:9px 0; border-bottom:1px solid #F0EDE4; font-size:14px; color:#191712; font-weight:600;">{{ value }}</td>
+                  <td align="{{ end }}" style="padding:9px 0; border-bottom:1px solid #F0EDE4; font-size:14px; color:#191712; font-weight:600;">{{ value }}</td>
                 </tr>
                 {% endfor %}
               </table>
@@ -110,15 +118,19 @@
                    what happens to this email. -->
               <div style="background:#191712; border-radius:10px; padding:16px 18px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
                 {% if promo.kind == "pro" %}
-                  <div style="font-size:15px; font-weight:600; color:#F1EFE9; margin-bottom:5px;">
-                    This crawl took {{ promo.took_seconds | duration }}. On Pro: <span style="color:#8FD3B4; font-weight:700;">{{ promo.pro_seconds | duration }}</span>.
+                  {% set pro_time %}<span style="color:#8FD3B4; font-weight:700;">{{ promo.pro_seconds | duration }}</span>{% endset %}
+                  <div style="font-size:15px; line-height:1.45; font-weight:600; color:#F1EFE9; margin-bottom:5px;">
+                    {# Translators: in the crawl email's Pro offer. %(took)s and %(pro)s
+                       are approximate durations such as "~1h 8m": how long this crawl
+                       took, and how long it would have taken on the Pro plan. #}
+                    {{ _('This crawl took %(took)s. On Pro: %(pro)s.', took=promo.took_seconds | duration, pro=pro_time) }}
                   </div>
-                  <div style="font-size:13px; line-height:1.5; color:#A9A79E;">
-                    More pages fetched at once, and it starts ahead of the queue.
-                    Everything else about the crawl is identical.
+                  <div style="font-size:13px; line-height:1.55; color:#A9A79E;">
+                    {{ _('More pages fetched at once, and it starts ahead of the queue. Everything else about the crawl is identical.') }}
                   </div>
                   <div style="margin-top:14px;">
-                    <a href="{{ pricing_url }}" style="display:inline-block; background:#8FD3B4; color:#191712; border-radius:6px; padding:9px 15px; font-size:12.5px; font-weight:700; text-decoration:none;">Compare plans &rarr;</a>
+                    {# Translators: a button that opens the pricing page. #}
+                    <a href="{{ pricing_url }}" style="display:inline-block; background:#8FD3B4; color:#191712; border-radius:6px; padding:9px 15px; font-size:12.5px; font-weight:700; text-decoration:none;">{{ _('Compare plans') }} {{ arrow }}</a>
                   </div>
                 {% else %}
                   {# Accent follows the platform the crawler recognised — see
@@ -134,21 +146,24 @@
                     </span>
                   </div>
                   {% endif %}
-                  <div style="font-size:15px; font-weight:600; color:#F1EFE9; margin-bottom:5px;">
-                    <span style="color:{{ promo.accent }}; font-weight:700;">{{ "{:,}".format(promo.total_words) }}</span> words to translate.
+                  {% set promo_words %}<span style="color:{{ promo.accent }}; font-weight:700;">{{ num(promo.total_words) }}</span>{% endset %}
+                  <div style="font-size:15px; line-height:1.45; font-weight:600; color:#F1EFE9; margin-bottom:5px;">
+                    {# Translators: the headline of the wxrks offer, in the crawl email
+                       and on the report. %(n)s is the site's word count. #}
+                    {{ ngettext('%(n)s word to translate.', '%(n)s words to translate.', promo.total_words, n=promo_words) }}
                   </div>
-                  <div style="font-size:13px; line-height:1.5; color:#A9A79E;">
+                  <div style="font-size:13px; line-height:1.55; color:#A9A79E;">
                     {% if promo.cms -%}
-                    wxrks has a {{ promo.cms }} connector: it pulls your content straight
-                    from {{ promo.cms }}, translates it with the best AI models and keeps
-                    it in sync.
+                    {# Translators: %(cms)s is the platform the site is built on, such as Webflow or WordPress. #}
+                    {{ _('wxrks has a %(cms)s connector: it pulls your content straight from %(cms)s, translates it with the best AI models and keeps it in sync.', cms=promo.cms) }}
                     {%- else -%}
-                    wxrks pulls the content and translates it with the best AI models,
-                    then keeps it in sync as the site changes.
+                    {{ _('wxrks pulls the content and translates it with the best AI models, then keeps it in sync as the site changes.') }}
                     {%- endif %}
                   </div>
                   <div style="margin-top:14px;">
-                    <a href="{{ promo.url }}" style="display:inline-block; background:{{ promo.accent }}; color:#191712; border-radius:6px; padding:9px 15px; font-size:12.5px; font-weight:700; text-decoration:none;">{% if promo.cms %}See the {{ promo.cms }} connector{% else %}See what wxrks would do with {{ promo.domain }}{% endif %} &rarr;</a>
+                    <a href="{{ promo.url }}" style="display:inline-block; background:{{ promo.accent }}; color:#191712; border-radius:6px; padding:9px 15px; font-size:12.5px; font-weight:700; text-decoration:none;">
+                      {%- if promo.cms %}{{ _('See the %(cms)s connector', cms=promo.cms) }}
+                      {%- else %}{# Translators: a button. %(site)s is the crawled site's domain, such as example.com. #}{{ _('See what wxrks would do with %(site)s', site=promo.domain) }}{% endif %} {{ arrow }}</a>
                   </div>
                 {% endif %}
               </div>
@@ -168,7 +183,8 @@
                 </tr>
               </table>
               {# Some clients strip the button; the raw URL keeps the mail usable. #}
-              <p style="margin:14px 0 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; line-height:1.5; color:#A5A093; word-break:break-all;">Or paste this into your browser:<br>{{ cta_url }}</p>
+              {# Translators: above the report's address, for mail apps that hide the button. #}
+              <p style="margin:14px 0 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; font-size:11px; line-height:1.5; color:#A5A093;">{{ _('Or paste this into your browser:') }}<br><span dir="ltr" style="word-break:break-all;">{{ cta_url }}</span></p>
             </td>
           </tr>
           {% else %}
@@ -178,7 +194,7 @@
           <!-- Footer -->
           <tr>
             <td style="padding:16px 32px; background:#FBFAF7; border-top:1px solid #E4E1D6; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
-              <p style="margin:0; font-size:11px; line-height:1.5; color:#A5A093;">{{ footer_note or product_name or "Website Word Counter" }}</p>
+              <p style="margin:0; font-size:11px; line-height:1.5; color:#A5A093;">{{ footer_note or product_name }}</p>
             </td>
           </tr>
 

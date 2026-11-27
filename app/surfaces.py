@@ -64,7 +64,12 @@ def _hosts(name: str, default: str) -> tuple[str, ...]:
 COUNTER = Surface(
     key="counter",
     host=os.environ.get("COUNTER_HOST", "wordcount.wxrks.com"),
+    # Translators: the product's name, in titles and running text (the logo
+    # keeps it as written). Translate it only where your market knows the
+    # product by a translated name.
     name=N_("Word Counter"),
+    # Translators: shown after the product name in page titles
+    # ("Word Counter — Count every word on a website") and on the sign-in page.
     tagline=N_("Count every word on a website"),
     headline=N_("Nobody knows how many words are on their website."),
     lede=N_(
@@ -83,6 +88,7 @@ COUNTER = Surface(
         ),
         (
             N_("It counts what a translator is handed"),
+            # Translators: write the numbers the way your language does.
             N_(
                 "Navigation, footers, sidebars and forms are stripped before counting, so a "
             "500-page site doesn't inflate by the same menu repeated 500 times."
@@ -120,6 +126,8 @@ COUNTER = Surface(
 MARKDOWN = Surface(
     key="markdown",
     host=os.environ.get("MARKDOWN_HOST", "markdown.wxrks.com"),
+    # Translators: the name of the companion product. Markdown is a file
+    # format and stays as written.
     name=N_("Site to Markdown"),
     tagline=N_("Turn any website into clean Markdown"),
     headline=N_("Your website, as clean text a language model can actually read."),
@@ -146,6 +154,9 @@ MARKDOWN = Surface(
         ),
         (
             N_("The token arithmetic is the argument"),
+            # Translators: write the numbers the way your language does
+            # (662.000 in German, 662 000 in French). "Tokens" are the units a
+            # language model reads.
             N_(
                 "English runs near 1.3 tokens per word. A 662,000-word site is about 880,000 "
             "tokens of clean text — as raw HTML it would be several times that, nearly all "

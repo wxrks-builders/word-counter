@@ -32,6 +32,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from app import consolidation, db, markdown_store, projects, segment_store
+from app.i18n import N_
 from app.repetition import SEGMENT_RULES
 
 logger = logging.getLogger(__name__)
@@ -153,8 +154,9 @@ async def _claim_loop() -> None:
 async def _run_guarded(project_id: str, gen: int, resumed: int = 0) -> None:
     try:
         if resumed > MAX_RESUMES:
+            # Stored in English and translated where it's shown (report.stored_text).
             await db.fail_consolidation(project_id, OWNER, gen,
-                                        "Stopped: the server restarted while it ran, several times in a row.")
+                                        N_("Stopped: the server restarted while it ran, several times in a row."))
             return
         await run(project_id, gen)
     except asyncio.CancelledError:

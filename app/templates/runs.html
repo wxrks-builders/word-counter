@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ _('All crawls') }} — {{ surface.name }}{% endblock %}
+{% block title %}{{ _('All crawls') }} — {{ _(surface.name) }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% block body %}
   {% include "_topbar.html" %}
@@ -8,14 +8,16 @@
     <a href="{{ url('/') }}" class="back-link">{{ _('← New crawl') }}</a>
 
     <div class="list-head" style="margin-top:20px;">
-      <div class="section-label">{{ _('All your crawls') }}{% if total %} ({{ num(total) }}){% endif %}</div>
+      {# Translators: a heading with the number of crawls in brackets: "All your crawls (25)". #}
+      <div class="section-label">{% if total %}{{ ngettext('All your crawls (%(n)s)', 'All your crawls (%(n)s)', total, n=num(total)) }}{% else %}{{ _('All your crawls') }}{% endif %}</div>
     </div>
 
     {% if runs %}
       {% include "_run_list.html" %}
       {% include "_pagination.html" %}
     {% else %}
-      <p class="muted">{{ _('No crawls yet') }} — <a href="{{ url('/') }}">{{ _('start one') }}</a>.</p>
+      {# Translators: keep the <a href="%(href)s"> and </a> tags around the words that link to a new crawl. #}
+      <p class="muted">{{ _('No crawls yet — <a href="%(href)s">start one</a>.', href=url('/')) }}</p>
     {% endif %}
   </div>
 

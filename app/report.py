@@ -12,9 +12,69 @@ app.js, which still run in live mode while a crawl is streaming.
 
 from __future__ import annotations
 
+import re
 from urllib.parse import urlsplit
 
+from app import i18n
+from app.i18n import N_
 from app.models import PageResult
+
+# Sentences the crawler stores in English, because it runs with no request and
+# so no reader to write for. They are translated where they are shown; this
+# list puts the ones written in app/crawler.py without N_() into the catalogue.
+# Anything else in a page's error is the browser's or the remote server's own
+# words (a DNS failure, a TLS error) and is shown as it came.
+_STORED = (
+    # Translators: why a page wasn't counted, in the report's list of pages
+    # that failed and in its tooltips.
+    N_("Requires login"),
+    N_("Duplicate of a page already counted"),
+    N_("Failed to fetch page"),
+    N_("This link points to a downloadable file, not a webpage"),
+)
+# Stored already formatted ("…for over 10 minutes…"), so the msgid it came
+# from (in app/crawler.py) is rebuilt to look it up.
+_STALLED = re.compile(r"^This crawl stalled — no page was fetched for over (\d+) minutes — and was stopped automatically\.$")
+_STALLED_MSGID = ("This crawl stalled — no page was fetched for over %(minutes)s "
+                  "minutes — and was stopped automatically.")
+
+
+# Why a project's consolidation stopped (app/consolidation_job.py), stored the
+# same way. The size one is stored with its numbers in, "{:,}"-grouped.
+_TOO_LARGE = re.compile(r"^Too large to consolidate here: ([\d,]+) pages across its crawls "
+                        r"\(this server's limit is ([\d,]+)\)\.$")
+
+
+def stored_text(text: str | None, lang: str) -> str | None:
+    """A sentence the crawler or a consolidation stored, in the reader's
+    language when it is one of the fixed ones (and in the catalogue), as stored
+    otherwise."""
+    if not text or lang == i18n.DEFAULT_LANG:
+        return text
+    _ = i18n.gettext_for(lang)
+    stalled = _STALLED.match(text)
+    if stalled:
+        minutes = int(stalled.group(1))
+        return _(_STALLED_MSGID) % {"minutes": i18n.format_number(minutes, lang)}
+    too_large = _TOO_LARGE.match(text)
+    if too_large:
+        pages, limit = (int(group.replace(",", "")) for group in too_large.groups())
+        ngettext = i18n.ngettext_for(lang)  # by this name, so pybabel extracts it
+        # Translators: why a project couldn't be consolidated. %(limit)s is the
+        # server's page limit; the plural follows the pages.
+        return ngettext(
+            "Too large to consolidate here: %(n)s page across its crawls (this server's limit is %(limit)s).",
+            "Too large to consolidate here: %(n)s pages across its crawls (this server's limit is %(limit)s).",
+            pages,
+        ) % {"n": i18n.format_number(pages, lang), "limit": i18n.format_number(limit, lang)}
+    return _(text)
+
+
+def consolidation_status(state: dict, lang: str) -> dict:
+    """consolidation_job.status() with its stored error in the reader's language."""
+    if state.get("error"):
+        return {**state, "error": stored_text(state["error"], lang)}
+    return state
 
 # How much of each list the report page gets up front. The full page list is
 # paged in on demand; these two are shown in full behind a "Show all".
@@ -150,19 +210,21 @@ def _grouped(pages: list[PageResult], key) -> list[dict]:
     return sorted(groups.values(), key=lambda g: g["words"], reverse=True)
 
 
-def page_row(page: PageResult) -> dict:
-    """Only the fields the table actually renders — PageResult carries more."""
+def page_row(page: PageResult, lang: str = i18n.DEFAULT_LANG) -> dict:
+    """Only the fields the table actually renders — PageResult carries more.
+    The error is in the reader's language where it is one of the crawler's
+    fixed sentences (see stored_text)."""
     return {
         "url": page.url,
         "title": page.title or "",
         "word_count": page.word_count,
         "success": page.success,
         "blocked_by_host": page.blocked_by_host,
-        "error": page.error,
+        "error": stored_text(page.error, lang),
     }
 
 
-def summarize(pages: list[PageResult]) -> dict:
+def summarize(pages: list[PageResult], lang: str = i18n.DEFAULT_LANG) -> dict:
     blocked = [p for p in pages if p.blocked_by_host]
     failed = [p for p in pages if not p.success and not p.blocked_by_host]
     top = sorted((p for p in pages if p.success), key=lambda p: p.word_count, reverse=True)[:TOP_PAGES]
@@ -176,7 +238,7 @@ def summarize(pages: list[PageResult]) -> dict:
         "blocked_count": len(blocked),
         "failed_count": len(failed),
         "issues": [
-            {"url": p.url, "error": p.error, "blocked_by_host": p.blocked_by_host}
+            {"url": p.url, "error": stored_text(p.error, lang), "blocked_by_host": p.blocked_by_host}
             for p in (blocked + failed)[:MAX_ISSUES]
         ],
         "issues_capped": len(blocked) + len(failed) > MAX_ISSUES,

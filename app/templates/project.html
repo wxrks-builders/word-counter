@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% block title %}{{ project.name }} — {{ _('Projects') }} — {{ surface.name }}{% endblock %}
+{% block title %}{{ project.name }} — {{ _('Projects') }} — {{ _(surface.name) }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% macro site(u) %}{{ u | replace('https://', '') | replace('http://', '') }}{% endmacro %}
-{% macro site_list(ids, names) %}{% for i in ids %}{% if not loop.first %}, {% endif %}{{ site(names.get(i, i)) }}{% endfor %}{% endmacro %}
+{# Translators: what goes between the items of a list of site names ("a.com, b.com").
+   Use your language's list punctuation, such as "、" or "، ". #}
+{% macro site_list(ids, names) %}{% for i in ids %}{% if not loop.first %}{{ pgettext('list separator', ', ') }}{% endif %}{{ site(names.get(i, i)) }}{% endfor %}{% endmacro %}
 {% set t = c.totals if c else {} %}
 {% set kind_labels = {'same_text': _('same text'), 'changed_text': _('text changed — counted from the crawl listed first'),
                       'address_only': _('same address')} %}
@@ -16,7 +18,8 @@
   {% include "_topbar.html" %}
 
   <div class="report-wrap report-header">
-    <a href="{{ url('/projects') }}">← {{ _('Projects') }}</a>
+    {# Translators: a link back to the list of projects. #}
+    <a href="{{ url('/projects') }}">{{ _('← Projects') }}</a>
     <div class="title-row">
       <div class="title-block">
         <h1 id="project-name">{{ project.name }}</h1>
@@ -41,16 +44,19 @@
           <button type="button" class="secondary action-dots" data-menu-button
                   aria-haspopup="true" aria-expanded="false" title="{{ _('More actions') }}">⋯</button>
           <div class="action-menu-list" role="menu" data-menu-panel hidden>
-            <button type="button" role="menuitem" id="add-runs-open">{{ _('Add existing runs') }}…</button>
+            {# Translators: opens a dialog for adding earlier crawls to this project. #}
+            <button type="button" role="menuitem" id="add-runs-open">{{ _('Add existing runs…') }}</button>
             <button type="button" role="menuitem" id="delete-project-btn" class="menu-danger">{{ _('Delete project') }}</button>
           </div>
         </div>
       </div>
     </div>
+    {# Translators: how many crawls the project holds, then how many of them are still running. #}
     <p class="run-date-line">
-      {%- if run_count == 1 %}{{ _('1 crawl') }}{% else %}{{ _('%(n)s crawls', n=num(run_count)) }}{% endif %}
+      {{- ngettext('%(n)s crawl', '%(n)s crawls', run_count or 0, n=num(run_count)) }}
       {%- set crawling = rows | selectattr('status', 'in', ['crawling', 'queued', 'starting', 'resuming', 'paused']) | list %}
-      {%- if crawling %} · {{ _('%(n)s still crawling', n=num(crawling | length)) }}{% endif %}
+      {# Translators: after the number of crawls in a project: how many of them are still running. #}
+      {%- if crawling %} · {{ ngettext('%(n)s still crawling', '%(n)s still crawling', crawling | length, n=num(crawling | length)) }}{% endif %}
       {%- if project.is_public %} · <span class="status-badge status-completed">{{ _('Shared') }}</span>{% endif %}
     </p>
   </div>
@@ -61,7 +67,7 @@
       <h2>{{ _('No crawls in this project yet') }}</h2>
       <p class="muted">{{ _('Add the crawls you already have, or crawl a site straight into it.') }}</p>
       <div class="project-empty-actions">
-        <button type="button" class="secondary" id="add-runs-open-empty">{{ _('Add existing runs') }}…</button>
+        <button type="button" class="secondary" id="add-runs-open-empty">{{ _('Add existing runs…') }}</button>
         <a class="button" href="{{ url('/') }}?project={{ project.id }}">{{ _('Crawl a site') }}</a>
       </div>
     </div>
@@ -75,9 +81,10 @@
           <div class="hero-label"><span class="section-label">{{ _('New words') }}</span></div>
           {% if c %}
           <div class="hero-number">{{ num(t.new_words) }}</div>
+          {# Translators: the caption under the project's number of new words; %(n)s is how many crawls it covers. #}
           <p class="hero-sub">
-            {%- if t.runs_counted == 1 %}{{ _('each page and each sentence once, in 1 crawl') }}
-            {%- else %}{{ _('each page and each sentence once, across %(n)s crawls', n=num(t.runs_counted)) }}{% endif -%}
+            {{- ngettext('each page and each sentence once, in %(n)s crawl', 'each page and each sentence once, across %(n)s crawls',
+                         t.runs_counted or 0, n=num(t.runs_counted)) -}}
           </p>
           {% else %}
           <div class="hero-number hero-number-pending">—</div>
@@ -85,7 +92,8 @@
           {% endif %}
         </div>
         <div class="consolidate-box">
-          {% if c %}<p class="consolidate-when">{{ _('Consolidated') }} <span class="run-date-iso" data-iso="{{ c.computed_at }}"></span></p>{% endif %}
+          {# Translators: %(date)s is when the project's totals were last worked out, filled in by the browser. #}
+          {% if c %}<p class="consolidate-when">{{ _('Consolidated %(date)s', date=('<span class="run-date-iso" data-iso="' ~ c.computed_at ~ '"></span>') | safe) }}</p>{% endif %}
           <button type="button" id="consolidate-btn"{% if busy %} disabled{% endif %}>
             {%- if busy %}{{ _('Consolidating…') }}{% elif c %}{{ _('Consolidate again') }}{% else %}{{ _('Consolidate') }}{% endif -%}
           </button>
@@ -126,11 +134,13 @@
       </div>
       {% endif %}
       {% if c.notes.markdown_runs %}
+      {# Translators: %(sites)s is a list of site names. #}
       <p class="project-notice">
         {{ _('Estimated from saved Markdown: %(sites)s. These crawls are from before crawls kept their sentences, so their sentences come from the Markdown they saved — main content only — and each page’s words are split in the same proportions. A new crawl gives exact figures.', sites=site_list(c.notes.markdown_runs, names)) }}
       </p>
       {% endif %}
       {% if c.notes.page_only_runs %}
+      {# Translators: %(sites)s is a list of site names. #}
       <p class="project-notice">
         {{ _('Checked by page only: %(sites)s. These crawls kept no sentences and saved no Markdown, so their pages count in full unless the same page is in another crawl. A new crawl checks them sentence by sentence.', sites=site_list(c.notes.page_only_runs, names)) }}
       </p>
@@ -143,14 +153,15 @@
     <section class="report-section" id="crawls">
       <div class="section-head">
         <h2>{{ _('Crawls') }}</h2>
-        <button type="button" class="secondary" id="add-runs-open-inline">{{ _('Add existing runs') }}…</button>
+        <button type="button" class="secondary" id="add-runs-open-inline">{{ _('Add existing runs…') }}</button>
       </div>
       <p class="section-lead">{{ _('Read in this order, each crawl adds what the ones above it don’t have: completed crawls first, newest first; a crawl that didn’t finish only fills the gaps. Of a site crawled twice, the latest completed crawl counts.') }}</p>
       <div class="table-scroll table-paged">
         <table class="project-sites project-crawls">
           <thead>
             <tr>
-              <th>{{ _('Crawl') }}</th><th class="col-num">{{ _('Words') }}</th>
+              {# Translators: a table column of crawls (a noun). #}
+              <th>{{ pgettext('noun', 'Crawl') }}</th><th class="col-num">{{ _('Words') }}</th>
               <th class="col-num">{{ _('Same page in another crawl') }}</th>
               <th class="col-num">{{ _('Repeated within') }}</th>
               <th class="col-num">{{ _('Repeated from other crawls') }}</th>
@@ -166,7 +177,7 @@
                 <span class="project-site-meta">
                   <span class="run-date-iso" data-iso="{{ row.created_at }}"></span>
                   <span class="status-badge status-{{ row.status }}">{{ status_labels.get(row.status, row.status | capitalize) }}</span>
-                  {% if row.detected_cms %}<span class="pill">{{ row.detected_cms }}</span>{% endif %}
+                  {% if row.detected_cms %}<span class="pill" translate="no">{{ row.detected_cms }}</span>{% endif %}
                   {% if row.password_protected %}<span class="pill">{{ _('Password-protected') }}</span>{% endif %}
                   {% if row.signed_in %}<span class="pill">{{ _('Signed in') }}</span>{% endif %}
                 </span>
@@ -176,18 +187,18 @@
                 {% elif row.state == 'waiting' %}<span class="project-site-note">{{ _('Added since the last consolidation — in the next one.') }}</span>{% endif %}
                 {% if counted and row.coverage %}
                   {% if row.coverage.markdown %}<span class="project-site-note">{{ _('Sentences estimated from saved Markdown.') }}</span>{% endif %}
-                  {% if row.coverage.page_only %}<span class="project-site-note">{{ _('%(n)s words checked by page only.', n=num(row.coverage.page_only)) }}</span>{% endif %}
+                  {% if row.coverage.page_only %}<span class="project-site-note">{{ ngettext('%(n)s word checked by page only.', '%(n)s words checked by page only.', row.coverage.page_only, n=num(row.coverage.page_only)) }}</span>{% endif %}
                 {% endif %}
               </td>
               <td class="words-cell" data-label="{{ _('Words') }}">
                 {%- if counted %}{{ num(row.words) }}{% else %}<s class="not-in-total" title="{{ _('Not in the total') }}">{{ num(row.own_words) }}</s>{% endif -%}
-                {%- if row.repeated_pct is not none %}<span class="cell-sub">{{ _('%(pct)s%% repeated in its own report', pct=row.repeated_pct) }}</span>{% endif -%}
+                {%- if row.repeated_pct is not none %}<span class="cell-sub">{{ _('%(pct)s%% repeated in its own report', pct=num(row.repeated_pct)) }}</span>{% endif -%}
               </td>
               {% if counted %}
               <td class="words-cell" data-label="{{ _('Same page in another crawl') }}">
                 {{- num(row.same_page_words) }}
                 {%- if row.same_page_pages %}<span class="cell-sub">
-                  {%- if row.same_page_pages == 1 %}{{ _('1 page') }}{% else %}{{ _('%(n)s pages', n=num(row.same_page_pages)) }}{% endif %}
+                  {{- ngettext('%(n)s page', '%(n)s pages', row.same_page_pages, n=num(row.same_page_pages)) }}
                   {%- for other in row.same_page_in[:2] %} · {{ _('counted from %(site)s', site=site(names.get(other.id, other.id))) }}{% endfor %}</span>{% endif -%}
               </td>
               <td class="words-cell" data-label="{{ _('Repeated within') }}">{{ num(row.repeated_within) }}</td>
@@ -238,16 +249,20 @@
             <tbody>
               {% for pair in c.pairs %}
               <tr>
-                <td>{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}
+                {# Translators: under a pair of sites, how many of their shared pages have
+                   the same text, changed text, or only the same address. Each %(n)s is a number of pages. #}
+                <td><span translate="no">{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}</span>
                   {%- if pair.pages %}<span class="cell-sub">
-                    {%- if pair.same_text %}{{ _('%(n)s same text', n=num(pair.same_text)) }}{% endif -%}
-                    {%- if pair.changed_text %}{% if pair.same_text %} · {% endif %}{{ _('%(n)s text changed', n=num(pair.changed_text)) }}{% endif -%}
-                    {%- if pair.address_only %}{% if pair.same_text or pair.changed_text %} · {% endif %}{{ _('%(n)s same address', n=num(pair.address_only)) }}{% endif -%}
+                    {%- if pair.same_text %}{{ ngettext('%(n)s same text', '%(n)s same text', pair.same_text, n=num(pair.same_text)) }}{% endif -%}
+                    {# Translators: shared pages whose text differs between the two sites; %(n)s is a number of pages. #}
+                    {%- if pair.changed_text %}{% if pair.same_text %} · {% endif %}{{ ngettext('%(n)s text changed', '%(n)s text changed', pair.changed_text, n=num(pair.changed_text)) }}{% endif -%}
+                    {# Translators: pages matched only by their address, because their text wasn't kept to compare; %(n)s is a number of pages. #}
+                    {%- if pair.address_only %}{% if pair.same_text or pair.changed_text %} · {% endif %}{{ ngettext('%(n)s same address', '%(n)s same address', pair.address_only, n=num(pair.address_only)) }}{% endif -%}
                   </span>{% endif %}
                 </td>
                 <td class="folder-pages">{{ num(pair.pages) }}</td>
                 <td class="folder-words">{{ num(pair.words) }}</td>
-                <td class="folder-words">{{ _('%(n)s words', n=num(pair.sentence_words)) }}</td>
+                <td class="folder-words">{{ ngettext('%(n)s word', '%(n)s words', pair.sentence_words or 0, n=num(pair.sentence_words)) }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -312,7 +327,12 @@
             <tbody>
               {% for sentence in c.sentences.top %}
               <tr>
-                <td>{% if sentence.text_known %}{{ sentence.text }}{% else %}<span class="muted">{{ _('Text not kept — first seen on') }} <a href="{{ sentence.first_url }}" target="_blank" rel="noopener">{{ sentence.first_url | replace('https://', '') }}</a></span>{% endif %}
+                {# The sentence is the site's own text, in the site's language, not the page's. #}
+                <td>{% if sentence.text_known %}<span dir="auto">{{ sentence.text }}</span>{% else %}
+                  {%- set first_seen %}<a href="{{ sentence.first_url }}" target="_blank" rel="noopener" translate="no">{{ sentence.first_url | replace('https://', '') }}</a>{% endset -%}
+                  {# Translators: %(url)s is the address of the page, as a link. #}
+                  <span class="muted">{{ _('Text not kept — first seen on %(url)s', url=first_seen) }}</span>{% endif %}
+                  {# Translators: %(sites)s is a list of site names. #}
                   <span class="cell-sub">{{ _('in %(sites)s', sites=site_list(sentence.runs, names)) }}</span>
                 </td>
                 <td class="folder-pages">{{ num(sentence.words) }}</td>
@@ -375,7 +395,7 @@
         <li><span>{{ _('Duplicate pages within a crawl') }}</span><strong>{{ num(t.duplicates) }}</strong></li>
         <li><span>{{ _('Pages behind a sign-in') }}</span><strong>{{ num(t.login_walls) }}</strong></li>
         {% if r.blocked_count or r.failed_count %}<li><span>{{ _('Blocked or failed pages') }}</span><strong>{{ num(r.blocked_count + r.failed_count) }}</strong></li>{% endif %}
-        {% if r.skipped_hosts %}<li><span>{{ _('Linked subdomains not crawled') }}</span><strong>{{ r.skipped_hosts[:4] | map(attribute='name') | join(', ') }}</strong></li>{% endif %}
+        {% if r.skipped_hosts %}<li><span>{{ _('Linked subdomains not crawled') }}</span><strong translate="no">{{ r.skipped_hosts[:4] | map(attribute='name') | join(pgettext('list separator', ', ')) }}</strong></li>{% endif %}
       </ul>
     </section>
     {% endif %}
@@ -398,11 +418,11 @@
           <label class="project-option" data-search="{{ run.shown_url | lower }}">
             <input type="checkbox" name="run" value="{{ run.id }}">
             <span class="project-option-name">{{ site(run.shown_url) }}</span>
-            <span class="project-option-meta">{{ _('%(n)s words', n=num(run.total_words)) }} · <span class="run-date-iso" data-iso="{{ run.created_at }}"></span></span>
+            <span class="project-option-meta">{{ ngettext('%(n)s word', '%(n)s words', run.total_words or 0, n=num(run.total_words)) }} · <span class="run-date-iso" data-iso="{{ run.created_at }}"></span></span>
           </label>
           {% endfor %}
         </div>
-        <p class="muted project-form-lead">{{ _('Up to %(n)s crawls in a project.', n=max_runs) }}</p>
+        <p class="muted project-form-lead">{{ ngettext('Up to %(n)s crawl in a project.', 'Up to %(n)s crawls in a project.', max_runs, n=num(max_runs)) }}</p>
         {% else %}
         <p class="muted">{{ _('All your runs are in this project already.') }}</p>
         {% endif %}

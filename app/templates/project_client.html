@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ project.name }} — {{ surface.name }}{% endblock %}
+{% block title %}{{ project.name }} — {{ _(surface.name) }}{% endblock %}
 {% block head %}<meta name="robots" content="noindex, nofollow">{% if not c %}<meta http-equiv="refresh" content="20">{% endif %}{% endblock %}
 {% macro site(u) %}{{ u | replace('https://', '') | replace('http://', '') }}{% endmacro %}
 {% set t = c.totals if c else {} %}
@@ -12,11 +12,11 @@
       <div>
         <span class="section-label">{{ _('Word count · project') }}</span>
         <h1>{{ project.name }}</h1>
-        <p class="client-sites">{{ counted | map(attribute='shown_url') | map('replace', 'https://', '') | map('replace', 'http://', '') | join(' · ') }}</p>
+        <p class="client-sites" translate="no">{{ counted | map(attribute='shown_url') | map('replace', 'https://', '') | map('replace', 'http://', '') | join(' · ') }}</p>
       </div>
       {% if is_owner %}
       <div class="header-actions client-actions">
-        <a class="button secondary" href="{{ url('/projects/' ~ project.id) }}">← {{ _('Back to the project') }}</a>
+        <a class="button secondary" href="{{ url('/projects/' ~ project.id) }}">{{ _('← Back to the project') }}</a>
         <button type="button" class="secondary" id="client-print-btn">{{ _('Print') }}</button>
       </div>
       {% endif %}
@@ -29,9 +29,17 @@
     {% else %}
     <section class="client-total">
       <div class="client-number">{{ num(t.new_words) }}</div>
+      {# One site and several are different sentences, not plural forms: the
+         first names "this site". The second is plural-aware for the count. #}
+      {# Translators: the caption under the project's big number of new words,
+         when the project counts one site. #}
       <p class="client-lead">
         {%- if counted | length == 1 %}{{ _('new words to translate on this site: each page and each sentence counted once.') }}
-        {%- else %}{{ _('new words to translate across the %(n)s sites: each page and each sentence counted once.', n=num(counted | length)) }}{% endif -%}
+        {# Translators: the caption under the project's big number of new words.
+           %(n)s is how many sites the project counts (two or more). #}
+        {%- else %}{{ ngettext('new words to translate across the %(n)s site: each page and each sentence counted once.',
+                               'new words to translate across the %(n)s sites: each page and each sentence counted once.',
+                               counted | length, n=num(counted | length)) }}{% endif -%}
       </p>
       {% if t.added_up %}
       <div class="client-bar" role="img" aria-label="{{ _('New words and repeated words') }}">
@@ -65,7 +73,7 @@
                 {% if is_owner %}<a href="{{ url('/crawl/' ~ row.id) }}"><strong>{{ site(row.shown_url) }}</strong></a>
                 {% elif row.is_public %}<a href="{{ url('/share/' ~ row.id) }}"><strong>{{ site(row.shown_url) }}</strong></a>
                 {% else %}<strong>{{ site(row.shown_url) }}</strong>{% endif %}
-                {% if row.detected_cms or row.password_protected %}<span class="cell-sub">{{ row.detected_cms or '' }}{% if row.detected_cms and row.password_protected %} · {% endif %}{% if row.password_protected %}{{ _('staging, password-protected') }}{% endif %}</span>{% endif %}
+                {% if row.detected_cms or row.password_protected %}<span class="cell-sub">{% if row.detected_cms %}<span translate="no">{{ row.detected_cms }}</span>{% endif %}{% if row.detected_cms and row.password_protected %} · {% endif %}{% if row.password_protected %}{{ _('staging, password-protected') }}{% endif %}</span>{% endif %}
                 {% if row.state == 'gap_filler' %}<span class="cell-sub">{{ _('Crawl didn’t finish: counted only for what the other sites don’t have') }}</span>{% endif %}
               </td>
               <td><span class="run-date-iso" data-iso="{{ row.created_at }}"></span></td>
@@ -91,12 +99,13 @@
         {% set folders = c.report.folders | sort(attribute='new_words', reverse=true) %}
         <table class="client-table">
           <tbody>
+            {# Translators: a percentage in a table cell ("12%"); add the space or sign your language uses. #}
             {% for f in folders[:5] %}
-            <tr><td>{{ f.name }}</td><td class="words-cell">{{ num(f.new_words or 0) }}</td><td class="words-cell client-pct">{{ ((100 * (f.new_words or 0) / t.new_words) | round | int) if t.new_words else 0 }}%</td></tr>
+            <tr><td translate="no">{{ f.name }}</td><td class="words-cell">{{ num(f.new_words or 0) }}</td><td class="words-cell client-pct">{{ pgettext('percent', '%(pct)s%%', pct=num(((100 * (f.new_words or 0) / t.new_words) | round | int) if t.new_words else 0)) }}</td></tr>
             {% endfor %}
             {% if folders | length > 5 %}
             {% set rest = folders[5:] | sum(attribute='new_words') %}
-            <tr><td>{{ _('Everything else') }}</td><td class="words-cell">{{ num(rest) }}</td><td class="words-cell client-pct">{{ ((100 * rest / t.new_words) | round | int) if t.new_words else 0 }}%</td></tr>
+            <tr><td>{{ _('Everything else') }}</td><td class="words-cell">{{ num(rest) }}</td><td class="words-cell client-pct">{{ pgettext('percent', '%(pct)s%%', pct=num(((100 * rest / t.new_words) | round | int) if t.new_words else 0)) }}</td></tr>
             {% endif %}
           </tbody>
         </table>
@@ -107,7 +116,8 @@
         <table class="client-table">
           <tbody>
             {% for pair in c.pairs %}
-            <tr><td>{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}</td><td class="words-cell">{% if pair.pages == 1 %}{{ _('1 page') }}{% else %}{{ _('%(n)s pages', n=num(pair.pages)) }}{% endif %}</td><td class="words-cell">{{ _('%(n)s words in sentences', n=num(pair.sentence_words)) }}</td></tr>
+            {# Translators: how much two sites share: a number of pages, then a number of words in shared sentences. #}
+            <tr><td translate="no">{{ site(names.get(pair.a, pair.a)) }} × {{ site(names.get(pair.b, pair.b)) }}</td><td class="words-cell">{{ ngettext('%(n)s page', '%(n)s pages', pair.pages or 0, n=num(pair.pages)) }}</td><td class="words-cell">{{ ngettext('%(n)s word in sentences', '%(n)s words in sentences', pair.sentence_words or 0, n=num(pair.sentence_words)) }}</td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -118,14 +128,17 @@
 
     <section class="client-section client-out">
       <h2>{{ _('Not in this count') }}</h2>
-      <p>
-        {{ _('Menus, footers and forms, which repeat on every page') }}
-        {%- if t.duplicates %}; {{ _('%(n)s duplicate pages within the sites', n=num(t.duplicates)) }}{% endif %}
-        {%- if t.login_walls %}; {{ _('%(n)s pages behind a sign-in', n=num(t.login_walls)) }}{% endif %}
-        {%- if c.report.skipped_hosts %}; {{ _('the linked subdomains that weren’t crawled: %(hosts)s', hosts=c.report.skipped_hosts[:5] | map(attribute='name') | join(', ')) }}{% endif %}.
-        {{ _('Each site’s own report has its pages, its repetition estimate and what it left out.') }}
-      </p>
-      <p class="client-credit">{{ _('Counted with %(product)s by wxrks', product=surface.name) }}{% if share_link %} · {{ share_link }}{% endif %}</p>
+      {# A list rather than one sentence glued together with semicolons: each
+         item is whole on its own, so it translates on its own. #}
+      <ul class="client-out-list">
+        <li>{{ _('Menus, footers and forms, which repeat on every page.') }}</li>
+        {% if t.duplicates %}<li>{{ ngettext('%(n)s duplicate page within the sites.', '%(n)s duplicate pages within the sites.', t.duplicates, n=num(t.duplicates)) }}</li>{% endif %}
+        {% if t.login_walls %}<li>{{ ngettext('%(n)s page behind a sign-in.', '%(n)s pages behind a sign-in.', t.login_walls, n=num(t.login_walls)) }}</li>{% endif %}
+        {# Translators: %(hosts)s is a list of subdomains, such as "help.example.com, docs.example.com". #}
+        {% if c.report.skipped_hosts %}<li>{{ _('The linked subdomains that weren’t crawled: %(hosts)s.', hosts=c.report.skipped_hosts[:5] | map(attribute='name') | join(pgettext('list separator', ', '))) }}</li>{% endif %}
+      </ul>
+      <p>{{ _('Each site’s own report has its pages, its repetition estimate and what it left out.') }}</p>
+      <p class="client-credit">{{ _('Counted with %(product)s by wxrks', product=_(surface.name)) }}{% if share_link %} · <span translate="no">{{ share_link }}</span>{% endif %}</p>
     </section>
     {% endif %}
   </main>

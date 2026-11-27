@@ -30,7 +30,7 @@
         {% for f in folders[:5] %}
         <li style="--w: {{ (f.words / top * 100) | round(1) }}%; --i: {{ loop.index0 }};">
           <span class="mock-bar"></span>
-          <span class="mock-bar-name">{{ f.name }}</span>
+          <span class="mock-bar-name" translate="no">{{ f.name }}</span>
           <span class="mock-bar-value">{{ num(f.words) }}</span>
         </li>
         {% endfor %}
@@ -49,7 +49,10 @@
       {% for w in [96, 88, 92, 70, 94, 83, 60] %}<span class="wire-line" style="--w: {{ w }}%; --i: {{ loop.index0 }};"></span>{% endfor %}
     </div>
     <div class="wire-chrome">{{ icon('x', 12) }} {{ _('Footer · not counted') }}</div>
-    <div class="wire-count">{{ icon('check', 14) }} <strong data-countup="1284">{{ num(1284) }}</strong> {{ _('words counted') }}</div>
+    {# Translators: under a sketch of a web page, how many of its words were counted.
+       %(n)s is the number, in bold. #}
+    <div class="wire-count">{{ icon('check', 14) }} {{ ngettext('%(n)s word counted', '%(n)s words counted', 1284,
+        n=('<strong data-countup="1284">' ~ num(1284) ~ '</strong>') | safe) }}</div>
   </div>
   <div class="wire-dup">{{ icon('copy-check', 14) }} {{ _('Duplicate · listed separately') }}</div>
 </div>
@@ -63,11 +66,11 @@
     <ol class="mock-toplist">
       {% for path, words in rows %}
       <li style="--w: {{ (words / 6240 * 100) | round(1) }}%; --i: {{ loop.index0 }};">
-        <span class="mock-bar"></span><span class="mock-bar-name">{{ path }}</span><span class="mock-bar-value">{{ num(words) }}</span>
+        <span class="mock-bar"></span><span class="mock-bar-name" translate="no">{{ path }}</span><span class="mock-bar-value">{{ num(words) }}</span>
       </li>
       {% endfor %}
     </ol>
-    <div class="mock-csv">{{ icon('download', 14) }} {{ _('Export CSV') }} <span>URL · {{ _('Title') }} · {{ _('Words') }}</span></div>
+    <div class="mock-csv">{{ icon('download', 14) }} {{ _('Export CSV') }} <span>{{ _('URL') }} · {{ _('Title') }} · {{ _('Words') }}</span></div>
   </div>
 </div>
 {%- endmacro %}
@@ -92,16 +95,18 @@
     </div>
   </div>
   <div class="md-zip">{{ icon('file-archive', 16) }} <span class="md-zip-name" translate="no">{{ preview.host if preview else 'example.com' }}-markdown.zip</span>
-    <span class="md-zip-count">{{ _('%(n)s files', n=num(preview.page_count if preview else 212)) }}</span></div>
+    {# Translators: how many Markdown files are in the ZIP download. #}
+    {% set md_files = (preview.page_count if preview else 212) or 0 %}
+    <span class="md-zip-count">{{ ngettext('%(n)s file', '%(n)s files', md_files, n=num(md_files)) }}</span></div>
 </div>
 {%- endmacro %}
 
 {% macro scope_mock() -%}
 <div class="mini" aria-hidden="true">
   <div class="mini-seg"><span class="on">{{ _('Whole domain') }}</span><span>{{ _('One subdomain') }}</span><span>{{ _('Main site') }}</span></div>
-  <div class="mini-chips">
+  <div class="mini-chips" translate="no">
     <span class="mini-chip">/careers {{ icon('x', 12) }}</span>
-    <span class="mini-chip" translate="no">staging {{ icon('x', 12) }}</span>
+    <span class="mini-chip">staging {{ icon('x', 12) }}</span>
     <span class="mini-chip">/archive {{ icon('x', 12) }}</span>
   </div>
 </div>
@@ -109,7 +114,7 @@
 
 {% macro languages_mock() -%}
 <div class="mini" aria-hidden="true">
-  <ul class="mini-paths">
+  <ul class="mini-paths" translate="no">
     <li class="kept"><span>/en/pricing</span>{{ icon('check', 13) }}</li>
     <li><span>/fr/pricing</span>{{ icon('minus', 13) }}</li>
     <li><span>/de/pricing</span>{{ icon('minus', 13) }}</li>
@@ -135,10 +140,11 @@
     <div class="est-stats">
       <div><span class="mock-label">{{ _('Estimated total') }}</span><strong data-countup="548000">{{ num(548000) }}</strong></div>
       <div><span class="mock-label">{{ _('Estimated total pages') }}</span><strong data-countup="420">{{ num(420) }}</strong></div>
-      <div><span class="mock-label">{{ _('Estimated total time') }}</span><strong>{{ _('~%(n)s min', n=15) }}</strong></div>
+      <div><span class="mock-label">{{ _('Estimated total time') }}</span><strong>{{ (15 * 60) | duration }}</strong></div>
     </div>
     <div class="est-track"><span class="est-fill"></span><span class="est-mark"></span></div>
-    <div class="est-note">{{ _('Paused at %(n)s words', n=num(pause_at_words)) }}</div>
+    {# Translators: a crawl stops here to show its estimate. %(n)s is a number of words. #}
+    <div class="est-note">{{ ngettext('Paused at %(n)s word', 'Paused at %(n)s words', pause_at_words, n=num(pause_at_words)) }}</div>
     <div class="est-google">{% include "_google_g.html" %} {{ _('Sign in with Google to continue') }}</div>
   </div>
 </div>
@@ -168,38 +174,53 @@
     <div class="vs-metric">
       <span class="mock-label">{{ _('Words on the main site') }}</span>
       <strong class="vs-number" data-countup="{{ v.alone_words }}">{{ num(v.alone_words) }}</strong>
-      <span class="vs-flag is-warn">{{ _('Menu and footer counted on every page: %(n)s%% more than the text people read', n=v.more_pct) }}</span>
+      {# Translators: %(n)s is a percentage. #}
+      <span class="vs-flag is-warn">{{ _('Menu and footer counted on every page: %(n)s%% more than the text people read', n=num(v.more_pct)) }}</span>
     </div>
+    {# Translators: %(n)s is a number of pages fetched, in a card comparing two ways of counting. #}
+    {% set alone_translations = ngettext('Every language crawled: %(n)s page.', 'Every language crawled: %(n)s pages.',
+                                         v.alone_pages_fetched, n=num(v.alone_pages_fetched)) %}
     {% for state, topic, text in [
         ('x', _('Subdomains'), _('None found. It trusted the sitemap.')),
         ('minus', _('Repetition'), _('Measured only when asked.')),
-        ('x', _('Translations'), _('Every language crawled: %(n)s pages.', n=num(v.alone_pages_fetched))),
+        ('x', _('Translations'), alone_translations),
         ('x', _('For your client'), _('A chat transcript.'))] %}
     <div class="vs-row" style="--i: {{ loop.index0 }};"><span class="vs-state is-{{ state }}">{{ icon(state, 13) }}</span>
       <span><b>{{ topic }}</b> {{ text }}</span></div>
     {% endfor %}
-    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ _('%(n)s min', n=v.alone_minutes) }} · <span translate="no">{{ v.alone_cost }}</span></strong> <span>{{ _('for its careful count') }}</span></div>
+    {# Translators: how long a count took, in minutes, abbreviated. #}
+    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ ngettext('%(n)s min', '%(n)s min', v.alone_minutes, n=num(v.alone_minutes)) }} · <span translate="no">{{ v.alone_cost_in(lang) }}</span></strong> <span>{{ _('for its careful count') }}</span></div>
   </div>
 
   <span class="vs-versus">{{ _('vs.') }}</span>
 
   <div class="vs-card vs-ours">
     <div class="vs-who"><span class="vs-mark">{{ icon('check', 18) }}</span>
-      <span><strong>Word Counter</strong><small>{{ _('The same site, the same day') }}</small></span></div>
+      <span><strong translate="no">{{ counter_surface.name }}</strong><small>{{ _('The same site, the same day') }}</small></span></div>
     <div class="vs-metric">
       <span class="mock-label">{{ _('Words on the main site') }}</span>
       <strong class="vs-number" data-countup="{{ v.main_words }}">{{ num(v.main_words) }}</strong>
       <span class="vs-flag is-ok">{{ _('The text people read, each page once') }}</span>
     </div>
+    {# Translators: after the label "Subdomains": %(n)s subdomains were found,
+       and %(words)s is "N more words", translated on its own. #}
+    {% set ours_subdomains = ngettext('%(n)s found, with %(words)s, each on its own line.',
+                                      '%(n)s found, with %(words)s, each on its own line.', v.subdomains,
+                                      n=num(v.subdomains),
+                                      words=ngettext('%(n)s more word', '%(n)s more words', v.subdomain_words, n=num(v.subdomain_words))) %}
+    {# Translators: %(n)s is a number of translated pages the crawl skipped. #}
+    {% set ours_translations = ngettext('%(n)s translated page set aside, never fetched.',
+                                        '%(n)s translated pages set aside, never fetched.',
+                                        v.translated_pages, n=num(v.translated_pages)) %}
     {% for topic, text in [
-        (_('Subdomains'), _('%(n)s found, with %(words)s more words, each on its own line.', n=v.subdomains, words=num(v.subdomain_words))),
+        (_('Subdomains'), ours_subdomains),
         (_('Repetition'), _('%(pct)s%% measured on every count, by sentence.', pct=num(v.repeated_pct))),
-        (_('Translations'), _('%(n)s translated pages set aside, never fetched.', n=num(v.translated_pages))),
+        (_('Translations'), ours_translations),
         (_('For your client'), _('A report link, a CSV of every page, the text as Markdown.'))] %}
     <div class="vs-row" style="--i: {{ loop.index0 }};"><span class="vs-state is-check">{{ icon('check', 13) }}</span>
       <span><b>{{ topic }}</b> {{ text }}</span></div>
     {% endfor %}
-    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ _('%(n)s min', n=v.minutes) }} · {{ _('free') }}</strong> <span>{{ _('on our servers, no AI usage') }}</span></div>
+    <div class="vs-foot">{{ icon('timer', 16) }} <strong>{{ ngettext('%(n)s min', '%(n)s min', v.minutes, n=num(v.minutes)) }} · {{ _('free') }}</strong> <span>{{ _('on our servers, no AI usage') }}</span></div>
   </div>
 </div>
 {%- endmacro %}

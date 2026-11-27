@@ -5,7 +5,8 @@
   {% include "_topbar.html" %}
 
   <main class="doc-page connect-page">
-    <a class="back-link" href="{{ url('/mcp') }}">← {{ _('How it works') }}</a>
+    {# Translators: a link back to the page explaining the assistant connection. #}
+    <a class="back-link" href="{{ url('/mcp') }}">{{ _('← How it works') }}</a>
     <h1>{{ _('Connect Claude, ChatGPT or another assistant') }}</h1>
     <p class="doc-lede">{{ _('Make a connection for each app you use. Each one has its own URL and key, and you can revoke it without touching the others.') }}</p>
 
@@ -16,7 +17,7 @@
         <button type="submit" id="mcp-key-create"{% if keys | length >= max_keys %} disabled{% endif %}>{{ _('Make a connection') }}</button>
       </div>
       <p class="field-error" id="mcp-key-error" hidden></p>
-      {% if keys | length >= max_keys %}<p class="muted">{{ _('You have %(n)s connections, the most there can be. Revoke one to make another.', n=max_keys) }}</p>{% endif %}
+      {% if keys | length >= max_keys %}<p class="muted">{{ ngettext('You have %(n)s connection, the most there can be. Revoke one to make another.', 'You have %(n)s connections, the most there can be. Revoke one to make another.', max_keys, n=num(max_keys)) }}</p>{% endif %}
     </form>
 
     <section class="connect-new" id="mcp-key-new" hidden aria-live="polite">
@@ -41,8 +42,10 @@
         {% for key in keys %}
         <li data-key-id="{{ key.id }}">
           <span class="connect-key-name">{{ key.name }}</span>
-          <span class="connect-key-meta"><span translate="no">wck_…{{ key.hint }}</span> · {{ _('made') }} <span class="run-date-iso" data-iso="{{ key.created_at }}"></span>
-            · {% if key.last_used_at %}{{ _('last used') }} <span class="run-date-iso" data-iso="{{ key.last_used_at }}"></span>{% else %}{{ _('not used yet') }}{% endif %}</span>
+          {# Translators: %(date)s is when this connection was made, filled in by the browser. #}
+          <span class="connect-key-meta"><span translate="no" dir="ltr">wck_…{{ key.hint }}</span> · {{ _('made %(date)s', date=('<span class="run-date-iso" data-iso="' ~ key.created_at ~ '"></span>') | safe) }}
+            {# Translators: %(date)s is when this connection was last used, filled in by the browser. #}
+            · {% if key.last_used_at %}{{ _('last used %(date)s', date=('<span class="run-date-iso" data-iso="' ~ key.last_used_at ~ '"></span>') | safe) }}{% else %}{{ _('not used yet') }}{% endif %}</span>
           <button type="button" class="link-button connect-revoke" data-revoke="{{ key.id }}">{{ _('Revoke') }}</button>
         </li>
         {% endfor %}

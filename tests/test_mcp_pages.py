@@ -56,7 +56,14 @@ def test_robots_and_the_sitemap_list_the_public_pages(app_env):
     assert sitemap.headers["content-type"].startswith("application/xml")
     for path in ("/", "/mcp", "/articles", "/articles/how-many-words-claude-vs-word-counter"):
         assert f"<loc>https://{host}{path if path != '/' else ''}" in sitemap.text, path
-    assert f'hreflang="pt-BR" href="https://{host}/pt/mcp"' in sitemap.text
+    # A language is listed once it's translated (i18n.PUBLISH_AT); until then
+    # its pages are English under another address and stay out.
+    from app import i18n
+
+    for code in i18n.LANGUAGES:
+        tag = i18n.HREFLANG[code]
+        listed = f'hreflang="{tag}" href="https://{host}{i18n.localized_path("/mcp", code)}"' in sitemap.text
+        assert listed == (code in i18n.published_languages()), code
 
 
 class TestTheGuideIsTranslatable(TestPseudoSweep):
