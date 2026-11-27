@@ -22,44 +22,44 @@ msgstr ""
 #. typed, %(kind)s is "folder" or "subdomain".
 #, python-format
 msgid "%(entry)s (%(kind)s)"
-msgstr ""
+msgstr "%(entry)s (%(kind)s)"
 
 #. Translators: a duration in hours, abbreviated ("3h").
 #, python-format
 msgid "%(h)sh"
-msgstr ""
+msgstr "%(h)sh"
 
 #. Translators: a duration, abbreviated: h is hours, m is minutes ("1h 8m").
 #, python-format
 msgid "%(h)sh %(m)sm"
-msgstr ""
+msgstr "%(h)sh %(m)sm"
 
 #. Translators: one line of the plain-text email: a label and its value
 #. ("Total words: 1,234"). Keep both placeholders.
 #, python-format
 msgid "%(label)s: %(value)s"
-msgstr ""
+msgstr "%(label)s : %(value)s"
 
 #. Translators: beside "Show more": %(loaded)s of %(total)s pages shown.
 #, python-format
 msgid "%(loaded)s of %(total)s"
-msgstr ""
+msgstr "%(loaded)s sur %(total)s"
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages
 #. that asked for a sign-in. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s behind a login"
 msgid_plural "%(n)s behind a login"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s derrière une connexion par identifiant et mot de passe"
+msgstr[1] "%(n)s derrière une connexion par identifiant et mot de passe"
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages the
 #. site's bot protection refused. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s blocked"
 msgid_plural "%(n)s blocked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s bloqué"
+msgstr[1] "%(n)s bloqués"
 
 #. how many crawls a project holds, in a project's one-line summary.
 #. how many crawls the project holds, then how many of them are still running.
@@ -67,78 +67,78 @@ msgstr[1] ""
 #, python-format
 msgid "%(n)s crawl"
 msgid_plural "%(n)s crawls"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s exploration de site web"
+msgstr[1] "%(n)s explorations de site web"
 
 #. Translators: the next four are parts of a short line under "Not
 #. counted": "3 duplicates · 2 blocked". Keep them short.
 #, python-format
 msgid "%(n)s duplicate"
 msgid_plural "%(n)s duplicates"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s doublon"
+msgstr[1] "%(n)s doublons"
 
 #, python-format
 msgid "%(n)s duplicate page isn’t in the total at all."
 msgid_plural "%(n)s duplicate pages aren’t in the total at all."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page en double n’est pas du tout incluse dans le total."
+msgstr[1] "Les %(n)s pages en double ne sont pas du tout incluses dans le total."
 
 #, python-format
 msgid "%(n)s duplicate page within the sites."
 msgid_plural "%(n)s duplicate pages within the sites."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page en double parmi les sites."
+msgstr[1] "%(n)s pages en double sur les sites."
 
 #. Translators: part of the "Not counted" line; %(n)s counts pages that
 #. didn't load. Agree with "pages" where your language must.
 #, python-format
 msgid "%(n)s failed"
 msgid_plural "%(n)s failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s échec"
+msgstr[1] "%(n)s échecs"
 
 #. how many Markdown files are in the ZIP download.
 #, python-format
 msgid "%(n)s file"
 msgid_plural "%(n)s files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s fichier"
+msgstr[1] "%(n)s fichiers"
 
 #. after the label "Subdomains": %(n)s subdomains were found,        and
 #. %(words)s is "N more words", translated on its own.
 #, python-format
 msgid "%(n)s found, with %(words)s, each on its own line."
 msgid_plural "%(n)s found, with %(words)s, each on its own line."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s trouvé, avec %(words)s, chacun sur sa propre ligne."
+msgstr[1] "%(n)s trouvés, avec %(words)s, chacun sur sa propre ligne."
 
 #. Translators: a duration in minutes, abbreviated ("25 min").
 #. how long a count took, in minutes, abbreviated.
 #, python-format
 msgid "%(n)s min"
 msgid_plural "%(n)s min"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s min"
+msgstr[1] "%(n)s min"
 
 #. Translators: more pages in that language that weren't fetched at all.
 #, python-format
 msgid "%(n)s more not fetched"
 msgid_plural "%(n)s more not fetched"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s de plus non récupéré"
+msgstr[1] "%(n)s autres non récupérés"
 
 #, python-format
 msgid "%(n)s more word"
 msgid_plural "%(n)s more words"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot de plus"
+msgstr[1] "%(n)s mots de plus"
 
 #, python-format
 msgid "%(n)s new word"
 msgid_plural "%(n)s new words"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s nouveau mot"
+msgstr[1] "%(n)s nouveaux mots"
 
 #. Translators: a page count, as part of a longer sentence.
 #. how much two sites share: a number of pages, then a number of words in
@@ -146,49 +146,53 @@ msgstr[1] ""
 #, python-format
 msgid "%(n)s page"
 msgid_plural "%(n)s pages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page"
+msgstr[1] "%(n)s pages"
 
 #. how many pages a plan fetches at the same time.
 #, python-format
 msgid "%(n)s page at a time"
 msgid_plural "%(n)s pages at a time"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page à la fois"
+msgstr[1] "%(n)s pages à la fois"
 
 #, python-format
 msgid "%(n)s page behind a sign-in."
 msgid_plural "%(n)s pages behind a sign-in."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page derrière une connexion."
+msgstr[1] "%(n)s pages derrière une connexion."
 
 #, python-format
 msgid "%(n)s page failed to load."
 msgid_plural "%(n)s pages failed to load."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page n’a pas pu être chargée."
+msgstr[1] "%(n)s pages n’ont pas pu être chargées."
 
 #, python-format
 msgid "%(n)s page was blocked by this site's own bot detection."
 msgid_plural "%(n)s pages were blocked by this site's own bot detection."
 msgstr[0] ""
+"%(n)s page a été bloquée par le système de détection des robots de ce "
+"site."
 msgstr[1] ""
+"%(n)s pages ont été bloquées par le système de détection des bots de ce "
+"site."
 
 #. Translators: pages in another language that were fetched, then left
 #. out of the count.
 #, python-format
 msgid "%(n)s read and set aside"
 msgid_plural "%(n)s read and set aside"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s lu et mis de côté"
+msgstr[1] "%(n)s lus et mis de côté"
 
 #. pages matched only by their address, because their text wasn't kept to
 #. compare; %(n)s is a number of pages.
 #, python-format
 msgid "%(n)s same address"
 msgid_plural "%(n)s same address"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s même adresse"
+msgstr[1] "%(n)s même adresse"
 
 #. under a pair of sites, how many of their shared pages have
 #. the same text, changed text, or only the same address. Each %(n)s is a
@@ -196,30 +200,30 @@ msgstr[1] ""
 #, python-format
 msgid "%(n)s same text"
 msgid_plural "%(n)s same text"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s même texte"
+msgstr[1] "%(n)s même texte"
 
 #. after the number of crawls in a project: how many of them are still running.
 #, python-format
 msgid "%(n)s still crawling"
 msgid_plural "%(n)s still crawling"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s exploration toujours en cours"
+msgstr[1] "%(n)s toujours en cours d’exploration"
 
 #. shared pages whose text differs between the two sites; %(n)s is a number of
 #. pages.
 #, python-format
 msgid "%(n)s text changed"
 msgid_plural "%(n)s text changed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s texte modifié"
+msgstr[1] "%(n)s textes modifiés"
 
 #. %(n)s is a number of translated pages the crawl skipped.
 #, python-format
 msgid "%(n)s translated page set aside, never fetched."
 msgid_plural "%(n)s translated pages set aside, never fetched."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s page traduite mise de côté, jamais récupérée."
+msgstr[1] "%(n)s pages traduites mises de côté, jamais récupérées."
 
 #. Translators: a word count, as part of a longer sentence.
 #. a site's word count, in a small chip beside its address.
@@ -227,34 +231,34 @@ msgstr[1] ""
 #, python-format
 msgid "%(n)s word"
 msgid_plural "%(n)s words"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot"
+msgstr[1] "%(n)s mots"
 
 #, python-format
 msgid "%(n)s word added up, each page once"
 msgid_plural "%(n)s words added up, each page once"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot comptabilisé, chaque page une seule fois"
+msgstr[1] "%(n)s mots ajoutés au total, chaque page une fois"
 
 #, python-format
 msgid "%(n)s word checked by page only."
 msgid_plural "%(n)s words checked by page only."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot vérifié par page uniquement."
+msgstr[1] "%(n)s mots vérifiés uniquement par page."
 
 #. under a sketch of a web page, how many of its words were counted.
 #. %(n)s is the number, in bold.
 #, python-format
 msgid "%(n)s word counted"
 msgid_plural "%(n)s words counted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot comptabilisé"
+msgstr[1] "%(n)s mots comptabilisés"
 
 #, python-format
 msgid "%(n)s word in sentences"
 msgid_plural "%(n)s words in sentences"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot dans les phrases"
+msgstr[1] "%(n)s mots dans les phrases"
 
 #. a promotion on the report; %(n)s is the report's word count, in bold.
 #. the headline of the wxrks offer, in the crawl email
@@ -262,92 +266,96 @@ msgstr[1] ""
 #, python-format
 msgid "%(n)s word to translate."
 msgid_plural "%(n)s words to translate."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(n)s mot à traduire."
+msgstr[1] "%(n)s mots à traduire."
 
 #, python-format
 msgid "%(name)s (you)"
-msgstr ""
+msgstr "%(name)s (vous)"
 
 #. Translators: %(pct)s is a percentage (64%%), %(folder)s a folder such
 #. as /blog, %(words)s a number of words; the plural follows the pages.
 #, python-format
 msgid "%(pct)s of the words are in %(folder)s: %(words)s on %(n)s page."
 msgid_plural "%(pct)s of the words are in %(folder)s: %(words)s on %(n)s pages."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(pct)s des mots se trouvent dans %(folder)s : %(words)s sur %(n)s page."
+msgstr[1] "%(pct)s des mots se trouvent dans %(folder)s : %(words)s sur %(n)s pages."
 
 #. a percentage in a table cell ("12%"); add the space or sign your language
 #. uses.
 #, python-format
 msgctxt "percent"
 msgid "%(pct)s%%"
-msgstr ""
+msgstr "%(pct)s %%"
 
 #, python-format
 msgid "%(pct)s%% measured on every count, by sentence."
-msgstr ""
+msgstr "%(pct)s%% mesuré à chaque décompte, par phrase."
 
 #. %(pct)s is a percentage of the words; %(new)s is a number of words.
 #, python-format
 msgid "%(pct)s%% of it repeats text from other pages; %(new)s word is new."
 msgid_plural "%(pct)s%% of it repeats text from other pages; %(new)s words are new."
 msgstr[0] ""
+"%(pct)s%% du contenu reprend du texte d’autres pages ; %(new)s mot est "
+"nouveau."
 msgstr[1] ""
+"%(pct)s%% du contenu reprend du texte d’autres pages ; %(new)s mots sont "
+"nouveaux."
 
 #, python-format
 msgid "%(pct)s%% repeated in its own report"
-msgstr ""
+msgstr "%(pct)s%% répété dans son propre rapport"
 
 #, python-format
 msgid "%(person)s shared a report with you"
-msgstr ""
+msgstr "%(person)s a partagé un rapport avec vous"
 
 #. Translators: the subject of the email inviting someone to a report.
 #. %(person)s is the sender's name, or their email address.
 #, python-format
 msgid "%(person)s shared a word-count report with you"
-msgstr ""
+msgstr "%(person)s a partagé avec vous un rapport de comptage de mots"
 
 #. Translators: the first line of the README inside a Markdown download.
 #. %(product)s is the product's name; %(site)s is the address crawled.
 #, python-format
 msgid "%(product)s — saved Markdown for %(site)s"
-msgstr ""
+msgstr "%(product)s — Markdown enregistré pour %(site)s"
 
 #. Translators: the crawl email's subject line. %(status)s is "Crawl
 #. finished", "Crawl failed" or "Crawl stopped"; %(site)s is the address
 #. that was crawled.
 #, python-format
 msgid "%(status)s: %(site)s"
-msgstr ""
+msgstr "%(status)s : %(site)s"
 
 #. under the product name on the sign-in page. %(tagline)s is          the
 #. product's tagline, such as "Count every word on a website".
 #, python-format
 msgid "%(tagline)s. Sign in to point it at your own site."
-msgstr ""
+msgstr "%(tagline)s. Connectez-vous pour le diriger vers votre propre site."
 
 #. Translators: the inbox preview of the crawl-finished email.
 #. %(words)s is "1,234 words" and %(pages)s is "56 pages", each
 #. already in the plural form its number needs.
 #, python-format
 msgid "%(words)s across %(pages)s"
-msgstr ""
+msgstr "%(words)s sur %(pages)s"
 
 #. an assistant's answer: "2,696,246 words on 2,494 pages".        %(words)s is
 #. "N words" and %(pages)s is "N pages", each translated on its own.
 #, python-format
 msgid "%(words)s on %(pages)s"
-msgstr ""
+msgstr "%(words)s sur %(pages)s"
 
 #. Translators: crawl speed, abbreviated; %(words)s and %(pages)s are numbers.
 #, python-format
 msgid "%(words)s words/min · %(pages)s pages/min"
-msgstr ""
+msgstr "%(words)s mots/min · %(pages)s pages/min"
 
 msgid "(root)"
-msgstr ""
+msgstr "(root)"
 
 #. what goes between the items of a list ("A, B"). Use your        language's
 #. list punctuation, such as "、" or "، ".
@@ -355,35 +363,43 @@ msgstr ""
 #. your language's list punctuation, such as "、" or "، ".
 msgctxt "list separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 msgid "A chat transcript."
-msgstr ""
+msgstr "Une transcription de chat."
 
 msgid "A count you can check, not just a number"
-msgstr ""
+msgstr "Un décompte que vous pouvez vérifier, pas seulement un chiffre"
 
 msgid "A page or a sentence on more than one site is counted once."
 msgstr ""
+"Une page ou une phrase présente sur plusieurs sites est comptabilisée une"
+" seule fois."
 
 msgid "A report link, a CSV of every page, the text as Markdown."
 msgstr ""
+"Un lien vers le rapport, un fichier CSV de chaque page, le texte au "
+"format Markdown."
 
 msgid "A report you can send"
-msgstr ""
+msgstr "Un rapport que vous pouvez envoyer"
 
 msgid ""
 "A run can be in more than one project. In each, a page found in several "
 "crawls counts once."
 msgstr ""
+"Une exécution peut faire partie de plusieurs projets. Dans chacun d’eux, "
+"une page trouvée lors de plusieurs explorations ne compte qu’une fois."
 
 msgid "A website has 200 pages. But how much work is that?"
 msgstr ""
+"Un site web comporte 200 pages. Mais quelle quantité de travail cela "
+"représente-t-il ?"
 
 #. Translators: the inbox preview of that email. %(site)s is a web address.
 #, python-format
 msgid "A word count for %(site)s"
-msgstr ""
+msgstr "Un décompte de mots pour %(site)s"
 
 #. an assistant's advice on what to put in a translation quote.
 #, python-format
@@ -394,7 +410,11 @@ msgid_plural ""
 "About %(words)s words, without the machine-generated API docs and the "
 "user forum."
 msgstr[0] ""
+"Environ %(words)s mot, sans la documentation de l’API générée "
+"automatiquement ni le forum des utilisateurs."
 msgstr[1] ""
+"Environ %(words)s mots, sans la documentation de l’API générée "
+"automatiquement ni le forum des utilisateurs."
 
 #. %(n)s and %(raw)s are whole-number multiples ("3", "4").
 #, python-format
@@ -404,86 +424,96 @@ msgid ""
 " is also rendered and its text extracted, and that competes for CPU. The "
 "honest number is the smaller one."
 msgstr ""
+"À propos de « %(n)s× plus rapide » : il s’agit d’une mesure, pas d’un "
+"calcul. Pro récupère %(raw)s× plus de pages à la fois, mais la "
+"récupération ne représente qu’une partie du travail : chaque page est "
+"également rendue et son texte extrait, ce qui sollicite aussi le "
+"processeur. Le chiffre honnête est le plus petit."
 
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 msgid ""
 "Add --scope user to have it in every project. Then type /mcp in Claude "
 "Code to check that word-counter is connected, and ask away."
 msgstr ""
+"Ajoutez --scope user pour l’inclure dans chaque projet. Saisissez ensuite"
+" /mcp dans Claude Code pour vérifier que word-counter est connecté, puis "
+"posez vos questions."
 
 #. Translators: placeholder in the exclusions box once it holds an entry.
 msgid "Add another…"
-msgstr ""
+msgstr "Ajouter un autre…"
 
 #, python-format
 msgid "Add existing runs to %(name)s"
-msgstr ""
+msgstr "Ajouter des exécutions existantes à %(name)s"
 
 #. opens a dialog for adding earlier crawls to this project.
 msgid "Add existing runs…"
-msgstr ""
+msgstr "Ajouter des exécutions existantes…"
 
 msgid "Add it to your app"
-msgstr ""
+msgstr "Ajoutez-le à votre application"
 
 msgid "Add people by email"
-msgstr ""
+msgstr "Ajouter des personnes par e-mail"
 
 msgid "Add the crawls you already have, or crawl a site straight into it."
 msgstr ""
+"Ajoutez les explorations que vous avez déjà ou explorez un site "
+"directement dans Word Counter."
 
 #. a button that opens a dialog for choosing projects.
 msgid "Add to a project…"
-msgstr ""
+msgstr "Ajouter à un projet…"
 
 msgid "Add to project"
-msgstr ""
+msgstr "Ajouter au projet"
 
 msgid "Add to project…"
-msgstr ""
+msgstr "Ajouter au projet…"
 
 msgid "Added since the last consolidation — in the next one."
-msgstr ""
+msgstr "Ajouté depuis la dernière consolidation — lors de la prochaine."
 
 msgid "Added up: every page of every crawl"
-msgstr ""
+msgstr "Total : chaque page de chaque exploration du site"
 
 msgid "Added up: every page of every site"
-msgstr ""
+msgstr "Total : chaque page de chaque site"
 
 msgid "Address shown on this report"
-msgstr ""
+msgstr "Adresse affichée dans ce rapport"
 
 msgid "Adjust settings"
-msgstr ""
+msgstr "Ajuster les paramètres"
 
 msgid "Advanced"
-msgstr ""
+msgstr "Avancé"
 
 #. a link to a comparison table; %(n)s is how many rows it has.
 #, python-format
 msgid "All %(n)s differences, side by side"
 msgid_plural "All %(n)s differences, side by side"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Toutes les %(n)s différences, côte à côte"
+msgstr[1] "Les %(n)s différences, côte à côte"
 
 msgid "All crawls"
-msgstr ""
+msgstr "Tous les crawls"
 
 msgid "All your crawls"
-msgstr ""
+msgstr "Toutes vos explorations du site"
 
 #. a heading with the number of crawls in brackets: "All your crawls (25)".
 #, python-format
 msgid "All your crawls (%(n)s)"
 msgid_plural "All your crawls (%(n)s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Toutes vos explorations (%(n)s)"
+msgstr[1] "Tous vos crawls (%(n)s)"
 
 msgid "All your runs are in this project already."
-msgstr ""
+msgstr "Toutes vos exécutions se trouvent déjà dans ce projet."
 
 msgid ""
 "Already working in an AI assistant? Connect it to Word Counter and ask "
@@ -491,23 +521,35 @@ msgid ""
 "servers, and your assistant answers with the total, the repetition and "
 "the split by language, with a link to the full report."
 msgstr ""
+"Vous travaillez déjà avec un assistant IA ? Connectez-le à Word Counter "
+"et posez des questions sur n’importe quel site web en termes simples. "
+"L’exploration s’exécute sur les serveurs de Word Counter, et votre "
+"assistant vous indique le total, les répétitions et la répartition par "
+"langue, avec un lien vers le rapport complet."
 
 msgid "An AI assistant on its own"
-msgstr ""
+msgstr "Un assistant IA à lui seul"
 
 msgid "An assistant answering with Word Counter"
-msgstr ""
+msgstr "Un assistant qui répond avec Word Counter"
 
 msgid ""
 "An assistant writes a new crawler every time, and its steps change from "
 "one run to the next. Word Counter counts every site the same way, so next"
 " month’s count compares with this one."
 msgstr ""
+"Un assistant crée un nouveau robot d’exploration à chaque fois, et ses "
+"étapes changent d’une exécution à l’autre. Word Counter compte tous les "
+"sites de la même manière, afin que le décompte du mois prochain puisse "
+"être comparé à celui-ci."
 
 msgid ""
 "An estimate of the sentences repeated across pages, and the split by "
 "language, section and subdomain — the numbers a quote is built on."
 msgstr ""
+"Une estimation des phrases répétées sur plusieurs pages, ainsi que leur "
+"répartition par langue, section et sous-domaine — les chiffres sur "
+"lesquels repose un devis."
 
 msgid ""
 "An estimate: each page is split into sentences, matched exactly across "
@@ -515,32 +557,42 @@ msgid ""
 "will differ with its own segmentation, tags, numbers and translation "
 "memory."
 msgstr ""
+"Une estimation : chaque page est divisée en phrases, qui sont mises en "
+"correspondance exacte entre les pages comptabilisées, comme le font les "
+"outils de TAO dans leur forme la plus simple. Votre analyse TMS différera"
+" en fonction de sa propre segmentation, de ses balises, de ses chiffres "
+"et de sa mémoire de traduction."
 
 msgid ""
 "Any other app: use Streamable HTTP with the server URL and the key as a "
 "Bearer token — or, if it only takes a URL, your personal URL."
 msgstr ""
+"Toute autre application : utilisez Streamable HTTP avec l’URL du serveur "
+"et la clé comme jeton Bearer — ou, si elle n’accepte qu’une URL, votre "
+"URL personnelle."
 
 msgid "Anyone with the link can view this project"
-msgstr ""
+msgstr "Toute personne disposant du lien peut consulter ce projet"
 
 msgid "Anyone with the link can view this report"
-msgstr ""
+msgstr "Toute personne disposant du lien peut consulter ce rapport"
 
 msgid "Articles"
-msgstr ""
+msgstr "Articles"
 
 msgid "Ask Claude or ChatGPT how many words a website has"
-msgstr ""
+msgstr "Demandez à Claude ou ChatGPT combien de mots contient un site web."
 
 msgid "Ask Claude or ChatGPT. Get the real count."
-msgstr ""
+msgstr "Demandez à Claude ou ChatGPT. Obtenez le nombre exact."
 
 msgid "Ask about any website"
-msgstr ""
+msgstr "Posez une question sur n’importe quel site Web"
 
 msgid "Ask your assistant the question it couldn’t answer before."
 msgstr ""
+"Posez à votre assistant la question à laquelle il n’a pas pu répondre "
+"auparavant."
 
 #, python-format
 msgid ""
@@ -548,6 +600,9 @@ msgid ""
 " count and time remaining. When a sitemap is available, it helps check "
 "the estimate."
 msgstr ""
+"À %(n)s mots, l’exploration s’interrompt et affiche le nombre de mots "
+"estimé, le nombre de pages et le temps restant. Lorsqu’un plan de site "
+"est disponible, il permet de vérifier l’estimation."
 
 #. %(n)s is a number of words (where a count pauses to estimate).
 #, python-format
@@ -558,91 +613,101 @@ msgid_plural ""
 "At about %(n)s words a count pauses with an estimate of the whole site. "
 "Ask your assistant to continue and it counts every page."
 msgstr[0] ""
+"À environ %(n)s mot, un décompte se met en pause avec une estimation de "
+"l’ensemble du site. Demandez à votre assistant de continuer et il "
+"comptera chaque page."
 msgstr[1] ""
+"À environ %(n)s mots, un décompte s’interrompt et affiche une estimation "
+"de l’ensemble du site. Demandez à votre assistant de continuer et il "
+"comptera chaque page."
 
 msgid ""
 "Available in English, Arabic, Chinese, French, German, Italian, Japanese,"
 " Korean, Portuguese, Spanish and Swedish."
 msgstr ""
+"Disponible en anglais, arabe, chinois, français, allemand, italien, "
+"japonais, coréen, portugais, espagnol et suédois."
 
 msgid "Available when the crawl finishes"
-msgstr ""
+msgstr "Disponible une fois l’exploration terminée"
 
 msgid "Avg words / page"
-msgstr ""
+msgstr "Moyenne de mots / page"
 
 msgid "Before you count"
-msgstr ""
+msgstr "Avant de compter"
 
 msgid "Behind a login"
-msgstr ""
+msgstr "Derrière une connexion"
 
 msgid "Between"
-msgstr ""
+msgstr "Entre"
 
 msgid "Big site? See the estimate before you keep going."
-msgstr ""
+msgstr "Grand site ? Consultez l’estimation avant de continuer."
 
 msgid "Blocked by the host"
-msgstr ""
+msgstr "Bloqué par l’hébergeur"
 
 #. Translators: a page row's tooltip: the site refused the crawler.
 msgid "Blocked by the host's bot detection"
-msgstr ""
+msgstr "Bloqué par la détection des robots de l’hôte"
 
 msgid "Blocked or failed pages"
-msgstr ""
+msgstr "Pages bloquées ou ayant échoué"
 
 #. Translators: %(reason)s is the technical reason a page was blocked, often in
 #. English.
 #, python-format
 msgid "Blocked: %(reason)s"
-msgstr ""
+msgstr "Bloqué : %(reason)s"
 
 msgid "Broken down where it's useful"
-msgstr ""
+msgstr "Ventilé là où c’est utile"
 
 msgid "Built for translation quotes"
-msgstr ""
+msgstr "Conçu pour les devis de traduction"
 
 msgid "Built with AI"
-msgstr ""
+msgstr "Conçu avec l’IA"
 
 msgid "Busy server load"
-msgstr ""
+msgstr "Charge élevée du serveur en cours"
 
 msgid "By folder"
-msgstr ""
+msgstr "Par dossier"
 
 msgid "By language"
-msgstr ""
+msgstr "Par langue"
 
 msgid "By subdomain"
-msgstr ""
+msgstr "Par sous-domaine"
 
 msgid "CMS and site builders"
-msgstr ""
+msgstr "CMS et créateurs de sites web"
 
 msgid "CSV export, Markdown ZIP, shareable reports"
-msgstr ""
+msgstr "Export CSV, ZIP Markdown, rapports partageables"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgid "Cancel anytime, from your billing page"
-msgstr ""
+msgstr "Résiliez à tout moment depuis votre page de facturation."
 
 msgid "Cancel crawl"
-msgstr ""
+msgstr "Annuler l’exploration du site"
 
 msgid "Cancel every active crawl on the server? This cannot be undone."
 msgstr ""
+"Annuler tous les crawls actifs sur le serveur ? Cette action est "
+"irréversible."
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Annulé"
 
 msgid "Cancelling…"
-msgstr ""
+msgstr "Annulation…"
 
 #. Translators: %(reason)s says why, such as "the server was running out
 #. of disk space".
@@ -652,18 +717,23 @@ msgid ""
 "archive covers only the pages listed above. The word count itself is "
 "complete."
 msgstr ""
+"La capture s’est arrêtée avant la fin de l’exploration du site en raison "
+"de %(reason)s ; cette archive ne couvre donc que les pages répertoriées "
+"ci-dessus. Le décompte des mots est terminé."
 
 msgid "Carries a large site past its estimate to the very last page."
 msgstr ""
+"Permet d’explorer un grand site au-delà de l’estimation, jusqu’à la toute"
+" dernière page."
 
 msgid "Change language"
-msgstr ""
+msgstr "Changer de langue"
 
 msgid "Change the address this report shows"
-msgstr ""
+msgstr "Modifier l’adresse affichée dans ce rapport"
 
 msgid "Check staging content before launch"
-msgstr ""
+msgstr "Vérifiez le contenu de préproduction avant le lancement"
 
 #. %(sites)s is a list of site names.
 #, python-format
@@ -672,43 +742,49 @@ msgid ""
 " no Markdown, so their pages count in full unless the same page is in "
 "another crawl. A new crawl checks them sentence by sentence."
 msgstr ""
+"Vérifié par page uniquement : %(sites)s. Ces explorations n’ont conservé "
+"aucune phrase ni enregistré de Markdown ; leurs pages sont donc "
+"comptabilisées intégralement, sauf si la même page figure dans une autre "
+"exploration. Un nouveau crawl les vérifie phrase par phrase."
 
 #. Translators: the name used for text in Chinese or Japanese characters,
 #. which the language check can't tell apart.
 msgid "Chinese or Japanese characters"
-msgstr ""
+msgstr "Caractères chinois ou japonais"
 
 msgid "Choose Add custom connector."
-msgstr ""
+msgstr "Sélectionnez Ajouter un connecteur personnalisé."
 
 msgid "Claude (claude.ai and Claude Desktop)"
-msgstr ""
+msgstr "Claude (claude.ai et Claude Desktop)"
 
 msgid "Claude (web and desktop)"
-msgstr ""
+msgstr "Claude (web et ordinateur)"
 
 msgid "Claude Code — paste in a terminal"
-msgstr ""
+msgstr "Claude Code — collez dans un terminal"
 
 msgid "Claude Code, writing its own crawler"
-msgstr ""
+msgstr "Claude Code, qui écrit son propre robot d’exploration"
 
 msgid "Claude alone vs. with Word Counter"
-msgstr ""
+msgstr "Claude seul vs. avec Word Counter"
 
 msgid "Claude with and without it →"
-msgstr ""
+msgstr "Claude avec et sans cela →"
 
 msgid "Client view"
-msgstr ""
+msgstr "Vue client"
 
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 msgid ""
 "Comma-separated subdomains and folders to leave out. A leading / excludes"
 " a folder, anything else a subdomain."
 msgstr ""
+"Sous-domaines et dossiers séparés par des virgules à exclure. Un / "
+"initial exclut un dossier, tout autre élément un sous-domaine."
 
 msgid ""
 "Comma-separated. A leading / excludes a folder, anything else a subdomain"
@@ -716,123 +792,145 @@ msgid ""
 "domain”, which otherwise includes every subdomain, staging mirrors "
 "included."
 msgstr ""
+"Séparés par des virgules. Un / initial exclut un dossier, tout autre "
+"élément un sous-domaine — staging correspond également à web-"
+"staging.example.com. Utile avec « Domaine entier », qui inclut sinon tous"
+" les sous-domaines, y compris les miroirs de préproduction."
 
 #. a button that opens the pricing page.
 msgid "Compare plans"
-msgstr ""
+msgstr "Comparer les offres"
 
 msgid "Compare the word counts of our live site and our staging site."
 msgstr ""
+"Comparez le nombre de mots de notre site en ligne et de notre site de "
+"préproduction."
 
 msgid "Comparing sentences…"
-msgstr ""
+msgstr "Comparaison des phrases…"
 
 msgid "Completed"
-msgstr ""
+msgstr "Terminé"
 
 msgid "Connect Claude or ChatGPT"
-msgstr ""
+msgstr "Connecter Claude ou ChatGPT"
 
 msgid "Connect Claude, ChatGPT or another assistant"
-msgstr ""
+msgstr "Connectez Claude, ChatGPT ou un autre assistant"
 
 msgid ""
 "Connect Word Counter to Claude, ChatGPT, Cursor or any MCP client and ask"
 " how many words a website has. It crawls every page and answers with the "
 "real total, the repetition and the split by language."
 msgstr ""
+"Connectez Word Counter à Claude, ChatGPT, Cursor ou à n’importe quel "
+"client MCP et demandez-lui combien de mots contient un site web. Il "
+"explore chaque page et indique le total réel, les répétitions et la "
+"répartition par langue."
 
 msgid ""
 "Connect Word Counter to your AI assistant. When you ask about a website, "
 "it crawls every page and comes back with the real total — the same count "
 "as our reports, not a guess from the homepage."
 msgstr ""
+"Connectez Word Counter à votre assistant IA. Lorsque vous interrogez un "
+"site web, l’outil explore chaque page et vous donne le total réel — le "
+"même nombre que dans nos rapports, et non une estimation basée sur la "
+"page d’accueil."
 
 msgid "Connect an assistant"
-msgstr ""
+msgstr "Connecter un assistant"
 
 msgid "Connect in three steps"
-msgstr ""
+msgstr "Connectez-vous en trois étapes"
 
 msgid "Connect your assistant"
-msgstr ""
+msgstr "Connectez votre assistant"
 
 msgid "Consolidate"
-msgstr ""
+msgstr "Consolider"
 
 msgid "Consolidate again"
-msgstr ""
+msgstr "Consolider à nouveau"
 
 #. %(date)s is when the project's totals were last worked out, filled in by the
 #. browser.
 #, python-format
 msgid "Consolidated %(date)s"
-msgstr ""
+msgstr "Consolidé le %(date)s"
 
 msgid "Consolidating"
-msgstr ""
+msgstr "Consolidation en cours"
 
 msgid "Consolidating…"
-msgstr ""
+msgstr "Consolidation…"
 
 msgid "Copied"
-msgstr ""
+msgstr "Copié"
 
 msgid "Copy"
-msgstr ""
+msgstr "Copier"
 
 msgid "Copy it now: this is the only time it’s shown. It works like a password."
 msgstr ""
+"Copiez-le maintenant : c’est la seule fois où il s’affiche. Cela "
+"fonctionne comme un mot de passe."
 
 msgid "Copy link"
-msgstr ""
+msgstr "Copier le lien"
 
 msgid "Could not reach billing"
-msgstr ""
+msgstr "Impossible d’accéder à la facturation"
 
 msgid ""
 "Couldn't find a sign-in form there. Enter the address of the site's sign-"
 "in page."
 msgstr ""
+"Impossible de trouver un formulaire de connexion à cet endroit. Saisissez"
+" l’adresse de la page de connexion du site."
 
 msgid "Couldn't load more pages."
-msgstr ""
+msgstr "Impossible de charger davantage de pages."
 
 msgid "Couldn't send — try again."
-msgstr ""
+msgstr "Envoi impossible — réessayez."
 
 msgid "Couldn’t delete this crawl. Try again."
-msgstr ""
+msgstr "Impossible de supprimer ce crawl. Réessayez."
 
 msgid "Count a website"
-msgstr ""
+msgstr "Compter un site Web"
 
 #. Translators: shown after the product name in page titles
 #. ("Word Counter — Count every word on a website") and on the sign-in page.
 msgid "Count every word on a website"
-msgstr ""
+msgstr "Comptez chaque mot d’un site web"
 
 msgid "Count my website’s words"
-msgstr ""
+msgstr "Compter les mots de mon site web"
 
 msgid "Count only www.example.com — leave out its subdomains."
-msgstr ""
+msgstr "Comptez uniquement www.example.com — excluez ses sous-domaines."
 
 msgid "Count the content that belongs in your project"
-msgstr ""
+msgstr "Comptez le contenu à inclure dans votre projet"
 
 msgid "Count the words on example.com and tell me how much of it repeats."
 msgstr ""
+"Comptez les mots sur example.com et indiquez-moi quelle part du contenu "
+"se répète."
 
 #. %(product)s is the product's name.
 #, python-format
 msgid "Counted with %(product)s by wxrks"
-msgstr ""
+msgstr "Comptabilisé avec %(product)s par wxrks"
 
 msgid ""
 "Counting relies on spaces between words, so totals for Chinese, Japanese "
 "and Thai will be much too low."
 msgstr ""
+"Le comptage repose sur les espaces entre les mots ; les totaux pour le "
+"chinois, le japonais et le thaï seront donc beaucoup trop bas."
 
 msgid ""
 "Counts a website: the total, pages, repetition, and the split by "
@@ -840,188 +938,217 @@ msgid ""
 "whole domain by default, or one host only. Reuses an earlier count of the"
 " same site unless asked to count again."
 msgstr ""
+"Compte un site web : le total, les pages, les répétitions et la "
+"répartition par langue, section et sous-domaine, avec un lien vers le "
+"rapport complet. Tout le domaine par défaut, ou un seul hôte. Réutilise "
+"un décompte précédent du même site, sauf si vous demandez un nouveau "
+"décompte."
 
 msgid "Counts each page once"
-msgstr ""
+msgstr "Compte chaque page une seule fois"
 
 #. Translators: %(checked)s and %(total)s are word counts; the sentence
 #. says how much of the total the repetition estimate covers.
 #, python-format
 msgid "Covers %(checked)s of %(total)s word"
 msgid_plural "Covers %(checked)s of %(total)s words"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Couvre %(checked)s mot sur %(total)s"
+msgstr[1] "Couvre %(checked)s mots sur %(total)s"
 
 #. Translators: the button that starts a crawl of the address typed in (a
 #. verb).
 #. the button that starts counting a website (a verb).
 msgctxt "button"
 msgid "Crawl"
-msgstr ""
+msgstr "Exploration du site"
 
 #. a table column of crawls (a noun).
 msgctxt "noun"
 msgid "Crawl"
-msgstr ""
+msgstr "Exploration du site"
 
 msgid "Crawl a site"
-msgstr ""
+msgstr "Explorer un site web"
 
 msgid ""
 "Crawl a website and count every word it contains — total, per page, per "
 "folder."
 msgstr ""
+"Explorez un site web et comptez tous les mots qu’il contient — au total, "
+"par page et par dossier."
 
 msgid "Crawl another site"
-msgstr ""
+msgstr "Explorer un autre site"
 
 msgid ""
 "Crawl any website and count every word — per page, per folder, in total. "
 "Built for sizing translation projects, with CSV export and a shareable "
 "report."
 msgstr ""
+"Explorez n’importe quel site web et comptez chaque mot — par page, par "
+"dossier, au total. Conçu pour estimer la taille des projets de "
+"traduction, avec export CSV et rapport partageable."
 
 msgid ""
 "Crawl any website and export every page as clean Markdown in a single "
 "ZIP. Main content only — ready to feed a language model, a RAG pipeline "
 "or a CMS migration."
 msgstr ""
+"Explorez n’importe quel site web et exportez chaque page en Markdown "
+"propre dans un seul fichier ZIP. Contenu principal uniquement — prêt à "
+"être transmis à un modèle de langage, à un pipeline RAG ou à une "
+"migration de CMS."
 
 msgid "Crawl didn’t finish: counted only for what the other sites don’t have"
 msgstr ""
+"L’exploration n’est pas terminée : comptabilisé uniquement pour ce que "
+"les autres sites n’ont pas"
 
 msgid "Crawl failed"
-msgstr ""
+msgstr "Échec de l’exploration du site"
 
 #. Translators: the heading of the email sent when a crawl ends, and the
 #. start of its subject line.
 msgid "Crawl finished"
-msgstr ""
+msgstr "Exploration terminée"
 
 msgid "Crawl stopped"
-msgstr ""
+msgstr "Exploration arrêtée"
 
 msgid "Crawled"
-msgstr ""
+msgstr "Exploré par le robot d’indexation"
 
 #. %(url)s is the address the crawl started from.
 #, python-format
 msgid "Crawled from %(url)s — only you see this."
-msgstr ""
+msgstr "Exploré depuis %(url)s — vous seul pouvez voir ceci."
 
 msgid "Crawled signed in on the site’s sign-in page"
-msgstr ""
+msgstr "Exploré la page de connexion du site en étant connecté"
 
 #. Translators: %(date)s is the date and time of the crawl.
 #, python-format
 msgid "Crawled: %(date)s"
-msgstr ""
+msgstr "Exploré : %(date)s\n"
 
 #. Translators: status badge: the crawl is reading pages right now.
 msgid "Crawling"
-msgstr ""
+msgstr "Exploration du site web"
 
 msgid "Crawls"
-msgstr ""
+msgstr "Explorations du site"
 
 msgid "Crawls run at full speed"
-msgstr ""
+msgstr "Les explorations s’exécutent à pleine vitesse"
 
 msgid "Create"
-msgstr ""
+msgstr "Créer"
 
 msgid "Cursor — in ~/.cursor/mcp.json:"
-msgstr ""
+msgstr "Cursor — dans ~/.cursor/mcp.json :"
 
 msgid "Cursor, VS Code and others"
-msgstr ""
+msgstr "Cursor, VS Code et autres"
 
 msgid ""
 "Custom MCP servers depend on your ChatGPT plan and, in a workspace, on "
 "what your admin allows."
 msgstr ""
+"Les serveurs MCP personnalisés dépendent de votre forfait ChatGPT et, "
+"dans un espace de travail, des autorisations accordées par votre "
+"administrateur."
 
 #. Translators: the language row for pages with no language in their address.
 msgid "Default"
-msgstr ""
+msgstr "Par défaut"
 
 msgid "Delete project"
-msgstr ""
+msgstr "Supprimer le projet"
 
 msgid "Delete run"
-msgstr ""
+msgstr "Supprimer l’exécution"
 
 #. Translators: %(site)s is the address of the site that was crawled.
 #, python-format
 msgid "Delete this crawl of %(site)s? This can’t be undone."
-msgstr ""
+msgstr "Supprimer cette exploration de %(site)s ? Cette action est irréversible."
 
 msgid ""
 "Delete this project? Its crawls stay, in your runs and in any other "
 "project."
 msgstr ""
+"Supprimer ce projet ? Ses explorations restent dans vos exécutions et "
+"dans tous vos autres projets."
 
 msgid "Delete this run and everything saved with it? This cannot be undone."
 msgstr ""
+"Supprimer cette exécution et tout ce qui a été enregistré avec elle ? "
+"Cette action est irréversible."
 
 msgid "Deleting…"
-msgstr ""
+msgstr "Suppression en cours…"
 
 msgid "Detected platform"
-msgstr ""
+msgstr "Plateforme détectée"
 
 #. Translators: %(cms)s is a platform's name, such as WordPress.
 #, python-format
 msgid "Detected platform: %(cms)s"
-msgstr ""
+msgstr "Plateforme détectée : %(cms)s"
 
 msgid "Detected platform: Contentful (headless — sitemap conventions vary)"
 msgstr ""
+"Plateforme détectée : Contentful (headless — les conventions de plan de "
+"site varient)"
 
 msgid ""
 "Didn’t finish: adds only the pages and sentences the crawls above don’t "
 "have."
 msgstr ""
+"Non terminé : ajoute uniquement les pages et les phrases absentes des "
+"explorations ci-dessus."
 
 msgid "Didn’t load when the crawler asked for them."
-msgstr ""
+msgstr "Ils ne se sont pas chargés lorsque le robot d’exploration les a demandés."
 
 msgid ""
 "Different pages, but at least half of their words are sentences another "
 "crawl has."
 msgstr ""
+"Des pages différentes, mais au moins la moitié de leurs mots sont des "
+"phrases déjà présentes dans un autre crawl."
 
 msgid "Differs only by numbers"
-msgstr ""
+msgstr "Diffère uniquement par les nombres"
 
 msgid "Download Markdown"
-msgstr ""
+msgstr "Télécharger le Markdown"
 
 #. Translators: a button; %(size)s is a file size such as "12 MB".
 #, python-format
 msgid "Download Markdown · %(size)s"
-msgstr ""
+msgstr "Télécharger le Markdown · %(size)s"
 
 msgid "Download every page, with its new words (CSV)"
-msgstr ""
+msgstr "Téléchargez chaque page, avec ses nouveaux mots (CSV)"
 
 msgid "Download the pages in more than one crawl (CSV)"
-msgstr ""
+msgstr "Téléchargez les pages en plusieurs explorations (CSV)"
 
 msgid "Download the repeated sentences (CSV)"
-msgstr ""
+msgstr "Télécharger les phrases répétées (CSV)"
 
 msgid "Duplicate of a page already counted"
-msgstr ""
+msgstr "Doublon d’une page déjà comptabilisée"
 
 msgid "Duplicate pages"
-msgstr ""
+msgstr "Pages en double"
 
 msgid "Duplicate pages within a crawl"
-msgstr ""
+msgstr "Pages en double lors d’une exploration du site"
 
 msgid "Duplicate · listed separately"
-msgstr ""
+msgstr "Dupliquer · répertorié séparément"
 
 msgid ""
 "Each page is opened in a real browser and counted only once it has "
@@ -1029,6 +1156,11 @@ msgid ""
 " a page the moment it appears finish sooner, but miss text that loads "
 "afterwards; on some sites that’s whole sections."
 msgstr ""
+"Chaque page est ouverte dans un véritable navigateur et comptabilisée "
+"uniquement une fois son chargement terminé — généralement une ou deux "
+"secondes de plus par page. Les outils qui lisent une page dès qu’elle "
+"s’affiche terminent plus vite, mais passent à côté du texte qui se charge"
+" ensuite ; sur certains sites, il s’agit de sections entières."
 
 msgid ""
 "Each page is opened in a real browser and counted only once it has "
@@ -1037,26 +1169,39 @@ msgid ""
 "afterwards; on some sites that’s whole sections. You don’t have to wait: "
 "if you’re signed in, you’ll get an email when the crawl finishes."
 msgstr ""
+"Chaque page est ouverte dans un véritable navigateur et comptabilisée "
+"uniquement une fois son chargement terminé — généralement une ou deux "
+"secondes de plus par page. Les outils qui lisent une page dès qu’elle "
+"s’affiche terminent plus vite, mais passent à côté du texte qui se charge"
+" ensuite ; sur certains sites, il s’agit de sections entières. Vous "
+"n’avez pas besoin d’attendre : si vous êtes connecté, vous recevrez un "
+"e-mail lorsque l’exploration sera terminée."
 
 msgid ""
 "Each page runs through a content filter that drops navigation and "
 "repeated chrome. That's the difference between a corpus you can search "
 "and one where every document matches the phrase “Book Now”."
 msgstr ""
+"Chaque page passe par un filtre de contenu qui supprime la navigation et "
+"les éléments d’interface répétés. C’est la différence entre un corpus "
+"dans lequel vous pouvez effectuer des recherches et un corpus où chaque "
+"document correspond à l’expression « Réservez maintenant »."
 
 msgid ""
 "Each site’s own report has its pages, its repetition estimate and what it"
 " left out."
 msgstr ""
+"Le rapport de chaque site contient ses pages, son estimation des "
+"répétitions et ce qu’il a omis."
 
 msgid "Easy server load"
-msgstr ""
+msgstr "Faible charge serveur"
 
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 msgid "Email or username"
-msgstr ""
+msgstr "E-mail ou nom d’utilisateur"
 
 #. Translators: write the numbers the way your language does
 #. (662.000 in German, 662 000 in French). "Tokens" are the units a
@@ -1066,27 +1211,33 @@ msgid ""
 "880,000 tokens of clean text — as raw HTML it would be several times "
 "that, nearly all of it markup."
 msgstr ""
+"En anglais, on compte près de 1,3 jeton par mot. Un site de 662 000 mots "
+"représente environ 880 000 jetons de texte propre — en HTML brut, il en "
+"représenterait plusieurs fois plus, presque entièrement sous forme de "
+"balisage."
 
 msgid "Enter a web address, such as https://www.example.com."
-msgstr ""
+msgstr "Saisissez une adresse Web, par exemple https://www.example.com."
 
 msgid "Enter an email address to send the report to."
-msgstr ""
+msgstr "Saisissez une adresse e-mail pour envoyer le rapport."
 
 msgid "Enter both the email (or username) and the password."
-msgstr ""
+msgstr "Saisissez l’adresse e-mail (ou le nom d’utilisateur) et le mot de passe."
 
 msgid "Enter the sign-in page as a web address, like https://example.com/login."
 msgstr ""
+"Saisissez l’adresse de la page de connexion, par exemple "
+"https://example.com/login."
 
 msgid "Enter your website URL"
-msgstr ""
+msgstr "Saisissez l’URL de votre site Web"
 
 msgid "Estimate confidence"
-msgstr ""
+msgstr "Estimer le niveau de confiance"
 
 msgid "Estimate — before you crawl"
-msgstr ""
+msgstr "Estimation — avant l’exploration du site"
 
 #. %(sites)s is a list of site names.
 #, python-format
@@ -1096,114 +1247,131 @@ msgid ""
 "they saved — main content only — and each page’s words are split in the "
 "same proportions. A new crawl gives exact figures."
 msgstr ""
+"Estimation à partir du Markdown enregistré : %(sites)s. Ces explorations "
+"ont eu lieu avant que les explorations ne conservent leurs phrases. Leurs"
+" phrases proviennent donc du Markdown qu’elles ont enregistré — contenu "
+"principal uniquement — et les mots de chaque page sont répartis dans les "
+"mêmes proportions. Un nouveau crawl fournit des chiffres exacts."
 
 msgid "Estimated total"
-msgstr ""
+msgstr "Total estimé"
 
 msgid "Estimated total pages"
-msgstr ""
+msgstr "Nombre total de pages estimé"
 
 msgid "Estimated total time"
-msgstr ""
+msgstr "Durée totale estimée"
 
 msgid ""
 "Every file opens with the URL it came from, so nothing loses its source "
 "on the way into a retrieval pipeline."
 msgstr ""
+"Chaque fichier s’ouvre sur l’URL dont il provient, afin que sa source ne "
+"se perde pas lors de son intégration à un pipeline de récupération."
 
 #. %(n)s is a number of pages fetched, in a card comparing two ways of
 #. counting.
 #, python-format
 msgid "Every language crawled: %(n)s page."
 msgid_plural "Every language crawled: %(n)s pages."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Chaque langue explorée : %(n)s page."
+msgstr[1] "Chaque langue explorée : %(n)s pages."
 
 msgid ""
 "Every page is rendered in a real browser, so content built by JavaScript "
 "is counted. Tools that only fetch HTML report a fraction of the truth."
 msgstr ""
+"Chaque page est affichée dans un véritable navigateur, le contenu généré "
+"par JavaScript est donc comptabilisé. Les outils qui récupèrent "
+"uniquement le HTML ne révèlent qu’une partie de la réalité."
 
 msgid "Everything else"
-msgstr ""
+msgstr "Tout le reste"
 
 msgid "Everything in Free"
-msgstr ""
+msgstr "Tout est inclus dans l’offre gratuite"
 
 msgid "Example"
-msgstr ""
+msgstr "Exemple"
 
 msgid "Exclude subdomains or folders"
-msgstr ""
+msgstr "Exclure les sous-domaines ou les dossiers"
 
 msgid "Exclude subdomains or folders before continuing"
-msgstr ""
+msgstr "Excluez les sous-domaines ou les dossiers avant de continuer"
 
 #. placeholder of a field of subdomains and folders to leave out; the examples
 #. may be adapted.
 msgid "Exclude: staging, /careers"
-msgstr ""
+msgstr "Exclure : staging, /careers"
 
 #. Translators: a pill; %(entries)s is a list such as "staging (subdomain),
 #. /careers (folder)".
 #, python-format
 msgid "Excluded: %(entries)s"
-msgstr ""
+msgstr "Exclus : %(entries)s"
 
 msgid "Excluded: none"
-msgstr ""
+msgstr "Exclus : aucun"
 
 msgid "Export"
-msgstr ""
+msgstr "Exporter"
 
 msgid "Export CSV"
-msgstr ""
+msgstr "Exporter en CSV"
 
 msgid "Failed"
-msgstr ""
+msgstr "Échec"
 
 msgid "Failed to fetch page"
-msgstr ""
+msgstr "Échec de la récupération de la page"
 
 msgid "Failed to load"
-msgstr ""
+msgstr "Échec du chargement"
 
 #. Translators: %(reason)s is the technical reason a page failed, often in
 #. English.
 #, python-format
 msgid "Failed: %(reason)s"
-msgstr ""
+msgstr "Échec : %(reason)s"
 
 msgid "Find out how much work is on your website."
-msgstr ""
+msgstr "Découvrez la charge de travail que représente votre site web."
 
 msgid ""
 "Find your longest pages and most content-heavy folders. Export a CSV with"
 " each page’s URL, title and word count to help build your scope."
 msgstr ""
+"Trouvez vos pages les plus longues et les dossiers les plus riches en "
+"contenu. Exportez un fichier CSV contenant l’URL, le titre et le nombre "
+"de mots de chaque page pour vous aider à définir votre périmètre."
 
 msgid "Folder"
-msgstr ""
+msgstr "Dossier"
 
 msgid "Folders"
-msgstr ""
+msgstr "Dossiers"
 
 msgid ""
 "Follows a count that’s still running, and returns the result when it’s "
 "done."
-msgstr ""
+msgstr "Suit un décompte en cours et renvoie le résultat une fois terminé."
 
 msgid "Footer · not counted"
-msgstr ""
+msgstr "Pied de page · non comptabilisé"
 
 msgid "For Claude and ChatGPT"
-msgstr ""
+msgstr "Pour Claude et ChatGPT"
 
 msgid ""
 "For a site that asks for a username and password in a browser pop-up, "
 "like most staging sites. Sent only to that site, used only for this "
 "crawl, never stored."
 msgstr ""
+"Pour un site qui demande un nom d’utilisateur et un mot de passe dans une"
+" fenêtre contextuelle du navigateur, comme la plupart des sites de "
+"préproduction. Envoyé uniquement à ce site, utilisé uniquement pour cette"
+" exploration, jamais stocké."
 
 msgid ""
 "For a site where you sign in with an email and password. The crawler "
@@ -1211,18 +1379,29 @@ msgid ""
 " only read; it never opens a log-out, delete or cancel link. Sent only to"
 " that site, used only for this crawl, never stored."
 msgstr ""
+"Pour un site sur lequel vous vous connectez avec une adresse e-mail et un"
+" mot de passe. Le robot d’exploration se connecte avant de démarrer et "
+"explore le site avec ce compte. Utilisez donc un compte qui ne peut que "
+"lire ; il n’ouvre jamais de lien de déconnexion, de suppression ou "
+"d’annulation. Envoyé uniquement à ce site, utilisé uniquement pour cette "
+"exploration, jamais stocké."
 
 msgid "For developers"
-msgstr ""
+msgstr "Pour les développeurs"
 
 msgid ""
 "For staging sites protected by a browser username-and-password pop-up, "
 "enter the credentials to run the crawl. They’re sent only to that site, "
 "used only for that crawl and never stored."
 msgstr ""
+"Pour les sites de préproduction protégés par une fenêtre contextuelle du "
+"navigateur demandant un nom d’utilisateur et un mot de passe, saisissez "
+"les identifiants pour lancer l’exploration. Ils sont envoyés uniquement à"
+" ce site, utilisés uniquement pour cette exploration et ne sont jamais "
+"stockés."
 
 msgid "For your client"
-msgstr ""
+msgstr "Pour votre client"
 
 #, python-format
 msgid ""
@@ -1232,16 +1411,20 @@ msgid_plural ""
 "Found a sitemap — this site has approximately %(n)s pages. Crawling all "
 "of them may take a while."
 msgstr[0] ""
+"Plan du site trouvé — ce site comporte environ %(n)s page. L’exploration "
+"de tous ces sites peut prendre un certain temps."
 msgstr[1] ""
+"Plan du site trouvé — ce site compte environ %(n)s pages. L’exploration "
+"de tous ces sites peut prendre un certain temps."
 
 msgid "Found while crawling, but not in the total."
-msgstr ""
+msgstr "Trouvé lors de l’exploration, mais non inclus dans le total."
 
 msgid "Frameworks and hand-written code"
-msgstr ""
+msgstr "Frameworks et code écrit à la main"
 
 msgid "Free"
-msgstr ""
+msgstr "Gratuit"
 
 #. %(n)s is a number of words (the size at which a guest crawl pauses).
 #, python-format
@@ -1252,12 +1435,19 @@ msgid_plural ""
 "Free to use. No sign-up to start. Sites over %(n)s words require Google "
 "sign-in to finish."
 msgstr[0] ""
+"Gratuit à utiliser. Aucune inscription nécessaire pour commencer. Les "
+"sites de plus d’un mot nécessitent une connexion à Google pour terminer."
 msgstr[1] ""
+"Gratuit à utiliser. Aucune inscription nécessaire pour commencer. Les "
+"sites de plus de %(n)s mots nécessitent une connexion à Google pour "
+"terminer."
 
 msgid ""
 "Free with a Word Counter account. Works with Claude Code, Claude, "
 "ChatGPT, Cursor, VS Code and any app that speaks MCP."
 msgstr ""
+"Gratuit avec un compte Word Counter. Fonctionne avec Claude Code, Claude,"
+" ChatGPT, Cursor, VS Code et toute application compatible avec MCP."
 
 #. %(n)s is a number of words (the size at which a guest crawl pauses).
 #, python-format
@@ -1268,85 +1458,101 @@ msgid_plural ""
 "Free. No sign-up for sites under %(n)s words. Sign in with Google to "
 "finish larger sites."
 msgstr[0] ""
+"Gratuit. Aucune inscription pour les sites de moins de %(n)s mot. "
+"Connectez-vous avec Google pour terminer les sites plus volumineux."
 msgstr[1] ""
+"Gratuit. Aucune inscription pour les sites de moins de %(n)s mots. "
+"Connectez-vous avec Google pour terminer les sites plus volumineux."
 
 msgid "Full report, every page →"
-msgstr ""
+msgstr "Rapport complet, toutes les pages →"
 
 msgid "Get the Markdown"
-msgstr ""
+msgstr "Obtenir le Markdown"
 
 msgid "Get the text without the copy-paste"
-msgstr ""
+msgstr "Obtenez le texte sans copier-coller"
 
 msgid "Get your connection URL"
-msgstr ""
+msgstr "Obtenez votre URL de connexion"
 
 msgid "Give the project a name."
-msgstr ""
+msgstr "Donnez un nom au projet."
 
 msgid "Going through the crawls for the first time…"
-msgstr ""
+msgstr "Analyse des explorations pour la première fois…"
 
 msgid "Good to know"
-msgstr ""
+msgstr "Bon à savoir"
 
 msgid ""
 "Google didn’t send your profile. Try again, and allow access to your name"
 " and email."
 msgstr ""
+"Google n’a pas envoyé votre profil. Réessayez et autorisez l’accès à "
+"votre nom et à votre adresse e-mail."
 
 msgid "Google sign-in didn’t finish. Try again."
-msgstr ""
+msgstr "La connexion avec Google n’a pas abouti. Réessayez."
 
 msgid ""
 "Ground a support assistant in your own answers, audit content at a scale "
 "nobody can read, brief translators with real terminology, or move "
 "platforms without losing the writing."
 msgstr ""
+"Ancrez un assistant d’assistance dans vos propres réponses, auditez des "
+"contenus à une échelle que personne ne peut lire, fournissez aux "
+"traducteurs des consignes terminologiques concrètes ou migrez des "
+"plateformes sans perdre le contenu rédactionnel."
 
 msgid ""
 "Groups this crawl with others of the same client: combined totals, each "
 "page counted once, and the overlap between crawls. Optional — a run can "
 "join a project later, from its report."
 msgstr ""
+"Regroupe ce crawl avec les autres du même client : totaux combinés, "
+"chaque page comptée une seule fois et chevauchement entre les crawls. "
+"Facultatif — une exécution peut être ajoutée à un projet ultérieurement, "
+"depuis son rapport."
 
 msgid ""
 "Hand it to a translator, prepare a CMS migration or use it with an AI "
 "tool or search index."
 msgstr ""
+"Transmettez-le à un traducteur, préparez une migration de CMS ou "
+"utilisez-le avec un outil d’IA ou un index de recherche."
 
 msgid "Header and menu · not counted"
-msgstr ""
+msgstr "En-tête et menu · non comptabilisés"
 
 #. Translators: how sure the word-count estimate is, shown in the email as
 #. "Estimate confidence: High".
 msgid "High"
-msgstr ""
+msgstr "Élevé"
 
 msgid "High confidence"
-msgstr ""
+msgstr "Confiance élevée"
 
 msgid "Host"
-msgstr ""
+msgstr "Hébergeur"
 
 msgid "How long does a count take?"
-msgstr ""
+msgstr "Combien de temps dure un comptage ?"
 
 msgid "How many words are in the German part of example.com?"
-msgstr ""
+msgstr "Combien de mots compte la partie en allemand de example.com ?"
 
 msgid "How many words does wxrks.com have?"
-msgstr ""
+msgstr "Combien de mots contient wxrks.com ?"
 
 msgid "How the added-up words split"
-msgstr ""
+msgstr "Répartition des mots additionnés"
 
 msgid "How the crawls come down to the new words"
-msgstr ""
+msgstr "Comment les explorations se traduisent en nouveaux mots\n"
 
 msgid "I counted every page with Word Counter:"
-msgstr ""
+msgstr "J’ai compté chaque page avec Word Counter :"
 
 msgid ""
 "If it opens in a browser, Word Counter can count it — whatever it was "
@@ -1355,6 +1561,11 @@ msgid ""
 "Squarespace, Wix, Ghost and Contentful, and names the platform in the "
 "report."
 msgstr ""
+"S’il s’ouvre dans un navigateur, Word Counter peut le compter, quel que "
+"soit son mode de création : un CMS, un éditeur de site, un framework, du "
+"code écrit à la main ou un outil d’IA. Il reconnaît également WordPress, "
+"Webflow, Drupal, Shopify, Squarespace, Wix, Ghost et Contentful, et "
+"indique le nom de la plateforme dans le rapport."
 
 #, python-format
 msgid ""
@@ -1364,183 +1575,215 @@ msgid_plural ""
 "If your vendor prices by translation memory, the %(new)s new words are "
 "the number that matters."
 msgstr[0] ""
+"Si votre prestataire facture en fonction de la mémoire de traduction, le "
+"%(new)s nouveau mot est le chiffre qui compte."
 msgstr[1] ""
+"Si votre prestataire facture à la mémoire de traduction, les %(new)s "
+"nouveaux mots sont le chiffre qui compte."
 
 msgid "In a chat, add Word Counter from the + menu and ask your question."
 msgstr ""
+"Dans une conversation, ajoutez Word Counter depuis le menu + et posez "
+"votre question."
 
 msgid "In a terminal, add the server with your key in a header:"
-msgstr ""
+msgstr "Dans un terminal, ajoutez le serveur avec votre clé dans un en-tête :"
 
 msgid ""
 "Include the whole domain, a single subdomain or just the main site. Leave"
 " out folders and subdomains you don’t need, such as /careers, old "
 "archives or a staging copy."
 msgstr ""
+"Incluez l’ensemble du domaine, un seul sous-domaine ou uniquement le site"
+" principal. Excluez les dossiers et sous-domaines dont vous n’avez pas "
+"besoin, comme /careers, les anciennes archives ou une copie de "
+"préproduction."
 
 msgid "Includes content loaded by JavaScript"
-msgstr ""
+msgstr "Inclut le contenu chargé par JavaScript"
 
 msgid ""
 "Includes waiting for each page to finish loading, so text that loads late"
 " isn’t missed."
 msgstr ""
+"Inclut l’attente du chargement complet de chaque page afin de ne pas "
+"manquer le texte qui s’affiche tardivement."
 
 #, python-format
 msgid "Interactive report: %(url)s"
-msgstr ""
+msgstr "Rapport interactif : %(url)s"
 
 msgid ""
 "Into Your runs, like any count you start here — each with its report, "
 "every page and a CSV."
 msgstr ""
+"Dans Vos exécutions, comme tout comptage que vous lancez ici — chacun "
+"avec son rapport, toutes ses pages et un CSV."
 
 msgid "Invited"
-msgstr ""
+msgstr "Invité(e)"
 
 #. Translators: under an invited person's address; %(date)s is when.
 #, python-format
 msgid "Invited %(date)s"
-msgstr ""
+msgstr "Invité le %(date)s"
 
 msgid "Is my URL safe to share?"
-msgstr ""
+msgstr "Mon URL peut-il être partagé sans risque ?"
 
 msgid "Is our help center bigger than our blog?"
-msgstr ""
+msgstr "Notre centre d’aide est-il plus grand que notre blog ?"
 
 msgid ""
 "It also assumes this app is what's slowing you down. A site that rate-"
 "limits or blocks a heavier crawler caps every plan at the same place; the"
 " report marks those pages, so you can see when that's what happened."
 msgstr ""
+"Cela suppose également que cette application est ce qui vous ralentit. Un"
+" site qui limite le débit ou bloque un robot d’exploration plus intensif "
+"plafonne tous les forfaits au même niveau ; le rapport signale ces pages "
+"pour que vous puissiez voir quand c’est ce qui s’est passé."
 
 msgid "It counts what a translator is handed"
-msgstr ""
+msgstr "Il compte ce qui est remis à un traducteur."
 
 msgid "It counts what you would translate"
-msgstr ""
+msgstr "Il compte ce que vous traduiriez"
 
 msgid ""
 "It follows links the way a visitor does, so it finds the help centers, "
 "docs and subdomains a sitemap leaves out."
 msgstr ""
+"Il suit les liens comme le ferait un visiteur et trouve ainsi les centres"
+" d’aide, la documentation et les sous-domaines qu’un plan de site ne "
+"répertorie pas."
 
 msgid "It knows what repeats"
-msgstr ""
+msgstr "Il sait ce qui se répète"
 
 msgid "It reads every page"
-msgstr ""
+msgstr "Il lit chaque page"
 
 msgid "It sees pages the way a reader does"
-msgstr ""
+msgstr "Il voit les pages comme un lecteur les voit."
 
 msgid "Keep the scope under control"
-msgstr ""
+msgstr "Gardez le périmètre sous contrôle"
 
 msgid "Keep translated copies out of the total"
-msgstr ""
+msgstr "Exclure les copies traduites du total"
 
 msgid "Key — for apps that send it as a header"
-msgstr ""
+msgstr "Clé — pour les applications qui l’envoient dans un en-tête"
 
 msgid "Know how much content you’re dealing with."
-msgstr ""
+msgstr "Sachez quelle quantité de contenu vous avez à traiter."
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #. a field for language codes such as en or pt; "auto" means detected
 #. automatically.
 msgid "Language (auto)"
-msgstr ""
+msgstr "Langue (auto)"
 
 #. Translators: a small pill; %(lang)s is a language's name, shown in bold.
 #, python-format
 msgid "Language: %(lang)s"
-msgstr ""
+msgstr "Langue : %(lang)s\n"
 
 #. Translators: a small pill; %(lang)s is the language the crawler detected, in
 #. bold.
 #, python-format
 msgid "Language: %(lang)s (auto)"
-msgstr ""
+msgstr "Langue : %(lang)s (automatique)"
 
 msgid "Languages"
-msgstr ""
+msgstr "Langues"
 
 #. Translators: a small pill; %(primary)s is the first language (bold),
 #. %(rest)s a list of the others.
 #, python-format
 msgid "Languages: %(primary)s + %(rest)s"
-msgstr ""
+msgstr "Langues : %(primary)s + %(rest)s"
 
 #. Translators: a small pill on the report; keep it short.
 msgid "Languages: All"
-msgstr ""
+msgstr "Langues : Tout"
 
 msgid ""
 "Leave the advanced settings empty and add it. In a chat, make sure Word "
 "Counter is switched on in the tools menu. On the Free plan Claude allows "
 "one custom connector."
 msgstr ""
+"Laissez les paramètres avancés vides et ajoutez-le. Dans une "
+"conversation, assurez-vous que Word Counter est activé dans le menu des "
+"outils. Avec l’offre Free, Claude autorise un connecteur personnalisé."
 
 msgid "Left out"
-msgstr ""
+msgstr "Omis"
 
 msgid "Linked but not crawled"
-msgstr ""
+msgstr "Lié, mais non exploré"
 
 msgid ""
 "Linked from the pages crawled but not counted — outside this run’s "
 "settings, excluded, or not reached before it stopped."
 msgstr ""
+"Liés depuis les pages explorées, mais non comptabilisés — hors des "
+"paramètres de cette exécution, exclus ou non atteints avant son arrêt."
 
 msgid "Linked subdomains not crawled"
-msgstr ""
+msgstr "Les sous-domaines liés n’ont pas été explorés."
 
 msgid "List the 20 longest pages under example.com/blog."
-msgstr ""
+msgstr "Listez les 20 pages les plus longues de example.com/blog."
 
 msgid "Loading…"
-msgstr ""
+msgstr "Chargement…"
 
 msgid "Log out"
-msgstr ""
+msgstr "Se déconnecter"
 
 msgid "Low"
-msgstr ""
+msgstr "Faible"
 
 msgid "Low confidence"
-msgstr ""
+msgstr "Faible niveau de confiance"
 
 msgid "MCP server"
-msgstr ""
+msgstr "Serveur MCP"
 
 msgid "Main content, not the whole page"
-msgstr ""
+msgstr "Contenu principal, pas la page entière"
 
 msgid ""
 "Main page content only — site navigation, footers and other repeated "
 "chrome are stripped. Each file starts with the URL it came from."
 msgstr ""
+"Contenu principal de la page uniquement — la navigation du site, les "
+"pieds de page et les autres éléments d’interface répétés ont été "
+"supprimés. Chaque fichier commence par l’URL dont il provient."
 
 msgid "Main site"
-msgstr ""
+msgstr "Site principal"
 
 msgid "Make a connection"
-msgstr ""
+msgstr "Établir une connexion"
 
 msgid ""
 "Make a connection for each app you use. Each one has its own URL and key,"
 " and you can revoke it without touching the others."
 msgstr ""
+"Établissez une connexion pour chaque application que vous utilisez. "
+"Chacun possède sa propre URL et sa propre clé, et vous pouvez le révoquer"
+" sans toucher aux autres."
 
 msgid "Manage billing"
-msgstr ""
+msgstr "Gérer la facturation"
 
 msgid "Manage subscription"
-msgstr ""
+msgstr "Gérer l’abonnement"
 
 msgid ""
 "Many sites keep adding content after a page appears. Each page is counted"
@@ -1548,9 +1791,14 @@ msgid ""
 " late are included. It takes a little longer, and the count is more "
 "complete."
 msgstr ""
+"De nombreux sites continuent d’ajouter du contenu après l’affichage d’une"
+" page. Chaque page n’est comptabilisée qu’une fois son chargement "
+"terminé, afin que les listes, les onglets et les sections qui se chargent"
+" tardivement soient inclus. Cela prend un peu plus de temps, et le "
+"décompte est plus complet."
 
 msgid "Markdown saved"
-msgstr ""
+msgstr "Markdown enregistré"
 
 #, python-format
 msgid ""
@@ -1560,7 +1808,13 @@ msgid_plural ""
 "Markdown was saved for the first %(n)s pages, then stopped because of an "
 "error while saving. The word count below is complete either way."
 msgstr[0] ""
+"Le Markdown a été enregistré pour la première page, puis l’enregistrement"
+" s’est arrêté en raison d’une erreur. Le décompte de mots ci-dessous est "
+"complet dans les deux cas."
 msgstr[1] ""
+"Le Markdown a été enregistré pour les %(n)s premières pages, puis "
+"l’enregistrement s’est interrompu en raison d’une erreur. Le décompte de "
+"mots ci-dessous est complet dans les deux cas."
 
 #, python-format
 msgid ""
@@ -1572,7 +1826,13 @@ msgid_plural ""
 "per-crawl size limit was reached. The word count below is complete either"
 " way."
 msgstr[0] ""
+"Le Markdown a été enregistré pour la première page, puis le processus "
+"s’est arrêté, car la limite de taille par exploration a été atteinte. Le "
+"décompte de mots ci-dessous est complet dans les deux cas."
 msgstr[1] ""
+"Le Markdown a été enregistré pour les %(n)s premières pages, puis le "
+"processus s’est arrêté, car la limite de taille par exploration a été "
+"atteinte. Le décompte de mots ci-dessous est complet dans les deux cas."
 
 #, python-format
 msgid ""
@@ -1584,7 +1844,13 @@ msgid_plural ""
 "server was running low on disk space. The word count below is complete "
 "either way."
 msgstr[0] ""
+"Le Markdown a été enregistré pour la première page, puis le processus "
+"s’est arrêté, car le serveur manquait d’espace disque. Le décompte de "
+"mots ci-dessous est complet dans les deux cas."
 msgstr[1] ""
+"Le Markdown a été enregistré pour les %(n)s premières pages, puis le "
+"processus s’est arrêté, car le serveur manquait d’espace disque. Le "
+"décompte de mots ci-dessous est complet dans les deux cas."
 
 #, python-format
 msgid ""
@@ -1596,25 +1862,31 @@ msgid_plural ""
 "server's total Markdown limit was reached. The word count below is "
 "complete either way."
 msgstr[0] ""
+"Le Markdown a été enregistré pour la première page, puis le processus "
+"s’est arrêté, car la limite totale de Markdown du serveur a été atteinte."
+" Le décompte de mots ci-dessous est complet dans les deux cas."
 msgstr[1] ""
+"Le Markdown a été enregistré pour les %(n)s premières pages, puis le "
+"processus s’est arrêté, car la limite totale de Markdown du serveur a été"
+" atteinte. Le décompte de mots ci-dessous est complet dans les deux cas."
 
 msgid "Matching pages…"
-msgstr ""
+msgstr "Pages correspondantes…"
 
 msgid "Measured only when asked."
-msgstr ""
+msgstr "Mesuré uniquement sur demande."
 
 msgid "Medium"
-msgstr ""
+msgstr "Moyen"
 
 msgid "Medium confidence"
-msgstr ""
+msgstr "Confiance moyenne"
 
 msgid "Member logins aren’t supported."
-msgstr ""
+msgstr "Les connexions des membres ne sont pas prises en charge."
 
 msgid "Member-only content stays out."
-msgstr ""
+msgstr "Le contenu réservé aux membres reste exclu."
 
 #. %(n)s is a percentage.
 #, python-format
@@ -1622,111 +1894,127 @@ msgid ""
 "Menu and footer counted on every page: %(n)s%% more than the text people "
 "read"
 msgstr ""
+"Menu et pied de page comptabilisés sur chaque page : %(n)s%% de plus que "
+"le texte lu par les visiteurs"
 
 msgid "Menus, footers and forms, which repeat on every page."
-msgstr ""
+msgstr "Menus, pieds de page et formulaires, qui se répètent sur chaque page."
 
 msgid "Moderate server load"
-msgstr ""
+msgstr "Charge modérée du serveur"
 
 msgid "More"
-msgstr ""
+msgstr "Plus d’options"
 
 msgid "More actions"
-msgstr ""
+msgstr "Plus d’actions"
 
 msgid ""
 "More pages fetched at once, and it starts ahead of the queue. Everything "
 "else about the crawl is identical."
 msgstr ""
+"Davantage de pages récupérées à la fois, et le traitement commence avant "
+"son tour dans la file d’attente. Tout le reste concernant l’exploration "
+"est identique."
 
 msgid "Most repeated text"
-msgstr ""
+msgstr "Texte le plus répété"
 
 msgid "Name it Word Counter and paste your personal URL:"
-msgstr ""
+msgstr "Nommez-le Word Counter et collez votre URL personnelle :"
 
 #. Translators: write the numbers the way your language does.
 msgid ""
 "Navigation, footers, sidebars and forms are stripped before counting, so "
 "a 500-page site doesn't inflate by the same menu repeated 500 times."
 msgstr ""
+"La navigation, les pieds de page, les barres latérales et les formulaires"
+" sont supprimés avant le comptage, afin qu’un site de 500 pages ne soit "
+"pas artificiellement gonflé par le même menu répété 500 fois."
 
 msgid ""
 "Need the content as well as the count? Select Save Markdown to download "
 "each page’s main text as a separate file, with its source URL included, "
 "all in one ZIP."
 msgstr ""
+"Vous avez besoin du contenu en plus du nombre de mots ? Sélectionnez Save"
+" Markdown pour télécharger le texte principal de chaque page dans un "
+"fichier distinct, avec son URL source, le tout dans un seul fichier ZIP."
 
 msgid "New"
-msgstr ""
+msgstr "Nouveau"
 
 msgid "New crawl"
-msgstr ""
+msgstr "Nouveau crawl"
 
 msgid "New project name"
-msgstr ""
+msgstr "Nom du nouveau projet"
 
 msgid "New project, e.g. the client’s name"
-msgstr ""
+msgstr "Nouveau projet, p. ex. le nom du client"
 
 msgid "New project…"
-msgstr ""
+msgstr "Nouveau projet…"
 
 msgid "New words"
-msgstr ""
+msgstr "Nouveaux mots"
 
 msgid "New words and repeated words"
-msgstr ""
+msgstr "Nouveaux mots et mots répétés"
 
 msgid "Newest first"
-msgstr ""
+msgstr "Du plus récent au plus ancien"
 
 msgid ""
 "No crawler on your laptop and no AI usage spent fetching pages. Close the"
 " tab: if you’re signed in, you’ll get an email when it’s done."
 msgstr ""
+"Aucun robot d’exploration sur votre ordinateur portable et aucune "
+"utilisation de l’IA pour récupérer des pages. Fermez l’onglet : si vous "
+"êtes connecté, vous recevrez un e-mail une fois l’opération terminée."
 
 msgid "No crawls in this project yet"
-msgstr ""
+msgstr "Aucun crawl dans ce projet pour le moment"
 
 #. keep the <a href="%(href)s"> and </a> tags around the words that link to a
 #. new crawl.
 #, python-format
 msgid "No crawls yet — <a href=\"%(href)s\">start one</a>."
-msgstr ""
+msgstr "Aucun crawl pour le moment — <a href=\"%(href)s\">lancez-en un</a>."
 
 msgid "No crawls yet — add some from the project."
-msgstr ""
+msgstr "Aucun crawl pour le moment — ajoutez-en depuis le projet."
 
 msgid "No crawls yet — try one above."
-msgstr ""
+msgstr "Aucun crawl pour le moment — essayez-en un ci-dessus."
 
 msgid "No finished crawls in this project yet."
-msgstr ""
+msgstr "Aucun crawl terminé dans ce projet pour le moment."
 
 msgid "No further detail was recorded."
-msgstr ""
+msgstr "Aucun autre détail n’a été enregistré."
 
 msgid "No other subdomains were linked from the pages crawled."
-msgstr ""
+msgstr "Aucun autre sous-domaine n’était lié depuis les pages explorées."
 
 msgid "No page or sentence is in more than one crawl."
-msgstr ""
+msgstr "Aucune page ni phrase n’apparaît dans plusieurs explorations."
 
 msgid "No pages counted yet."
-msgstr ""
+msgstr "Aucune page n’a encore été comptabilisée."
 
 msgid "No project"
-msgstr ""
+msgstr "Aucun projet"
 
 msgid ""
 "No projects yet. Make one above, then add crawls to it — from the project"
 " page, or from any report’s ⋯ menu."
 msgstr ""
+"Aucun projet pour le moment. Créez-en un, puis ajoutez-y des explorations"
+" depuis la page du projet ou le menu ⋯ de n’importe quel rapport."
 
 msgid "No sentence is in more than one crawl."
-msgstr ""
+msgstr "Aucune phrase ne figure dans plusieurs explorations."
 
 #, python-format
 msgid ""
@@ -1738,45 +2026,57 @@ msgid_plural ""
 " (approximately %(n)s), so it may be less accurate. Crawling all of them "
 "may take a while."
 msgstr[0] ""
+"Aucun sitemap trouvé — cette estimation est basée uniquement sur les "
+"pages découvertes jusqu’à présent (environ %(n)s) et peut donc être moins"
+" précise. L’exploration de tous ces sites peut prendre un certain temps."
 msgstr[1] ""
+"Aucun sitemap trouvé — cette estimation est basée uniquement sur les "
+"pages découvertes jusqu’à présent (environ %(n)s) et peut donc être moins"
+" précise. L’exploration de tous ces sites peut prendre un certain temps."
 
 msgid "No sitemap needed"
-msgstr ""
+msgstr "Aucun plan de site nécessaire"
 
 msgid ""
 "No — treat it like a password: anyone with it can count as you. You can "
 "revoke it at any time and make a new one."
 msgstr ""
+"Non : traitez-le comme un mot de passe : toute personne qui le possède "
+"peut compter à votre place. Vous pouvez le révoquer à tout moment et en "
+"créer un nouveau."
 
 msgid "Nobody knows how many words are on their website."
-msgstr ""
+msgstr "Personne ne sait combien de mots contient son site web."
 
 msgid "None found. It trusted the sitemap."
-msgstr ""
+msgstr "Aucun résultat trouvé. Il a fait confiance au plan du site."
 
 msgid "None yet."
-msgstr ""
+msgstr "Pas encore."
 
 msgid "Not checked"
-msgstr ""
+msgstr "Non vérifié"
 
 msgid "Not counted"
-msgstr ""
+msgstr "Non comptabilisé"
 
 msgid "Not found"
-msgstr ""
+msgstr "Introuvable"
 
 msgid "Not in the total"
-msgstr ""
+msgstr "Non inclus dans le total"
 
 msgid "Not in this count"
-msgstr ""
+msgstr "Non inclus dans ce décompte"
 
 msgid ""
 "Not the marketing lead, not the person who built it, and not the agency "
 "about to quote you for translating it. Point this at a URL and find out —"
 " page by page, folder by folder."
 msgstr ""
+"Ni le responsable marketing, ni la personne qui l’a créé, ni l’agence qui"
+" s’apprête à vous faire un devis pour sa traduction. Indiquez une URL "
+"pour découvrir le site, page par page, dossier par dossier."
 
 msgid ""
 "Nothing could be counted because the starting page itself couldn't be "
@@ -1784,15 +2084,22 @@ msgid ""
 "accessible (e.g. a blog post or inner page rather than the homepage), try"
 " starting the crawl from that URL instead."
 msgstr ""
+"Aucun élément n’a pu être comptabilisé, car la page de départ elle-même "
+"était inaccessible. Si vous connaissez une autre page de ce site qui "
+"pourrait être plus accessible (par exemple, un article de blog ou une "
+"page interne plutôt que la page d’accueil), essayez de lancer "
+"l’exploration à partir de cette URL."
 
 msgid "Nothing extra: the same as counting on the website. Pro counts run faster."
 msgstr ""
+"Rien de plus : comme compter les mots sur le site Web. Pro compte plus "
+"rapidement les exécutions."
 
 msgid "Nothing left out"
-msgstr ""
+msgstr "Rien n’a été omis"
 
 msgid "Older →"
-msgstr ""
+msgstr "Plus ancien →"
 
 msgid ""
 "On its own, an assistant estimates from the pages it opens — or, in "
@@ -1800,238 +2107,293 @@ msgid ""
 " Word Counter follows every link and the sitemap until there is nothing "
 "left to read."
 msgstr ""
+"À lui seul, un assistant fait une estimation à partir des pages qu’il "
+"ouvre — ou, dans Claude Code, écrit un robot d’exploration ponctuel qui "
+"compte les éléments du menu sur chaque page. Word Counter suit chaque "
+"lien et le plan du site jusqu’à ce qu’il n’y ait plus rien à lire."
 
 msgid ""
 "One client, every crawl that belongs to it, and the number that counts "
 "each page once."
 msgstr ""
+"Un client, chaque exploration qui lui appartient et le nombre qui "
+"comptabilise chaque page une seule fois."
 
 msgid "One file per page, provenance intact"
-msgstr ""
+msgstr "Un fichier par page, provenance intacte"
 
 msgid "One subdomain"
-msgstr ""
+msgstr "Un sous-domaine"
 
 msgid ""
 "Only crawl this language’s pages, for sites with a /en/, /fr/, ... path "
 "per language. Leave blank to auto-detect the starting page’s language."
 msgstr ""
+"Explorer uniquement les pages de cette langue, pour les sites dont le "
+"chemin comporte /en/, /fr/, ... pour chaque langue. Laissez ce champ vide"
+" pour détecter automatiquement la langue de la page de départ."
 
 msgid ""
 "Only crawl this language’s pages, for sites with a /en/, /fr/, ... path "
 "per language. Leave blank to auto-detect the starting page’s language. "
 "Comma-separate multiple codes to keep more than one (e.g. en, pt, es)."
 msgstr ""
+"Explorer uniquement les pages de cette langue pour les sites dont le "
+"chemin comprend /en/, /fr/, ... pour chaque langue. Laissez ce champ vide"
+" pour détecter automatiquement la langue de la page de départ. Séparez "
+"les codes par des virgules pour en conserver plusieurs (par ex. en, pt, "
+"es)."
 
 msgid ""
 "Open Plugins and choose + → Add custom MCP server. (Some accounts have it"
 " under Settings → Apps & Connectors → Advanced → Developer mode → "
 "Create.)"
 msgstr ""
+"Ouvrez Plugins et sélectionnez + → Ajouter un serveur MCP personnalisé. "
+"(Certains comptes le trouvent sous Paramètres → Applications et "
+"connecteurs → Avancé → Mode développeur → Créer.)"
 
 msgid "Open Settings → Connectors (on some versions, Customize → Connectors)."
 msgstr ""
+"Ouvrez Paramètres → Connecteurs (sur certaines versions, Personnaliser → "
+"Connecteurs)."
 
 #. Translators: a link that opens the crawled page in a new tab.
 msgid "Open ↗"
-msgstr ""
+msgstr "Ouvrir ↗"
 
 msgid "Opening checkout…"
-msgstr ""
+msgstr "Ouverture de la page de paiement…"
 
 #. above the report's address, for mail apps that hide the button.
 msgid "Or paste this into your browser:"
-msgstr ""
+msgstr "Ou collez ceci dans votre navigateur :"
 
 msgid "Overview"
-msgstr ""
+msgstr "Vue d’ensemble\n"
 
 msgid "Owner"
-msgstr ""
+msgstr "Propriétaire"
 
 msgid "PDFs, Word and Excel files, images and videos aren’t counted."
 msgstr ""
+"Les PDF, les fichiers Word et Excel, les images et les vidéos ne sont pas"
+" comptabilisés."
 
 msgid "Page"
-msgstr ""
+msgstr "Page"
 
 #, python-format
 msgid "Page %(page)s of %(total)s"
-msgstr ""
+msgstr "Page %(page)s sur %(total)s"
 
 msgid ""
 "Page counts only tell you so much. Some pages have a paragraph. Others "
 "have thousands of words. Opening them one by one takes time you could "
 "spend doing the work."
 msgstr ""
+"Le nombre de pages ne vous dit pas tout. Certaines pages contiennent un "
+"paragraphe. D’autres en ont des milliers. Les ouvrir un par un prend du "
+"temps que vous pourriez consacrer à votre travail."
 
 msgid "Pages"
-msgstr ""
+msgstr "Pages"
 
 msgid "Pages appear below as they’re read."
-msgstr ""
+msgstr "Les pages s’affichent ci-dessous au fur et à mesure de leur lecture."
 
 msgid ""
 "Pages behind a login or blocked by the site are listed separately, so you"
 " can see what the total leaves out."
 msgstr ""
+"Les pages nécessitant une connexion ou bloquées par le site sont "
+"répertoriées séparément, afin que vous puissiez voir ce qui n’est pas "
+"inclus dans le total."
 
 msgid "Pages behind a sign-in"
-msgstr ""
+msgstr "Pages derrière une connexion"
 
 msgid "Pages counted"
-msgstr ""
+msgstr "Pages comptabilisées"
 
 msgid "Pages fetched so far"
-msgstr ""
+msgstr "Pages récupérées jusqu’à présent"
 
 msgid "Pages in more than one crawl"
-msgstr ""
+msgstr "Pages dans plusieurs explorations"
 
 #. Translators: %(saved)s is how many pages are in the download and
 #. %(total)s how many the crawl counted.
 #, python-format
 msgid "Pages in this archive: %(saved)s of %(total)s crawled"
 msgid_plural "Pages in this archive: %(saved)s of %(total)s crawled"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Pages dans cette archive : %(saved)s sur %(total)s explorée"
+msgstr[1] "Pages dans cette archive : %(saved)s sur %(total)s explorées"
 
 msgid "Pages mostly repeated from another crawl"
-msgstr ""
+msgstr "Pages principalement répétées d’un autre crawl"
 
 msgid "Pages need a link to be found."
-msgstr ""
+msgstr "Les pages doivent comporter un lien pour être trouvées."
 
 msgid ""
 "Pages open in Chrome, so text that appears after JavaScript runs can be "
 "counted too."
 msgstr ""
+"Les pages s’ouvrent dans Chrome, ce qui permet également de compter le "
+"texte qui apparaît après l’exécution de JavaScript."
 
 msgid "Pages requiring a member login are listed but can’t be read."
 msgstr ""
+"Les pages nécessitant une connexion membre sont répertoriées, mais ne "
+"peuvent pas être lues."
 
 msgid "Pages so far"
-msgstr ""
+msgstr "Pages jusqu’à présent"
 
 msgid "Pages with no links pointing to them may be missed."
 msgstr ""
+"Les pages vers lesquelles aucun lien ne pointe risquent de ne pas être "
+"détectées."
 
 msgid ""
 "Part of this is estimated: some sites were crawled before their sentences"
 " were kept, so their repetition is worked out from their main content."
 msgstr ""
+"Une partie de ces données est estimée : certains sites ont été explorés "
+"avant que leurs phrases soient conservées ; leur répétition est donc "
+"calculée à partir de leur contenu principal."
 
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 msgid "Password-protected"
-msgstr ""
+msgstr "Protégé par mot de passe"
 
 msgid "Password-protected site"
-msgstr ""
+msgstr "Site protégé par mot de passe"
 
 msgid "Paused"
-msgstr ""
+msgstr "En pause"
 
 #. a crawl stops here to show its estimate. %(n)s is a number of words.
 #, python-format
 msgid "Paused at %(n)s word"
 msgid_plural "Paused at %(n)s words"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "En pause à %(n)s mot"
+msgstr[1] "En pause à %(n)s mots"
 
 msgid "People with access"
-msgstr ""
+msgstr "Personnes ayant accès"
 
 msgid "Personal URL — for Claude, ChatGPT and apps that only take a URL"
 msgstr ""
+"URL personnelle — pour Claude, ChatGPT et les applications qui "
+"n’acceptent qu’une URL"
 
 msgid "Pick your app below and paste it in. It takes a minute."
 msgstr ""
+"Sélectionnez votre application ci-dessous et collez-la. Cela prend une "
+"minute."
 
 msgid "Plans for teams of every size, billed monthly or yearly."
 msgstr ""
+"Des forfaits pour les équipes de toutes tailles, facturés au mois ou à "
+"l’année."
 
 msgid "Please enter a valid http(s) URL"
-msgstr ""
+msgstr "Veuillez saisir une URL http(s) valide."
 
 msgid ""
 "Point this at a URL and get every page back as Markdown, in one ZIP — "
 "main content only, no navigation, no cookie banners, no markup burning "
 "tokens without carrying meaning."
 msgstr ""
+"Indiquez une URL et récupérez toutes les pages au format Markdown, dans "
+"un seul fichier ZIP — uniquement le contenu principal, sans navigation, "
+"sans bannières de cookies ni balisage qui consomme des jetons sans "
+"apporter de sens."
 
 msgid "Preparing…"
-msgstr ""
+msgstr "Préparation…"
 
 msgid ""
 "Press Enter or comma to add one. A leading / excludes a folder, anything "
 "else a subdomain — each entry is labelled with how it will be treated. "
 "Applies to the rest of this crawl; pages already counted stay counted."
 msgstr ""
+"Appuyez sur Entrée ou sur la virgule pour en ajouter un. Un / au début "
+"exclut un dossier, tout autre élément un sous-domaine — chaque entrée est"
+" accompagnée d’une indication sur la façon dont elle sera traitée. "
+"S’applique au reste de cette exploration ; les pages déjà comptabilisées "
+"le restent."
 
 msgid "Preview"
-msgstr ""
+msgstr "Aperçu"
 
 msgid "Pricing"
-msgstr ""
+msgstr "Tarifs"
 
 #. a field for language codes such as en or pt; "auto" means detected
 #. automatically.
 msgid "Primary language (auto)"
-msgstr ""
+msgstr "Langue principale (automatique)"
 
 msgid "Print"
-msgstr ""
+msgstr "Imprimer"
 
 msgid "Print report"
-msgstr ""
+msgstr "Imprimer le rapport"
 
 msgid "Pro"
-msgstr ""
+msgstr "Pro"
 
 msgid "Proceed with crawl"
-msgstr ""
+msgstr "Lancer l’exploration du site"
 
 msgid "Project"
-msgstr ""
+msgstr "Projet"
 
 msgid "Project name"
-msgstr ""
+msgstr "Nom du projet"
 
 msgid "Projects"
-msgstr ""
+msgstr "Projets"
 
 msgid "Public link"
-msgstr ""
+msgstr "Lien public"
 
 msgid "Questions people ask"
-msgstr ""
+msgstr "Questions fréquentes"
 
 msgid "Queued"
-msgstr ""
+msgstr "En attente"
 
 msgid "Quote with a word count behind you"
-msgstr ""
+msgstr "Obtenez un devis avec le nombre de mots en main"
 
 msgid ""
 "Quoting a translation, planning a website rewrite or moving to a new CMS?"
 " Get a word count for your site, broken down by page and folder, so you "
 "can scope the work before you commit."
 msgstr ""
+"Vous préparez un devis de traduction, planifiez la refonte d’un site web "
+"ou migrez vers un nouveau CMS ? Obtenez le nombre de mots de votre site, "
+"ventilé par page et par dossier, afin d’évaluer le travail avant de vous "
+"engager."
 
 msgid "Re-crawl"
-msgstr ""
+msgstr "Relancer l’exploration de l’URL"
 
 #. menu items that open a form or a dialog, hence the ellipsis.
 msgid "Re-crawl…"
-msgstr ""
+msgstr "Relancer l’exploration…"
 
 msgid "Re-run to check every word"
-msgstr ""
+msgstr "Relancez pour vérifier chaque mot"
 
 msgid "Read how Claude does with and without it →"
-msgstr ""
+msgstr "Découvrez les performances de Claude avec et sans cet outil →"
 
 msgid ""
 "Read in this order, each crawl adds what the ones above it don’t have: "
@@ -2039,89 +2401,98 @@ msgid ""
 "fills the gaps. Of a site crawled twice, the latest completed crawl "
 "counts."
 msgstr ""
+"Lisez dans cet ordre : chaque exploration ajoute ce qui manque à celles "
+"qui la précèdent. D’abord les explorations terminées, de la plus récente "
+"à la plus ancienne ; une exploration inachevée ne comble que les lacunes."
+" Pour un site exploré deux fois, c’est la dernière exploration terminée "
+"qui est prise en compte."
 
 msgid "Reading sentences…"
-msgstr ""
+msgstr "Lecture des phrases…"
 
 msgid "Reading the crawls…"
-msgstr ""
+msgstr "Lecture des explorations…"
 
 msgid "Ready for whatever comes next"
-msgstr ""
+msgstr "Prêt pour la suite, quelle qu’elle soit"
 
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #. Translators: the × beside an invited person; %(email)s is their address.
 #, python-format
 msgid "Remove %(email)s"
-msgstr ""
+msgstr "Supprimer %(email)s"
 
 #. Translators: the × on an exclusion chip; %(entry)s is what was typed, such
 #. as /careers.
 #, python-format
 msgid "Remove %(entry)s"
-msgstr ""
+msgstr "Supprimer %(entry)s"
 
 msgid "Removing…"
-msgstr ""
+msgstr "Suppression…"
 
 msgid "Rename project"
-msgstr ""
+msgstr "Renommer le projet"
 
 msgid "Repeated"
-msgstr ""
+msgstr "Répété"
 
 msgid "Repeated from other crawls"
-msgstr ""
+msgstr "Répété dans d’autres explorations de site web"
 
 msgid "Repeated within"
-msgstr ""
+msgstr "Répété dans les"
 
 msgid "Repeated words"
-msgstr ""
+msgstr "Mots répétés"
 
 msgid "Repeated · est."
-msgstr ""
+msgstr "Récurrent · est."
 
 msgid "Repetition"
-msgstr ""
+msgstr "Répétition"
 
 msgid "Repetition estimate"
-msgstr ""
+msgstr "Estimation des répétitions"
 
 msgid "Replaced by the newer crawl of this site — not counted."
-msgstr ""
+msgstr "Remplacé par l’exploration plus récente de ce site — non comptabilisé."
 
 msgid "Report sections"
-msgstr ""
+msgstr "Sections du rapport"
 
 #. Translators: why a page wasn't counted, in the report's list of pages
 #. that failed and in its tooltips.
 msgid "Requires login"
-msgstr ""
+msgstr "Connexion requise"
 
 msgid "Resuming…"
-msgstr ""
+msgstr "Reprise…"
 
 msgid ""
 "Review the scope, exclude anything you don’t need and sign in with Google"
 " to finish for free."
 msgstr ""
+"Vérifiez le périmètre, excluez tout ce dont vous n’avez pas besoin et "
+"connectez-vous avec Google pour terminer gratuitement."
 
 msgid "Revoke"
-msgstr ""
+msgstr "Révoquer"
 
 msgid ""
 "Revoke this connection? Any app using it stops counting until you give it"
 " a new one."
 msgstr ""
+"Révoquer cette connexion ? Toute application qui l’utilise cesse de "
+"compter jusqu’à ce que vous lui en fournissiez une nouvelle."
 
 msgid "Runs not in a project"
-msgstr ""
+msgstr "Exécutions hors projet"
 
 msgid "Runs on our servers, not your computer"
-msgstr ""
+msgstr "S’exécute sur nos serveurs, pas sur votre ordinateur"
 
 #. %(pro)s is "N pages" in bold (how many pages Pro fetches at        once) and
 #. %(free)s is the Free plan's number, in bold, with the noun left        out
@@ -2134,59 +2505,71 @@ msgid ""
 "busy. One subscription covers both %(counter)s and %(markdown)s — they’re"
 " the same account."
 msgstr ""
+"Même robot d’exploration, même comptage, mêmes rapports. Pro récupère "
+"%(pro)s éléments à la fois au lieu de %(free)s, et passe avant tout le "
+"monde lorsque la file d’attente est chargée. Un seul abonnement couvre à "
+"la fois %(counter)s et %(markdown)s : il s’agit du même compte."
 
 msgid "Same page in another crawl"
-msgstr ""
+msgstr "Même page lors d’un autre crawl"
 
 msgid "Same page in more than one crawl"
-msgstr ""
+msgstr "Même page dans plusieurs explorations du site"
 
 msgid "Same page on more than one site"
-msgstr ""
+msgstr "Même page sur plusieurs sites"
 
 msgid "Same pages"
-msgstr ""
+msgstr "Mêmes pages"
 
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 msgid "Save Markdown"
-msgstr ""
+msgstr "Enregistrer le Markdown"
 
 msgid "Save each page as Markdown"
-msgstr ""
+msgstr "Enregistrez chaque page au format Markdown"
 
 msgid ""
 "Save each page's main content as Markdown, downloadable as a ZIP when the"
 " crawl finishes."
 msgstr ""
+"Enregistrez le contenu principal de chaque page au format Markdown, "
+"téléchargeable dans un fichier ZIP une fois l’exploration terminée."
 
 msgid "Saving…"
-msgstr ""
+msgstr "Enregistrement…"
 
 msgid "Search your runs"
-msgstr ""
+msgstr "Rechercher vos exécutions"
 
 msgid ""
 "Seconds for a small site, minutes for a large one. Your assistant waits "
 "up to a minute, then checks back on the count until it’s done."
 msgstr ""
+"Quelques secondes pour un petit site, quelques minutes pour un grand. "
+"Votre assistant attend jusqu’à une minute, puis vérifie régulièrement le "
+"décompte jusqu’à ce qu’il soit terminé."
 
 msgid "See a real report"
-msgstr ""
+msgstr "Voir un rapport réel"
 
 #. a link to every crawl; %(n)s is how many there are.
 #, python-format
 msgid "See all %(n)s →"
 msgid_plural "See all %(n)s →"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Voir les %(n)s →"
+msgstr[1] "Voir les %(n)s →"
 
 msgid ""
 "See how many words need translating, editing or rewriting. Repeated "
 "menus, headers and footers are left out, and duplicate pages don’t "
 "inflate the total."
 msgstr ""
+"Découvrez combien de mots doivent être traduits, révisés ou réécrits. Les"
+" menus, en-têtes et pieds de page répétés sont exclus, et les pages en "
+"double ne gonflent pas le total."
 
 #. %(cms)s is a website platform such as WordPress or Webflow.            The
 #. same words as the email's button; the arrow beside it follows the reading
@@ -2194,135 +2577,150 @@ msgstr ""
 #. %(cms)s is a website platform such as WordPress or Webflow.
 #, python-format
 msgid "See the %(cms)s connector"
-msgstr ""
+msgstr "Voir le connecteur %(cms)s"
 
 msgid "See what comes out"
-msgstr ""
+msgstr "Découvrez le résultat"
 
 msgid "See what that costs →"
-msgstr ""
+msgstr "Découvrez combien cela coûte →"
 
 #. a button. %(site)s is the crawled site's domain, such as example.com.
 #, python-format
 msgid "See what wxrks would do with %(site)s"
-msgstr ""
+msgstr "Découvrez ce que wxrks ferait avec %(site)s"
 
 msgid "See where the work is"
-msgstr ""
+msgstr "Voyez où en est le travail"
 
 msgid "Seems slow? Here’s why"
-msgstr ""
+msgstr "Cela semble lent ? Voici pourquoi"
 
 msgid "Seen"
-msgstr ""
+msgstr "Vu(e) "
 
 msgid "Send"
-msgstr ""
+msgstr "Envoyer"
 
 msgid ""
 "Send a public report link, share by email, print the results or export "
 "them. If you’re signed in, you’ll get an email when the crawl finishes."
 msgstr ""
+"Envoyez un lien vers le rapport public, partagez-le par e-mail, imprimez "
+"les résultats ou exportez-les. Si vous êtes connecté, vous recevrez un "
+"e-mail lorsque l’exploration du site sera terminée."
 
 msgid "Sending…"
-msgstr ""
+msgstr "Envoi en cours…"
 
 #. Translators: %(email)s is the address the report was just sent to.
 #, python-format
 msgid "Sent to %(email)s"
-msgstr ""
+msgstr "Envoyé à %(email)s"
 
 msgid "Sentence"
-msgstr ""
+msgstr "Phrase"
 
 msgid "Sentences"
-msgstr ""
+msgstr "Phrases"
 
 msgid "Sentences estimated from saved Markdown."
-msgstr ""
+msgstr "Phrases estimées à partir du Markdown enregistré."
 
 msgid ""
 "Sentences found in more than one crawl. Each counts once, where it was "
 "first seen; its other copies are the words removed."
 msgstr ""
+"Phrases trouvées dans plusieurs explorations. Chaque mot est compté une "
+"fois, à l’endroit où il apparaît pour la première fois ; ses autres "
+"occurrences sont les mots supprimés."
 
 msgid "Sentences in common"
-msgstr ""
+msgstr "Phrases courantes"
 
 msgid "Sentences repeated across crawls"
-msgstr ""
+msgstr "Phrases répétées lors de plusieurs explorations du site"
 
 msgid "Sentences repeated across sites"
-msgstr ""
+msgstr "Phrases répétées sur plusieurs sites"
 
 msgid "Sentences repeated within a crawl"
-msgstr ""
+msgstr "Phrases répétées lors d’une exploration du site"
 
 msgid "Sentences repeated within a site"
-msgstr ""
+msgstr "Phrases répétées sur un site"
 
 msgid "Session from your browser"
-msgstr ""
+msgstr "Session depuis votre navigateur"
 
 msgid ""
 "Set Authentication to None — the key is already in the URL — and create "
 "it."
 msgstr ""
+"Définissez l’authentification sur « Aucune » — la clé se trouve déjà dans"
+" l’URL — puis créez-la."
 
 msgid "Set aside: other languages"
-msgstr ""
+msgstr "À part : autres langues"
 
 msgid "Set exclusions before the crawl or adjust them when the estimate appears."
 msgstr ""
+"Définissez les exclusions avant l’exploration ou ajustez-les lorsque "
+"l’estimation s’affiche."
 
 msgid "Settings applied"
-msgstr ""
+msgstr "Paramètres appliqués"
 
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 msgid ""
 "Share a link with your client, export every page to CSV, or put a "
 "client’s sites in one project that counts each page and sentence once."
 msgstr ""
+"Partagez un lien avec votre client, exportez chaque page au format CSV ou"
+" regroupez les sites d’un client dans un seul projet qui comptabilise "
+"chaque page et chaque phrase une seule fois."
 
 msgid "Share results"
-msgstr ""
+msgstr "Partager les résultats"
 
 msgid "Share the scope. Get everyone working from the same numbers."
 msgstr ""
+"Partagez le périmètre. Faites en sorte que tout le monde travaille à "
+"partir des mêmes chiffres."
 
 msgid "Share this project"
-msgstr ""
+msgstr "Partager ce projet"
 
 msgid "Share this report"
-msgstr ""
+msgstr "Partager ce rapport"
 
 msgid "Shared"
-msgstr ""
+msgstr "Partagé"
 
 msgid "Shared between the sites"
-msgstr ""
+msgstr "Partagé entre les sites"
 
 msgid "Show all"
-msgstr ""
+msgstr "Tout afficher"
 
 #. Translators: a link under a table that shows every row; %(n)s is how many.
 #, python-format
 msgid "Show all %(n)s"
-msgstr ""
+msgstr "Afficher les %(n)s au complet"
 
 msgid "Show more"
-msgstr ""
+msgstr "Afficher plus"
 
 #. Translators: a link under the top pages, when the list is itself the top
 #. %(n)s of more.
 #, python-format
 msgid "Show top %(n)s"
-msgstr ""
+msgstr "Afficher les %(n)s premiers éléments"
 
 msgid "Showed a member login instead of the page."
-msgstr ""
+msgstr "A affiché une connexion membre au lieu de la page."
 
 #, python-format
 msgid ""
@@ -2332,28 +2730,35 @@ msgid_plural ""
 "Showing the first %(loaded)s of %(n)s pages. Export the CSV for the "
 "complete list."
 msgstr[0] ""
+"Affichage des %(loaded)s premières sur %(n)s page. Exportez le CSV de la "
+"liste complète."
 msgstr[1] ""
+"Affichage des %(loaded)s premières pages sur %(n)s. Exportez le CSV de la"
+" liste complète."
 
 #, python-format
 msgid "Showing the first %(n)s — export the CSV for the rest."
-msgstr ""
+msgstr "Affichage des %(n)s premiers — exportez le CSV pour obtenir le reste."
 
 #, python-format
 msgid "Showing the most recent %(n)s page while this crawl runs."
 msgid_plural "Showing the most recent %(n)s pages while this crawl runs."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Affichage de la page la plus récente pendant l’exploration du site."
+msgstr[1] "Affichage des %(n)s pages les plus récentes pendant l’exploration du site."
 
 msgid ""
 "Shown on this report, its shared link and the CSV. It has to be on the "
 "site that was crawled. Leave it empty to show where the crawl started."
 msgstr ""
+"Affiché dans ce rapport, son lien partagé et le CSV. Il doit se trouver "
+"sur le site qui a été exploré. Laissez ce champ vide pour indiquer où "
+"l’exploration a commencé."
 
 msgid "Shows what’s missing"
-msgstr ""
+msgstr "Indique ce qui manque"
 
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 msgid ""
 "Sign in to the site in Chrome, open View → Developer → Developer Tools, "
@@ -2361,80 +2766,94 @@ msgid ""
 "“cookie” under Request Headers and copy its value here. It works until "
 "that session ends, and is never stored."
 msgstr ""
+"Connectez-vous au site dans Chrome, ouvrez Affichage → Développeur → "
+"Outils de développement, sélectionnez Réseau et rechargez la page. "
+"Cliquez sur la première requête, repérez « cookie » sous Request Headers "
+"et copiez sa valeur ici. Cela fonctionne jusqu’à la fin de cette session "
+"et n’est jamais enregistré."
 
 msgid "Sign in to upgrade"
-msgstr ""
+msgstr "Connectez-vous pour passer à une offre supérieure"
 
 msgid "Sign in with Google"
-msgstr ""
+msgstr "Se connecter avec Google"
 
 msgid ""
 "Sign in with Google and make a connection. You get a personal URL — and a"
 " key for apps that take one — shown once."
 msgstr ""
+"Connectez-vous avec Google et établissez une connexion. Vous obtenez une "
+"URL personnelle — et une clé pour les applications qui en utilisent une —"
+" affichée une seule fois."
 
 msgid "Sign in with Google to continue"
-msgstr ""
+msgstr "Connectez-vous avec Google pour continuer"
 
 msgid "Sign in with Google to count the rest of this site."
-msgstr ""
+msgstr "Connectez-vous avec Google pour compter le reste de ce site."
 
 msgid ""
 "Sign in with Google to count the rest. It’s free, and the crawl carries "
 "on from here."
 msgstr ""
+"Connectez-vous avec Google pour compter le reste. C’est gratuit, et "
+"l’exploration du site se poursuit à partir d’ici."
 
 msgid "Sign in with Google to keep it"
-msgstr ""
+msgstr "Connectez-vous avec Google pour le conserver."
 
 msgid "Sign-in email"
-msgstr ""
+msgstr "E-mail de connexion"
 
 msgid "Sign-in page"
-msgstr ""
+msgstr "Page de connexion"
 
 msgid "Sign-in page — optional, if the crawl starts on it"
-msgstr ""
+msgstr "Page de connexion — facultative, si l’exploration commence sur cette page"
 
 msgid "Sign-in password"
-msgstr ""
+msgstr "Mot de passe de connexion"
 
 msgid "Signed in"
-msgstr ""
+msgstr "Connecté en tant que"
 
 msgid ""
 "Signing in isn't available right now. Try again in a minute, or paste a "
 "session."
 msgstr ""
+"La connexion n’est pas disponible pour le moment. Réessayez dans une "
+"minute ou collez une session."
 
 msgid "Signs in with a code, or with Google or Microsoft? Paste a session instead"
 msgstr ""
+"Vous vous connectez avec un code, ou avec Google ou Microsoft ? Collez "
+"plutôt une session"
 
 msgid "Site"
-msgstr ""
+msgstr "Site"
 
 msgid "Site password"
-msgstr ""
+msgstr "Mot de passe du site"
 
 #. Translators: the name of the companion product. Markdown is a file
 #. format and stays as written.
 msgid "Site to Markdown"
-msgstr ""
+msgstr "Site to Markdown"
 
 msgid "Site username"
-msgstr ""
+msgstr "Nom d’utilisateur du site"
 
 msgid "Site with a sign-in page"
-msgstr ""
+msgstr "Site avec une page de connexion"
 
 msgid "Skipped as translations"
-msgstr ""
+msgstr "Ignoré en tant que traductions"
 
 msgid "Skips the queue when crawls are waiting"
-msgstr ""
+msgstr "Passe en priorité lorsque des explorations sont en attente"
 
 msgid "Some languages are undercounted."
-msgstr ""
+msgstr "Certaines langues sont sous-comptabilisées."
 
 msgid ""
 "Some sites use bot protection such as Cloudflare or Akamai. Pages it "
@@ -2442,96 +2861,114 @@ msgid ""
 "total is incomplete. If it’s your site, a staging copy often works best —"
 " including one behind a browser username-and-password pop-up."
 msgstr ""
+"Certains sites utilisent une protection contre les robots, comme "
+"Cloudflare ou Akamai. Les pages qu’il bloque sont répertoriées séparément"
+" et ne sont jamais comptabilisées comme vides, afin que vous puissiez "
+"voir que le total est incomplet. S’il s’agit de votre site, une copie de "
+"préproduction est souvent la meilleure solution — y compris si elle est "
+"protégée par une fenêtre contextuelle de navigateur demandant un nom "
+"d’utilisateur et un mot de passe."
 
 msgid "Something went wrong"
-msgstr ""
+msgstr "Une erreur s’est produite"
 
 msgid "Source code (AGPL-3.0)"
-msgstr ""
+msgstr "Code source (AGPL-3.0)"
 
 msgid "Start re-crawl"
-msgstr ""
+msgstr "Lancer un nouveau crawl"
 
 #. Translators: %(date)s is a date and time, such as "27 November 2026, 15:08".
 #, python-format
 msgid "Started: %(date)s"
-msgstr ""
+msgstr "Démarré : %(date)s\n"
 
 #. Translators: the label of a crawl's status badge, and of the form's
 #. button while a crawl starts.
 msgid "Starting…"
-msgstr ""
+msgstr "Démarrage…"
 
 #. Translators: the banner's button that keeps the English page and hides the
 #. banner.
 msgid "Stay in English"
-msgstr ""
+msgstr "Rester en anglais"
 
 msgid "Still crawling — joins when it finishes."
-msgstr ""
+msgstr "Exploration toujours en cours — rejoint le groupe une fois terminée."
 
 msgid "Stop this crawl before deleting it."
-msgstr ""
+msgstr "Arrêtez cette exploration avant de la supprimer."
 
 msgid "Stopped: the server restarted while it ran, several times in a row."
 msgstr ""
+"Arrêté : le serveur a redémarré pendant son exécution, plusieurs fois de "
+"suite."
 
 msgid ""
 "Streamable HTTP at the URL below, plain JSON responses, no sessions. "
 "Protocol versions 2025-03-26 to 2026-07-28. Authentication: a Bearer key,"
 " or the key in the URL path."
 msgstr ""
+"HTTP en flux à l’URL ci-dessous, réponses JSON simples, sans session. "
+"Versions du protocole du 2025-03-26 au 2026-07-28. Authentification : une"
+" clé Bearer ou la clé dans le chemin de l’URL."
 
 msgid "Subdomain"
-msgstr ""
+msgstr "Sous-domaine"
 
 msgid "Subdomains"
-msgstr ""
+msgstr "Sous-domaines"
 
 msgid "Summary"
-msgstr ""
+msgstr "Résumé"
 
 #. Translators: %(email)s is the account's email address, shown in bold.
 #, python-format
 msgid "Summary emailed to %(email)s"
-msgstr ""
+msgstr "Récapitulatif envoyé par e-mail à %(email)s"
 
 #. Translators: %(email)s is the account's email address, shown in bold.
 #, python-format
 msgid "Summary will be emailed to %(email)s"
-msgstr ""
+msgstr "Le récapitulatif sera envoyé par e-mail à %(email)s"
 
 msgid "Support in your language"
-msgstr ""
+msgstr "Assistance dans votre langue"
 
 #. Translators: the banner's button that opens this page in your language.
 #, python-format
 msgid "Switch to %(language)s"
-msgstr ""
+msgstr "Passer en %(language)s"
 
 msgid "Text"
-msgstr ""
+msgstr "Texte"
 
 #. %(url)s is the address of the page, as a link.
 #, python-format
 msgid "Text not kept — first seen on %(url)s"
-msgstr ""
+msgstr "Texte non conservé — première apparition sur %(url)s"
 
 msgid ""
 "That doesn't look like a session. Copy the value of the “cookie” line "
 "from the browser's developer tools."
 msgstr ""
+"Cela ne ressemble pas à une session. Copiez la valeur de la ligne « "
+"cookie » dans les outils de développement du navigateur."
 
 msgid "That project isn't yours, or it no longer exists."
-msgstr ""
+msgstr "Ce projet ne vous appartient pas ou n’existe plus."
 
 msgid ""
 "That session didn't get past the sign-in page; it may have ended. Sign in"
 " again in your browser and copy a fresh one."
 msgstr ""
+"Cette session n’a pas dépassé la page de connexion ; elle a peut-être "
+"pris fin. Reconnectez-vous dans votre navigateur et copiez-en un nouveau."
 
 msgid "The configured page limit was reached — the crawl may be incomplete."
 msgstr ""
+"La limite de pages configurée a été atteinte — l’exploration peut être "
+"incomplète."
 
 msgid ""
 "The crawl counts the starting page’s language only. Every page is checked"
@@ -2539,15 +2976,23 @@ msgid ""
 "pages in another language are set aside, whatever their address says. "
 "Folders such as /de/ are skipped without being fetched."
 msgstr ""
+"L’exploration ne compte que la langue de la page de départ. Chaque page "
+"est vérifiée selon la langue qu’elle déclare et le système d’écriture "
+"utilisé, et les pages dans une autre langue sont mises de côté, quelle "
+"que soit leur adresse. Les dossiers tels que /de/ sont ignorés sans être "
+"récupérés."
 
 msgid "The crawl failed."
-msgstr ""
+msgstr "L’exploration a échoué."
 
 msgid ""
 "The crawl, project or page may have been deleted, or the link may be "
 "missing a part. A report that’s private only opens for the account that "
 "made it."
 msgstr ""
+"L’exploration, le projet ou la page a peut-être été supprimé, ou il "
+"manque une partie du lien. Un rapport privé ne s’ouvre que pour le compte"
+" qui l’a créé."
 
 #. at the end of the printed report. %(n)s is the number of pages.
 #, python-format
@@ -2558,54 +3003,71 @@ msgid_plural ""
 "The full list of %(n)s pages, with each page’s title and word count, is "
 "in the CSV export."
 msgstr[0] ""
+"La liste complète de %(n)s page, avec le titre et le nombre de mots de "
+"chaque page, se trouve dans l’export CSV."
 msgstr[1] ""
+"La liste complète des %(n)s pages, avec le titre et le nombre de mots de "
+"chaque page, figure dans l’export CSV."
 
 #. Translators: %(error)s is a technical reason, often in English.
 #, python-format
 msgid "The last consolidation didn’t finish: %(error)s"
-msgstr ""
+msgstr "La dernière consolidation ne s’est pas terminée : %(error)s"
 
 msgid ""
 "The link opens the client view: the combined total, the sites and where "
 "the words are. Each crawl’s own report stays private unless you share it "
 "too."
 msgstr ""
+"Le lien ouvre la vue client : le total combiné, les sites et "
+"l’emplacement des mots. Le rapport de chaque exploration reste privé, "
+"sauf si vous le partagez également."
 
 #. %(hosts)s is a list of subdomains, such as "help.example.com,
 #. docs.example.com".
 #, python-format
 msgid "The linked subdomains that weren’t crawled: %(hosts)s."
-msgstr ""
+msgstr "Les sous-domaines liés qui n’ont pas été explorés : %(hosts)s."
 
 msgid ""
 "The main text a visitor reads — without menus, footers and forms, and "
 "with each duplicate page counted once."
 msgstr ""
+"Le texte principal lu par un visiteur — sans les menus, pieds de page et "
+"formulaires, et en ne comptant chaque page en double qu’une seule fois."
 
 msgid "The only thing that changes is how long you wait."
-msgstr ""
+msgstr "La seule chose qui change, c’est la durée de l’attente."
 
 msgid ""
 "The pages of a count with their words, largest first, optionally only one"
 " section."
 msgstr ""
+"Les pages d’un décompte avec leur nombre de mots, de la plus longue à la "
+"plus courte, éventuellement pour une seule section."
 
 msgid ""
 "The same page in more than one crawl — the same address on one site, or "
 "the same text anywhere — counts once, from the crawl listed first above. "
 "Crawls can also share sentences without sharing a page."
 msgstr ""
+"La même page dans plusieurs explorations — la même adresse sur un site, "
+"ou le même texte n’importe où — ne compte qu’une fois, à partir de "
+"l’exploration indiquée en premier ci-dessus. Les explorations peuvent "
+"également partager des phrases sans partager de page."
 
 msgid "The same rules on every site"
-msgstr ""
+msgstr "Les mêmes règles sur tous les sites"
 
 msgid "The same site, the same day"
-msgstr ""
+msgstr "Le même site, le même jour"
 
 msgid ""
 "The same text as a page already counted, under another address. Counted "
 "once, not twice."
 msgstr ""
+"Le même texte qu’une page déjà comptabilisée, sous une autre adresse. "
+"Compté une fois, pas deux."
 
 #, python-format
 msgid ""
@@ -2615,68 +3077,91 @@ msgid_plural ""
 "The server restarted during this crawl, so the estimate covers %(n)s of "
 "its words."
 msgstr[0] ""
+"Le serveur a redémarré pendant cette exploration ; l’estimation porte "
+"donc sur %(n)s de ses mots."
 msgstr[1] ""
+"Le serveur a redémarré pendant cette exploration ; l’estimation porte "
+"donc sur %(n)s de ses mots."
 
 msgid ""
 "The server restarted while this crawl was paused, and the site's password"
 " is never kept. Start a re-crawl and enter it again."
 msgstr ""
+"Le serveur a redémarré alors que cette exploration était en pause, et le "
+"mot de passe du site n’est jamais conservé. Lancez une nouvelle "
+"exploration et saisissez-le à nouveau."
 
 msgid ""
 "The server restarted while this crawl was paused, and the site's sign-in "
 "is never kept. Start a re-crawl and sign in again."
 msgstr ""
+"Le serveur a redémarré alors que cette exploration était en pause, et la "
+"connexion au site n’est jamais conservée. Lancez une nouvelle exploration"
+" et reconnectez-vous."
 
 msgid "The sign-in page didn't load. Check its address and try again."
 msgstr ""
+"La page de connexion ne s’est pas chargée. Vérifiez son adresse et "
+"réessayez."
 
 msgid "The site didn't accept that username and password."
-msgstr ""
+msgstr "Le site n’a pas accepté ce nom d’utilisateur et ce mot de passe."
 
 msgid ""
 "The site didn't let the crawler in with that email and password, or it "
 "asked for more, like a code. For a code or a Google or Microsoft sign-in,"
 " paste a session instead."
 msgstr ""
+"Le site n’a pas laissé le robot d’exploration accéder au site avec cette "
+"adresse e-mail et ce mot de passe, ou il a demandé des informations "
+"supplémentaires, comme un code. Pour vous connecter avec un code, Google "
+"ou Microsoft, collez plutôt une session."
 
 msgid "The sites"
-msgstr ""
+msgstr "Les sites"
 
 msgid "The sites you’ve counted, with their totals."
-msgstr ""
+msgstr "Les sites que vous avez comptabilisés, avec leurs totaux."
 
 msgid "The text people read, each page once"
-msgstr ""
+msgstr "Le texte lu par les internautes, chaque page une seule fois"
 
 msgid "The token arithmetic is the argument"
-msgstr ""
+msgstr "L’arithmétique des jetons est l’argument"
 
 msgid "The tools"
-msgstr ""
+msgstr "Les outils"
 
 msgid "Their words"
-msgstr ""
+msgstr "Leurs mots"
 
 msgid ""
 "Then keep asking. Your assistant reads the numbers with you: which "
 "sections are biggest, what to leave out of a quote, how many words are "
 "new."
 msgstr ""
+"Puis continuez à poser des questions. Votre assistant analyse les "
+"chiffres avec vous : quelles sections sont les plus volumineuses, quoi "
+"exclure d’un devis, combien de mots sont nouveaux."
 
 msgid "There’s nothing at this address"
-msgstr ""
+msgstr "Il n’y a rien à cette adresse"
 
 msgid "They ran a word count on this site and gave you access to the full report."
 msgstr ""
+"Ils ont compté les mots de ce site et vous ont donné accès au rapport "
+"complet."
 
 msgid "This crawl couldn't be completed."
-msgstr ""
+msgstr "Cette exploration n’a pas pu être menée à bien."
 
 #, python-format
 msgid ""
 "This crawl stalled — no page was fetched for over %(minutes)s minutes — "
 "and was stopped automatically."
 msgstr ""
+"Ce crawl s’est interrompu — aucune page n’a été récupérée pendant plus de"
+" %(minutes)s minutes — et a été arrêté automatiquement."
 
 #. %(took)s and %(pro)s are approximate durations such as "~25 min";
 #. %(pro)s is shown in bold.
@@ -2685,69 +3170,83 @@ msgstr ""
 #. took, and how long it would have taken on the Pro plan.
 #, python-format
 msgid "This crawl took %(took)s. On Pro: %(pro)s."
-msgstr ""
+msgstr "Cette exploration a pris %(took)s. Sur Pro : %(pro)s."
 
 msgid "This crawl was cancelled — showing partial results."
-msgstr ""
+msgstr "Cette exploration a été annulée — affichage des résultats partiels."
 
 msgid ""
 "This crawl was paused for an estimate and never resumed — showing partial"
 " results from before the pause."
 msgstr ""
+"Cette exploration a été mise en pause pour obtenir un devis et n’a jamais"
+" repris — les résultats partiels affichés datent d’avant la pause."
 
 msgid ""
 "This crawl was stopped automatically — it was using too much memory to "
 "continue safely on this server."
 msgstr ""
+"Cette exploration a été arrêtée automatiquement — elle utilisait trop de "
+"mémoire pour continuer en toute sécurité sur ce serveur."
 
 msgid ""
 "This crawl was stopped before it finished, so the report shows partial "
 "results."
 msgstr ""
+"Cette exploration a été arrêtée avant son terme ; le rapport affiche donc"
+" des résultats partiels."
 
 msgid "This link points to a downloadable file, not a webpage"
-msgstr ""
+msgstr "Ce lien pointe vers un fichier téléchargeable, et non vers une page Web."
 
 #. Translators: a banner on the English page. %(language)s is your language's
 #. own name (Deutsch, 日本語); the sentence is shown in your language.
 #, python-format
 msgid "This page is also in %(language)s."
-msgstr ""
+msgstr "Cette page est également disponible en %(language)s."
 
 msgid "This project is being prepared. The page updates by itself."
 msgstr ""
+"Ce projet est en cours de préparation. La page se met à jour "
+"automatiquement."
 
 #. Translators: %(scope)s is one of "Whole domain (incl. subdomains)",
 #. "This subdomain only" or "Top-level domain only".
 #, python-format
 msgid "This run was set to “%(scope)s”, so other subdomains weren’t crawled."
 msgstr ""
+"Cette exploration était configurée sur « %(scope)s », les autres sous-"
+"domaines n’ont donc pas été explorés."
 
 #, python-format
 msgid "This site has more than %(n)s word."
 msgid_plural "This site has more than %(n)s words."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ce site contient plus de %(n)s mot."
+msgstr[1] "Ce site contient plus de %(n)s mots."
 
 msgid ""
 "This site is password-protected. Enter the username and password its "
 "owner gave you."
 msgstr ""
+"Ce site est protégé par mot de passe. Saisissez le nom d’utilisateur et "
+"le mot de passe que son propriétaire vous a fournis."
 
 msgid "This subdomain only"
-msgstr ""
+msgstr "Ce sous-domaine uniquement"
 
 msgid "This will start automatically, and we'll email you when it's done."
 msgstr ""
+"Cela démarrera automatiquement et nous vous enverrons un e-mail une fois "
+"terminé."
 
 msgid "Times"
-msgstr ""
+msgstr "Fois"
 
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgid "Together"
-msgstr ""
+msgstr "Ensemble"
 
 #. Translators: why a project couldn't be consolidated. %(limit)s is the
 #. server's page limit; the plural follows the pages.
@@ -2759,97 +3258,108 @@ msgid_plural ""
 "Too large to consolidate here: %(n)s pages across its crawls (this "
 "server's limit is %(limit)s)."
 msgstr[0] ""
+"Trop volumineux pour être regroupé ici : %(n)s page sur l’ensemble de ses"
+" explorations (limite de ce serveur : %(limit)s)."
 msgstr[1] ""
+"Trop volumineux pour être regroupé ici : %(n)s pages sur l’ensemble de "
+"ses explorations (limite de ce serveur : %(limit)s)."
 
 #, python-format
 msgid "Took %(time)s"
-msgstr ""
+msgstr "A pris %(time)s"
 
 msgid "Tool"
-msgstr ""
+msgstr "Outil"
 
 msgid "Top pages by word count"
-msgstr ""
+msgstr "Pages principales par nombre de mots"
 
 msgid "Top-level domain only"
-msgstr ""
+msgstr "Domaine de premier niveau uniquement"
 
 msgid "Total words"
-msgstr ""
+msgstr "Nombre total de mots"
 
 msgid ""
 "Totals per folder and per page, your longest pages ranked, and a CSV of "
 "every URL — so a quote turns into a plan you can phase."
 msgstr ""
+"Totaux par dossier et par page, classement de vos pages les plus longues "
+"et fichier CSV de toutes les URL : votre devis devient ainsi un plan que "
+"vous pouvez déployer par étapes."
 
 msgid ""
 "Translation is priced per word, so the first question is one most site "
 "owners can only guess at. Guessing wrong by a factor of three is a budget"
 " that runs out halfway through."
 msgstr ""
+"La traduction est facturée au mot, alors la première question est une "
+"question à laquelle la plupart des propriétaires de sites ne peuvent que "
+"répondre au jugé. Se tromper d’un facteur trois, c’est un budget épuisé à"
+" mi-parcours."
 
 msgid "Translations"
-msgstr ""
+msgstr "Traductions"
 
 msgid "Turn any website into clean Markdown"
-msgstr ""
+msgstr "Convertissez n’importe quel site web en Markdown épuré"
 
 msgid "Turned away by the site’s bot protection."
-msgstr ""
+msgstr "Bloqué par la protection anti-bot du site."
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Unknown reason"
-msgstr ""
+msgstr "Raison inconnue"
 
 msgid "Unlimited crawls, unlimited pages"
-msgstr ""
+msgstr "Explorations illimitées, pages illimitées"
 
 msgid "Unlimited projects"
-msgstr ""
+msgstr "Projets illimités"
 
 #, python-format
 msgid "Up to %(n)s crawl in a project."
 msgid_plural "Up to %(n)s crawls in a project."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Jusqu’à %(n)s exploration par projet."
+msgstr[1] "Jusqu’à %(n)s explorations par projet."
 
 msgid "Upgrade to Pro"
-msgstr ""
+msgstr "Passer à Pro"
 
 msgid "Use an address on the site that was crawled."
-msgstr ""
+msgstr "Utilisez une adresse du site qui a été exploré."
 
 msgid "Username"
-msgstr ""
+msgstr "Nom d’utilisateur"
 
 msgid "VS Code — in .vscode/mcp.json:"
-msgstr ""
+msgstr "VS Code — dans .vscode/mcp.json :"
 
 msgid "View blocked/failed pages"
-msgstr ""
+msgstr "Afficher les pages bloquées/en échec"
 
 msgid "View full report"
-msgstr ""
+msgstr "Afficher le rapport complet"
 
 msgid "View report"
-msgstr ""
+msgstr "Afficher le rapport"
 
 msgid "View the list"
-msgstr ""
+msgstr "Afficher la liste"
 
 msgid "Waiting for a free slot. It starts on its own."
-msgstr ""
+msgstr "En attente d’une place disponible. Cela démarre tout seul."
 
 msgid "Waiting to start…"
-msgstr ""
+msgstr "En attente du démarrage…"
 
 msgid "Waits for each page to finish loading"
-msgstr ""
+msgstr "Attend que chaque page ait fini de charger"
 
 msgid "Waits its turn when the server is busy"
-msgstr ""
+msgstr "Attend son tour lorsque le serveur est occupé"
 
 msgid ""
 "We tried it on our own site. Asked how many words wxrks.com has, Claude "
@@ -2857,128 +3367,144 @@ msgid ""
 "every word in their HTML. Word Counter counted the same site, the same "
 "day."
 msgstr ""
+"Nous l’avons essayé sur notre propre site. Interrogé sur le nombre de "
+"mots que contient wxrks.com, Claude Code a écrit un robot d’exploration, "
+"récupéré les pages répertoriées dans son plan de site et compté chaque "
+"mot dans leur code HTML. Word Counter a compté le même site le même jour."
 
 msgid "Web pages only."
-msgstr ""
+msgstr "Pages Web uniquement."
 
 msgid "What about very large sites?"
-msgstr ""
+msgstr "Qu’en est-il des sites très volumineux ?"
 
 msgid "What does it cost?"
-msgstr ""
+msgstr "Combien cela coûte-t-il ?"
 
 msgid "What every plan includes"
-msgstr ""
+msgstr "Ce que comprend chaque forfait"
 
 msgid "What if the site blocks bots?"
-msgstr ""
+msgstr "Que faire si le site bloque les robots ?"
 
 msgid "What is it for?"
-msgstr ""
+msgstr "À quoi sert-il ?"
 
 msgid "What it does"
-msgstr ""
+msgstr "Ce qu’il fait"
 
 msgid "What overlapped"
-msgstr ""
+msgstr "Éléments qui se chevauchaient"
 
 msgid "What should I quote on?"
-msgstr ""
+msgstr "Sur quoi dois-je établir un devis ?"
 
 msgid "What that costs"
-msgstr ""
+msgstr "Combien cela coûte-t-il ?"
 
 msgid "What to ask"
-msgstr ""
+msgstr "Que demander"
 
 msgid "Where do my counts go?"
-msgstr ""
+msgstr "Où vont mes décomptes ?"
 
 msgid "Where the new words are"
-msgstr ""
+msgstr "Où se trouvent les nouveaux mots"
 
 msgid "Where to paste it, app by app →"
-msgstr ""
+msgstr "Où le coller, application par application →"
 
 msgid "Which pages count as part of this site?"
-msgstr ""
+msgstr "Quelles pages sont considérées comme faisant partie de ce site ?"
 
 msgid "Which sections of example.com have the most text?"
-msgstr ""
+msgstr "Quelles sections de example.com contiennent le plus de texte ?"
 
 msgid "Whole domain"
-msgstr ""
+msgstr "Domaine entier"
 
 msgid "Whole domain (incl. subdomains)"
-msgstr ""
+msgstr "Domaine entier (sous-domaines inclus)"
 
 msgid "Why does a crawl take a while?"
-msgstr ""
+msgstr "Pourquoi l’exploration prend-elle du temps ?"
 
 msgid "Why it took this long"
-msgstr ""
+msgstr "Pourquoi cela a pris autant de temps"
 
 msgid "Why not just ask ChatGPT or Claude?"
-msgstr ""
+msgstr "Pourquoi ne pas simplement demander à ChatGPT ou à Claude ?"
 
 msgid "Why your assistant needs it"
-msgstr ""
+msgstr "Pourquoi votre assistant en a besoin"
 
 #. Translators: the product's name, in titles and running text (the logo
 #. keeps it as written). Translate it only where your market knows the
 #. product by a translated name.
 msgid "Word Counter"
-msgstr ""
+msgstr "Word Counter"
 
 msgid ""
 "Word Counter checks for identical text, pages that identify another URL "
 "as their original, and URLs that differ only by tracking or sign-in "
 "parameters. Duplicates are listed separately."
 msgstr ""
+"Word Counter vérifie la présence de textes identiques, de pages qui "
+"désignent une autre URL comme source originale et d’URL qui ne diffèrent "
+"que par des paramètres de suivi ou de connexion. Les doublons sont "
+"répertoriés séparément."
 
 msgid ""
 "Word Counter detects the starting page’s language and skips translated "
 "versions under folders such as /fr/ and /de/, helping you scope one "
 "language at a time."
 msgstr ""
+"Word Counter détecte la langue de la page de départ et ignore les "
+"versions traduites dans des dossiers tels que /fr/ et /de/, ce qui vous "
+"permet de définir le périmètre d’une seule langue à la fois."
 
 msgid "Word Counter for Claude and ChatGPT (MCP server)"
-msgstr ""
+msgstr "Word Counter pour Claude et ChatGPT (serveur MCP)"
 
 msgid ""
 "Word Counter opens your site’s linked pages in a real browser and adds up"
 " the main content. You get a total, a breakdown and a clearer picture of "
 "what’s ahead."
 msgstr ""
+"Word Counter ouvre les pages liées de votre site dans un véritable "
+"navigateur et additionne le contenu principal. Vous obtenez un total, une"
+" répartition et une vision plus claire de ce qui vous attend."
 
 msgid ""
 "Word Counter’s MCP server crawls every page and gives your assistant the "
 "real total — not a guess from the homepage."
 msgstr ""
+"Le serveur MCP de Word Counter explore chaque page et fournit à votre "
+"assistant le total réel — pas une estimation basée sur la page d’accueil."
 
 msgid "Word count · project"
-msgstr ""
+msgstr "Nombre de mots · projet"
 
 msgid "Words"
-msgstr ""
+msgstr "Mots"
 
 msgid "Words each"
-msgstr ""
+msgstr "Mots chacun"
 
 msgid "Words on the main site"
-msgstr ""
+msgstr "Mots sur le site principal"
 
 msgid "Words removed"
-msgstr ""
+msgstr "Mots supprimés"
 
 msgid "Words so far"
-msgstr ""
+msgstr "Nombre de mots jusqu’à présent"
 
 msgid "Works with"
-msgstr ""
+msgstr "Fonctionne avec"
 
 msgid "Works with any website"
-msgstr ""
+msgstr "Fonctionne avec n’importe quel site Web"
 
 #, python-format
 msgid ""
@@ -2988,10 +3514,16 @@ msgid_plural ""
 "You have %(n)s connections, the most there can be. Revoke one to make "
 "another."
 msgstr[0] ""
+"Vous avez %(n)s connexion, le maximum possible. Révoquez-en un pour en "
+"créer un autre."
 msgstr[1] ""
+"Vous avez %(n)s connexions, le maximum possible. Révoquez-en un pour en "
+"créer un autre."
 
 msgid "You have as many connections as there can be. Revoke one to make another."
 msgstr ""
+"Vous avez autant de connexions que possible. Révoquez-en un pour en créer"
+" un autre."
 
 #. Translators: %(n)s is a position in the queue (1, 2, 3…).
 #, python-format
@@ -2999,170 +3531,183 @@ msgid ""
 "You're #%(n)s in line — this server is busy right now. This will start "
 "automatically, and we'll email you when it's done."
 msgstr ""
+"Vous êtes n° %(n)s dans la file d’attente — ce serveur est très sollicité"
+" en ce moment. Cela démarrera automatiquement et nous vous enverrons un "
+"e-mail une fois terminé."
 
 #. Translators: %(product)s is the product's name, such as "Word Counter".
 #, python-format
 msgid "You're getting this because someone shared a %(product)s report with you."
 msgstr ""
+"Vous recevez ce message parce qu’une personne a partagé avec vous un "
+"rapport %(product)s."
 
 #. Translators: %(product)s is the product's name, such as "Word Counter".
 #, python-format
 msgid "You're getting this because you started this crawl on %(product)s."
 msgstr ""
+"Vous recevez ce message parce que vous avez lancé cette exploration sur "
+"%(product)s."
 
 msgid "Your app"
-msgstr ""
+msgstr "Votre application"
 
 msgid "Your assistant picks these itself; you just ask in your own words."
 msgstr ""
+"Votre assistant les choisit lui-même ; vous n’avez qu’à formuler votre "
+"demande avec vos propres mots."
 
 msgid "Your connection is ready"
-msgstr ""
+msgstr "Votre connexion est prête"
 
 msgid "Your connections"
-msgstr ""
+msgstr "Vos connexions"
 
 msgid "Your crawl finished. Here's what it counted."
-msgstr ""
+msgstr "Votre exploration est terminée. Voici ce qu’il a compté."
 
 msgid "Your current plan"
-msgstr ""
+msgstr "Votre forfait actuel"
 
 #. %(date)s is the date the subscription renews, filled in by the browser.
 #, python-format
 msgid "Your current plan · renews %(date)s"
-msgstr ""
+msgstr "Votre forfait actuel · renouvellement le %(date)s"
 
 #. %(domain)s is a website's address; %(words)s is a number of words, in bold.
 #, python-format
 msgid "Your last crawl of %(domain)s found %(words)s word."
 msgid_plural "Your last crawl of %(domain)s found %(words)s words."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Votre dernier crawl de %(domain)s a trouvé %(words)s mot."
+msgstr[1] "Votre dernier crawl de %(domain)s a détecté %(words)s mots."
 
 msgid "Your recent runs"
-msgstr ""
+msgstr "Vos exécutions récentes"
 
 msgid "Your runs"
-msgstr ""
+msgstr "Vos exécutions"
 
 msgid "Your runs →"
-msgstr ""
+msgstr "Vos exécutions →"
 
 msgid "Your website, as clean text a language model can actually read."
 msgstr ""
+"Votre site web, sous forme de texte épuré qu’un modèle de langage peut "
+"réellement lire."
 
 #. %(days)s is a number of days a guest's report is kept.
 #, python-format
 msgid "You’re not signed in, so this report is kept for %(days)s day."
 msgid_plural "You’re not signed in, so this report is kept for %(days)s days."
-msgstr[0] ""
+msgstr[0] "Vous n’êtes pas connecté·e, ce rapport est conservé pendant %(days)s jour."
 msgstr[1] ""
+"Vous n’êtes pas connecté·e, ce rapport est donc conservé pendant %(days)s"
+" jours."
 
 msgid "a tool by wxrks"
-msgstr ""
+msgstr "un outil de wxrks"
 
 #. %(n)s is a whole number: how many times faster Pro is.
 #, python-format
 msgid "about %(n)s× faster"
-msgstr ""
+msgstr "environ %(n)s× plus rapide"
 
 #. Translators: %(time)s is a duration such as "25 min", shown in bold.
 #, python-format
 msgid "about %(time)s on Pro"
-msgstr ""
+msgstr "environ %(time)s avec Pro"
 
 #, python-format
 msgid "also in %(site)s:"
-msgstr ""
+msgstr "également sur %(site)s :"
 
 msgid "and anything else built with AI"
-msgstr ""
+msgstr "et tout autre contenu créé avec l’IA"
 
 #. Translators: in the Words column instead of a number; keep it short and
 #. lower-case if your language does.
 msgid "blocked"
-msgstr ""
+msgstr "bloqué"
 
 #. Translators: %(cms)s is a platform's name, such as WordPress or Webflow.
 #, python-format
 msgid "built with %(cms)s"
-msgstr ""
+msgstr "créé avec %(cms)s"
 
 #, python-format
 msgid "counted from %(site)s"
-msgstr ""
+msgstr "comptabilisé à partir de %(site)s"
 
 #. Translators: %(path)s is the address of one page, such as /fr/pricing.
 #, python-format
 msgid "e.g. %(path)s"
-msgstr ""
+msgstr "p. ex. %(path)s"
 
 msgid "e.g. Claude Code on my laptop"
-msgstr ""
+msgstr "p. ex. Claude Code sur mon ordinateur portable"
 
 #. the caption under the project's number of new words; %(n)s is how many
 #. crawls it covers.
 #, python-format
 msgid "each page and each sentence once, in %(n)s crawl"
 msgid_plural "each page and each sentence once, across %(n)s crawls"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "chaque page et chaque phrase une fois, en %(n)s exploration du site"
+msgstr[1] "chaque page et chaque phrase une fois, sur %(n)s explorations de site web"
 
 #. Translators: in the Words column instead of a number; keep it short.
 msgid "failed"
-msgstr ""
+msgstr "échec"
 
 #. Translators: on an exclusion chip: the entry is a folder (it starts with /).
 msgid "folder"
-msgstr ""
+msgstr "dossier"
 
 msgid "for its careful count"
-msgstr ""
+msgstr "pour son décompte précis"
 
 msgid "free"
-msgstr ""
+msgstr "gratuit"
 
 #, python-format
 msgid "from %(sites)s"
-msgstr ""
+msgstr "à partir de %(sites)s"
 
 #. %(sites)s is a list of site names.
 #, python-format
 msgid "in %(sites)s"
-msgstr ""
+msgstr "dans %(sites)s"
 
 #. %(date)s is when this connection was last used, filled in by the browser.
 #, python-format
 msgid "last used %(date)s"
-msgstr ""
+msgstr "utilisé pour la dernière fois le %(date)s"
 
 msgid "less than a minute"
-msgstr ""
+msgstr "moins d’une minute"
 
 #. Translators: beside a subdomain or language that wasn't counted: how
 #. many of the crawled pages link to it.
 #, python-format
 msgid "linked from %(n)s page"
 msgid_plural "linked from %(n)s pages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "lié depuis %(n)s page"
+msgstr[1] "lié depuis %(n)s pages"
 
 #. %(date)s is when this connection was made, filled in by the browser.
 #, python-format
 msgid "made %(date)s"
-msgstr ""
+msgstr "créé le %(date)s"
 
 #. Translators: after a new connection's key hint ("wck_…a1b2 · made just
 #. now").
 msgid "made just now"
-msgstr ""
+msgstr "créé à l’instant"
 
 msgid "moved"
-msgstr ""
+msgstr "déplacé"
 
 msgid "new"
-msgstr ""
+msgstr "nouveau"
 
 #. the caption under the project's big number of new words.            %(n)s is
 #. how many sites the project counts (two or more).
@@ -3174,7 +3719,11 @@ msgid_plural ""
 "new words to translate across the %(n)s sites: each page and each "
 "sentence counted once."
 msgstr[0] ""
+"nouveaux mots à traduire sur le site %(n)s : chaque page et chaque phrase"
+" sont comptées une seule fois."
 msgstr[1] ""
+"nouveaux mots à traduire sur les %(n)s sites : chaque page et chaque "
+"phrase sont comptabilisées une seule fois."
 
 #. the caption under the project's big number of new words,          when the
 #. project counts one site.
@@ -3182,94 +3731,98 @@ msgid ""
 "new words to translate on this site: each page and each sentence counted "
 "once."
 msgstr ""
+"nouveaux mots à traduire sur ce site : chaque page et chaque phrase sont "
+"comptées une seule fois."
 
 #. the caption under a project's big number, which is a count of new words.
 msgid "new words: each page and sentence once"
-msgstr ""
+msgstr "nouveaux mots : chaque page et chaque phrase une seule fois"
 
 msgid "not used yet"
-msgstr ""
+msgstr "pas encore utilisé"
 
 #, python-format
 msgid "of the %(n)s word checked"
 msgid_plural "of the %(n)s words checked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sur le %(n)s mot vérifié"
+msgstr[1] "sur les %(n)s mots vérifiés"
 
 #. Translators: under the total word count: "on 1,204 pages".
 #, python-format
 msgid "on %(n)s page"
 msgid_plural "on %(n)s pages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sur %(n)s page"
+msgstr[1] "sur %(n)s pages"
 
 #. Translators: under the total word count while the crawl still runs.
 #, python-format
 msgid "on %(n)s page so far"
 msgid_plural "on %(n)s pages so far"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "sur %(n)s page jusqu’à présent"
+msgstr[1] "sur %(n)s pages jusqu’à présent"
 
 msgid "on our servers, no AI usage"
-msgstr ""
+msgstr "sur nos serveurs, sans recours à l’IA"
 
 msgid "or paste a session"
-msgstr ""
+msgstr "ou collez une session"
 
 msgid "repeated across crawls"
-msgstr ""
+msgstr "répété sur plusieurs explorations du site"
 
 msgid "repeated within a crawl"
-msgstr ""
+msgstr "répété au cours d’une exploration"
 
 msgid "same address"
-msgstr ""
+msgstr "même adresse"
 
 msgid "same page in another crawl"
-msgstr ""
+msgstr "même page lors d’un autre crawl"
 
 msgid "same text"
-msgstr ""
+msgstr "même texte"
 
 msgid "staging, password-protected"
-msgstr ""
+msgstr "en préproduction, protégé par mot de passe"
 
 #. example entries for a field of subdomains and folders to leave out.
 #. Keep the leading / on folders; the names may be adapted.
 msgid "staging, web-staging, /careers"
-msgstr ""
+msgstr "staging, web-staging, /careers"
 
 #. Translators: on an exclusion chip: the entry is a subdomain.
 msgid "subdomain"
-msgstr ""
+msgstr "sous-domaine"
 
 msgid "text changed — counted from the crawl listed first"
-msgstr ""
+msgstr "texte modifié — compté à partir de l’exploration affichée en premier"
 
 msgid "the server reached the most Markdown it keeps"
-msgstr ""
+msgstr "le serveur a atteint la quantité maximale de Markdown qu’il conserve"
 
 #. Translators: in the README inside a Markdown download, after "Capture
 #. stopped before the end of the crawl": the reason it stopped.
 msgid "the server was running out of disk space"
-msgstr ""
+msgstr "Le serveur manquait d’espace disque."
 
 msgid "this crawl reached the most Markdown one crawl may save"
 msgstr ""
+"cette exploration a atteint le nombre maximal de fichiers Markdown qu’une"
+" exploration peut enregistrer"
 
 msgid "vs."
-msgstr ""
+msgstr "contre-verts."
 
 #. the caption under a project's big number, which is a count of words.
 msgid "words, each page once"
-msgstr ""
+msgstr "mots, chaque page une fois"
 
 #. Translators: a group of pages told apart by their writing system.
 #. %(script)s is a script's name in your language (Latin, Cyrillic,
 #. Arabic…), as the browser names it; phrase it so any name fits.
 #, python-format
 msgid "written in %(script)s"
-msgstr ""
+msgstr "écrit en %(script)s"
 
 #. %(cms)s is the platform the site is built on, such as Webflow or WordPress.
 #, python-format
@@ -3277,39 +3830,46 @@ msgid ""
 "wxrks has a %(cms)s connector: it pulls your content straight from "
 "%(cms)s, translates it with the best AI models and keeps it in sync."
 msgstr ""
+"wxrks dispose d’un connecteur %(cms)s : il récupère votre contenu "
+"directement depuis %(cms)s, le traduit avec les meilleurs modèles d’IA et"
+" le synchronise en permanence."
 
 msgid ""
 "wxrks pulls the content and translates it with the best AI models, then "
 "keeps it in sync as the site changes."
 msgstr ""
+"wxrks récupère le contenu et le traduit avec les meilleurs modèles d’IA, "
+"puis le synchronise au fil des changements du site."
 
 #. Translators: marks a duration as approximate ("~25 min"). %(duration)s is
 #. a duration such as "25 min" or "1h 8m".
 #, python-format
 msgid "~%(duration)s"
-msgstr ""
+msgstr "~%(duration)s"
 
 msgid ""
 "“How many words does example.com have?” Your assistant starts the count, "
 "follows it, and answers with the total."
 msgstr ""
+"« Combien de mots contient example.com ? » Votre assistant lance le "
+"comptage, le suit et vous donne le total."
 
 msgid "← Back to the project"
-msgstr ""
+msgstr "← Retour au projet"
 
 #. a link back to the page explaining the assistant connection.
 msgid "← How it works"
-msgstr ""
+msgstr "← Comment ça marche"
 
 msgid "← New crawl"
-msgstr ""
+msgstr "← Nouveau crawl"
 
 msgid "← Newer"
-msgstr ""
+msgstr "← Plus récent"
 
 #. a link back to the list of projects.
 msgid "← Projects"
-msgstr ""
+msgstr "← Projets"
 
 #~ msgid "Sign in with Google. Nothing to install, nothing to configure."
 #~ msgstr ""

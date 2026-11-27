@@ -89,6 +89,12 @@
   --font-sans: "Urbanist", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "PingFang SC", "Microsoft YaHei", monospace;
 }
+/* Japanese breaks a line between any two characters, so a large headline can
+   split a word in two (コンテン|ツ). auto-phrase breaks between phrases where
+   the browser knows how (Chrome, Edge); elsewhere the line breaks as before.
+   Korean puts spaces between words: keep-all wraps there, not inside a word. */
+:lang(ja) :is(h1, h2, h3) { word-break: auto-phrase; }
+:lang(ko) { word-break: keep-all; }
 /* font-family inherits as a resolved list, so text in another language inside
    a page (the language menu's 日本語, the "also in" banner) re-reads the stack
    for its own lang. :where() keeps this below every class rule. */
